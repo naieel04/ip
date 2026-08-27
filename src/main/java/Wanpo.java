@@ -38,6 +38,40 @@ public class Wanpo {
         System.out.println(output);
     }
 
+    public static void printList(List<String> list){
+        for (int i = 0; i < list.size(); i++) {
+            System.out.printf("%d. %s\n",i+1,list.get(i));
+        }
+    }
+    public static void addTasks(){
+        Scanner in = new Scanner(System.in);
+        String input,output="";
+        List<String> taskList = new ArrayList<>();
+        input = in.nextLine();
+        while (!input.equals("bye")) {
+            output = "____________________________________________________________\n";
+            System.out.println(output);
+            if(input.equals("list")){
+                printList(taskList);
+            }
+            else {
+                if (taskList.size() < 100) {
+                    taskList.add(input);
+                    output = "added: " + input + "\n";
+                } else {
+                    output = "Error, 100 tasks present";
+                }
+                System.out.println(output);
+            }
+            output="____________________________________________________________\n";
+            System.out.println(output);
+            input=in.nextLine();
+        }
+        output="____________________________________________________________\n";
+        System.out.println(output);
+    }
+
+
 
     public static void main(String[] args) {
         String banner = " ____        _        \n"
@@ -47,7 +81,7 @@ public class Wanpo {
                 + "|____/ \\__,_|_|\\_\\___|\n";
 
         System.out.println(getIntroMessage());
-        echo();
+        addTasks();
         System.out.println(getByeMessage());
     }
 }
