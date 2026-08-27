@@ -38,25 +38,55 @@ public class Wanpo {
         System.out.println(output);
     }
 
-    public static void printList(List<String> list){
+    public static void printList(List<String> list,List<Boolean> markList){
+        System.out.println("Here are the tasks in your list:");
+        String marked="";
         for (int i = 0; i < list.size(); i++) {
-            System.out.printf("%d. %s\n",i+1,list.get(i));
+            if(markList.get(i)){
+                marked="X";
+            }else{
+                marked=" ";
+            }
+            System.out.printf("%d.[%s] %s\n",i+1,marked,list.get(i));
         }
     }
     public static void addTasks(){
         Scanner in = new Scanner(System.in);
         String input,output="";
         List<String> taskList = new ArrayList<>();
+        List<Boolean> doneList = new ArrayList<>();
+
         input = in.nextLine();
         while (!input.equals("bye")) {
             output = "____________________________________________________________\n";
             System.out.println(output);
             if(input.equals("list")){
-                printList(taskList);
-            }
-            else {
+                printList(taskList,doneList);
+            } else if (input.contains("unmark")) {
+                int idx = Integer.parseInt(input.replaceAll("\\D",""))-1;
+                if(idx>taskList.size()-1 || idx<0){
+                    output = "Task not found\n";
+                }else {
+                    doneList.set(idx, false);
+                    output = "OK, I've marked this task as not done yet:\n" +
+                            "\t[ ] " + taskList.get(idx) + "\n";
+                }
+                System.out.println(output);
+
+            } else if (input.contains("mark")) {
+                int idx = Integer.parseInt(input.replaceAll("\\D",""))-1;
+                if(idx>taskList.size()-1 || idx<0){
+                    output = "Task not found\n";
+                }else {
+                    doneList.set(idx,true);
+                    output = "Nice! I've marked this task as done:\n" +
+                            "\t[X] " + taskList.get(idx) + "\n";
+                }
+                System.out.println(output);
+            }else{
                 if (taskList.size() < 100) {
                     taskList.add(input);
+                    doneList.add(false);
                     output = "added: " + input + "\n";
                 } else {
                     output = "Error, 100 tasks present";
