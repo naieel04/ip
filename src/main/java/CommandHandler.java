@@ -105,9 +105,21 @@ public class CommandHandler {
         System.out.println(message + task + "\n");
     }
 
-    public void addTodo(String args) {
+    private boolean isCapacityReached() {
         if (taskList.size() >= MAX_TASKS) {
-            System.out.println("Error, 100 tasks present\n");
+            System.out.println("Error, " + MAX_TASKS + " tasks present\n");
+            return true;
+        }
+        return false;
+    }
+
+    private void addTask(Task task) {
+        taskList.add(task);
+        System.out.println("added: " + task.getDescription() + "\n");
+    }
+
+    public void addTodo(String args) {
+        if (isCapacityReached()) {
             return;
         }
         String description = args.trim();
@@ -115,14 +127,11 @@ public class CommandHandler {
             System.out.println("Invalid task: description cannot be blank\n");
             return;
         }
-        Task task = new ToDo(description);
-        taskList.add(task);
-        System.out.println("added: " + task.getDescription() + "\n");
+        addTask(new ToDo(description));
     }
 
     public void addDeadline(String args) {
-        if (taskList.size() >= MAX_TASKS) {
-            System.out.println("Error, 100 tasks present\n");
+        if (isCapacityReached()) {
             return;
         }
         if (!args.contains(DEADLINE_SEPARATOR)) {
@@ -136,14 +145,11 @@ public class CommandHandler {
             System.out.println("Invalid task: description cannot be blank\n");
             return;
         }
-        Task task = new Deadline(description, dueDate);
-        taskList.add(task);
-        System.out.println("added: " + task.getDescription() + "\n");
+        addTask(new Deadline(description, dueDate));
     }
 
     public void addEvent(String args) {
-        if (taskList.size() >= MAX_TASKS) {
-            System.out.println("Error, 100 tasks present\n");
+        if (isCapacityReached()) {
             return;
         }
         if (!args.contains(EVENT_START_SEPARATOR) || !args.contains(EVENT_END_SEPARATOR)) {
@@ -159,8 +165,6 @@ public class CommandHandler {
             System.out.println("Invalid task: description cannot be blank\n");
             return;
         }
-        Task task = new Event(description, startDate, endDate);
-        taskList.add(task);
-        System.out.println("added: " + task.getDescription() + "\n");
+        addTask(new Event(description, startDate, endDate));
     }
 }
