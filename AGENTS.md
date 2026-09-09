@@ -36,4 +36,7 @@ After every code update, review `test/ui-test-plan.md` and update it when the ch
 
 Use lightweight tags unless the user requests an annotated tag.
 When proposing or creating a commit message, include enough detail to explain the rationale for the change.
+When generating or proposing a Git commit message, use the project-specific
+`.codex/skills/seedu-git-standard` skill and follow the SE-EDU Git conventions
+documented at https://se-education.org/guides/conventions/git.html.
 Do not commit or push unless explicitly asked.
