@@ -76,11 +76,15 @@ public class DawnUi {
         }
         String input = scanner.nextLine();
         System.out.println(MAX_LINE);
-        boolean isExit = commandHandler.handleCommand(input);
-        if (!isExit) {
-            System.out.println(MAX_LINE);
+        
+        String feedback = commandHandler.handleCommand(input);
+        if (feedback == null) {
+            return true;
         }
-        return isExit;
+        
+        System.out.print(feedback);
+        System.out.println(MAX_LINE);
+        return false;
     }
 
     // Backwards-compatible methods if needed

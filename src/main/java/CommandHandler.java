@@ -36,10 +36,10 @@ public class CommandHandler {
      * Processes one command whose first whitespace-delimited word must match exactly.
      *
      * @param input the raw command line
-     * @return true only for a valid {@code bye} command
+     * @return the result message to display, or {@code null} if the exit command was issued
      * @throws DawnException if the command or any required argument is invalid
      */
-    public boolean handleCommand(String input) throws DawnException {
+    public String handleCommand(String input) throws DawnException {
         String trimmedInput = input.trim();
         if (trimmedInput.isEmpty()) {
             throw new DawnException(unknownCommandMessage(""));
@@ -51,41 +51,36 @@ public class CommandHandler {
         switch (command) {
         case COMMAND_BYE:
             requireNoArguments(command, arguments);
-            return true;
+            return null; // Return null to signal termination
         case COMMAND_LIST:
             requireNoArguments(command, arguments);
-            printList();
-            return false;
+            return getListString();
         case COMMAND_MARK:
-            updateTask(arguments, true);
-            return false;
+            return updateTask(arguments, true);
         case COMMAND_UNMARK:
-            updateTask(arguments, false);
-            return false;
+            return updateTask(arguments, false);
         case COMMAND_TODO:
-            addTodo(arguments);
-            return false;
+            return addTodo(arguments);
         case COMMAND_DEADLINE:
-            addDeadline(arguments);
-            return false;
+            return addDeadline(arguments);
         case COMMAND_EVENT:
-            addEvent(arguments);
-            return false;
+            return addEvent(arguments);
         default:
             throw new DawnException(unknownCommandMessage(command));
         }
     }
 
-    /** Prints the current task list in insertion order. */
-    public void printList() {
-        System.out.println("Here are the tasks in your list:");
+    /** Returns the current task list in insertion order. */
+    public String getListString() {
+        StringBuilder sb = new StringBuilder("Here are the tasks in your list:\n");
         for (int i = 0; i < taskList.size(); i++) {
-            System.out.printf("%d.%s%n", i + 1, taskList.get(i));
+            sb.append(String.format("%d.%s\n", i + 1, taskList.get(i)));
         }
+        return sb.toString();
     }
 
-    /** Validates a task number before marking or unmarking that task. */
-    public void updateTask(String taskNumber, boolean done) throws DawnException {
+    /** Validates a task number before marking or unmarking that task, returning feedback. */
+    public String updateTask(String taskNumber, boolean done) throws DawnException {
         String command = done ? COMMAND_MARK : COMMAND_UNMARK;
         String usage = done ? MARK_USAGE : UNMARK_USAGE;
         if (taskNumber.isEmpty()) {
@@ -109,20 +104,20 @@ public class CommandHandler {
         task.setDone(done);
         String message = done ? "Nice! I've marked this task as done:\n\t"
                 : "OK, I've marked this task as not done yet:\n\t";
-        System.out.println(message + task + "\n");
+        return message + task + "\n\n";
     }
 
-    /** Adds a todo only when it has a non-blank description. */
-    public void addTodo(String description) throws DawnException {
+    /** Adds a todo only when it has a non-blank description, returning feedback. */
+    public String addTodo(String description) throws DawnException {
         ensureCapacity();
         if (description.isEmpty()) {
             throw new DawnException("A todo needs a description. Use: " + TODO_USAGE);
         }
-        addTask(new ToDo(description));
+        return addTask(new ToDo(description));
     }
 
-    /** Validates a deadline description and due-date marker before adding the task. */
-    public void addDeadline(String details) throws DawnException {
+    /** Validates a deadline description and marker before adding the task, returning feedback. */
+    public String addDeadline(String details) throws DawnException {
         ensureCapacity();
         int byIndex = findStandaloneMarker(details, DEADLINE_MARKER);
         if (byIndex < 0) {
@@ -136,11 +131,11 @@ public class CommandHandler {
         if (dueDate.isEmpty()) {
             throw new DawnException("The due date cannot be blank. Use: " + DEADLINE_USAGE);
         }
-        addTask(new Deadline(description, dueDate));
+        return addTask(new Deadline(description, dueDate));
     }
 
-    /** Validates an event description, start, and end before adding the task. */
-    public void addEvent(String details) throws DawnException {
+    /** Validates an event description, start, and end before adding the task, returning feedback. */
+    public String addEvent(String details) throws DawnException {
         ensureCapacity();
         int fromIndex = findStandaloneMarker(details, EVENT_START_MARKER);
         int toIndex = findStandaloneMarker(details, EVENT_END_MARKER);
@@ -166,7 +161,7 @@ public class CommandHandler {
         if (end.isEmpty()) {
             throw new DawnException("The event end cannot be blank. Use: " + EVENT_USAGE);
         }
-        addTask(new Event(description, start, end));
+        return addTask(new Event(description, start, end));
     }
 
     /** Finds a marker only when it is bounded by whitespace or the input edge. */
@@ -199,10 +194,10 @@ public class CommandHandler {
         }
     }
 
-    /** Adds an already validated task and reports the addition. */
-    private void addTask(Task task) {
+    /** Adds an already validated task and returns the addition feedback. */
+    private String addTask(Task task) {
         taskList.add(task);
-        System.out.println("added: " + task.getDescription() + "\n");
+        return "added: " + task.getDescription() + "\n\n";
     }
 
     /** Returns a targeted usage suggestion for a malformed known command word. */
