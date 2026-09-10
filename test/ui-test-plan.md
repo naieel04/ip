@@ -3,8 +3,9 @@
 Run these tests from the repository root after compiling with Java 25:
 
 ```powershell
-javac -d out\production\ip src\main\java\*.java
-powershell -ExecutionPolicy Bypass -File .codex\skills\test-ui\scripts\run-ui-tests.ps1
+$javaSources = @(Get-ChildItem -Path src\main\java -Recurse -Filter *.java | Select-Object -ExpandProperty FullName)
+javac -d out\production\ip $javaSources
+powershell -ExecutionPolicy Bypass -File .codex\skills\test-ui\scripts\run-ui-tests.ps1 -ProgramCommand "java -cp out/production/ip dawn.Dawn"
 ```
 
 Each case is a new console session. The listed inputs are entered in order, and the expected output is the complete session transcript. The runner expands the following output tokens before it compares output exactly, apart from platform line endings, final newlines, and trailing padding on a line.

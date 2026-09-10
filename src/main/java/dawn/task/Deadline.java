@@ -1,3 +1,5 @@
+package dawn.task;
+
 /** Subclass Deadline: A task with a due date and description. */
 public class Deadline extends Task {
     private String dueDate;

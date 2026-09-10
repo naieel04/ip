@@ -1,3 +1,10 @@
+package dawn;
+
+import dawn.command.CommandHandler;
+import dawn.exception.DawnException;
+import dawn.ui.DawnUi;
+
+/** Starts Dawn and coordinates the console application's lifecycle. */
 public class Dawn {
     private final DawnUi ui;
     private final CommandHandler commandHandler;

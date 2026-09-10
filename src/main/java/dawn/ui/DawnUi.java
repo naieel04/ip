@@ -1,5 +1,11 @@
+package dawn.ui;
+
+import dawn.command.CommandHandler;
+import dawn.exception.DawnException;
+
 import java.util.Scanner;
 
+/** Handles console input and displays Dawn's messages and command feedback. */
 public class DawnUi {
     public static final String NAME_BANNER = """
                                      :::xxxxxxxxxxx;:::.              \s

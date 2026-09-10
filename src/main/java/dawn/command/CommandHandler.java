@@ -1,3 +1,13 @@
+package dawn.command;
+
+import dawn.exception.DawnException;
+import dawn.parser.Parser;
+import dawn.task.Deadline;
+import dawn.task.Event;
+import dawn.task.Task;
+import dawn.task.TaskList;
+import dawn.task.ToDo;
+
 /** Manages task-list updates and logic. */
 public class CommandHandler {
     private static final String COMMAND_BYE = "bye";
