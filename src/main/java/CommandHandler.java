@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-
 /** Manages task-list updates and logic. */
 public class CommandHandler {
     private static final String COMMAND_BYE = "bye";
@@ -11,15 +8,10 @@ public class CommandHandler {
     private static final String COMMAND_DEADLINE = "deadline";
     private static final String COMMAND_EVENT = "event";
 
-    private static final int MAX_TASKS = 100;
-    private final List<Task> taskList;
+    private final TaskList taskList;
 
     public CommandHandler() {
-        this.taskList = new ArrayList<>();
-    }
-
-    public List<Task> getTaskList() {
-        return taskList;
+        this.taskList = new TaskList();
     }
 
     /**
@@ -60,7 +52,7 @@ public class CommandHandler {
     public String getListString() {
         StringBuilder sb = new StringBuilder("Here are the tasks in your list:\n");
         for (int i = 0; i < taskList.size(); i++) {
-            sb.append(String.format("%d.%s\n", i + 1, taskList.get(i)));
+            sb.append(String.format("%d.%s\n", i + 1, taskList.getTask(i)));
         }
         return sb.toString();
     }
@@ -73,7 +65,7 @@ public class CommandHandler {
             throw new DawnException("Task number not found. Use: " + command + " [task number]");
         }
 
-        Task task = taskList.get(index);
+        Task task = taskList.getTask(index);
         task.setDone(done);
         String message = done ? "Nice! I've marked this task as done:\n\t"
                 : "OK, I've marked this task as not done yet:\n\t";
@@ -82,35 +74,25 @@ public class CommandHandler {
 
     /** Adds a todo only when it has a non-blank description, returning feedback. */
     public String addTodo(String arguments) throws DawnException {
-        ensureCapacity();
         String description = Parser.parseTodoArgs(arguments);
-        return addTask(new ToDo(description));
+        return addTaskMessage(new ToDo(description));
     }
 
     /** Validates a deadline description and marker before adding the task, returning feedback. */
     public String addDeadline(String arguments) throws DawnException {
-        ensureCapacity();
         String[] parsed = Parser.parseDeadlineArgs(arguments);
-        return addTask(new Deadline(parsed[0], parsed[1]));
+        return addTaskMessage(new Deadline(parsed[0], parsed[1]));
     }
 
     /** Validates an event description, start, and end before adding the task, returning feedback. */
     public String addEvent(String arguments) throws DawnException {
-        ensureCapacity();
         String[] parsed = Parser.parseEventArgs(arguments);
-        return addTask(new Event(parsed[0], parsed[1], parsed[2]));
-    }
-
-    /** Rejects a new task after the list reaches its fixed capacity. */
-    private void ensureCapacity() throws DawnException {
-        if (taskList.size() >= MAX_TASKS) {
-            throw new DawnException("Dawn can store at most " + MAX_TASKS + " tasks.");
-        }
+        return addTaskMessage(new Event(parsed[0], parsed[1], parsed[2]));
     }
 
     /** Adds an already validated task and returns the addition feedback. */
-    private String addTask(Task task) {
-        taskList.add(task);
+    private String addTaskMessage(Task task) throws DawnException {
+        taskList.addTask(task);
         return "added: " + task.getDescription() + "\n\n";
     }
 }
