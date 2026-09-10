@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
-
+/** Manages task-list updates and logic. */
 public class CommandHandler {
     private static final String COMMAND_BYE = "bye";
     private static final String COMMAND_LIST = "list";
@@ -9,162 +7,92 @@ public class CommandHandler {
     private static final String COMMAND_TODO = "todo";
     private static final String COMMAND_DEADLINE = "deadline";
     private static final String COMMAND_EVENT = "event";
-    private static final String COMMAND_ADD = "add";
 
-    private static final String DEADLINE_SEPARATOR = " /by ";
-    private static final String EVENT_START_SEPARATOR = " /from ";
-    private static final String EVENT_END_SEPARATOR = " /to ";
-
-    private static final int MAX_TASKS = 100;
-    private final List<Task> taskList;
+    private final TaskList taskList;
 
     public CommandHandler() {
-        this.taskList = new ArrayList<>();
-    }
-
-    public List<Task> getTaskList() {
-        return taskList;
+        this.taskList = new TaskList();
     }
 
     /**
-     * Parses and executes the given user command.
+     * Executes the given raw command string.
      *
-     * @param input the raw user command line
-     * @return true if the command is "bye" requesting exit; false otherwise
+     * @param input the raw command line
+     * @return the result message to display, or {@code null} if the exit command was issued
+     * @throws DawnException if the command or any required argument is invalid
      */
-    public boolean handleCommand(String input) throws DawnException {
-        String trimmed = input.trim();
-        if (trimmed.equals(COMMAND_BYE)) {
-            return true;
-        }
+    public String handleCommand(String input) throws DawnException {
+        String[] parsed = Parser.parseCommand(input);
+        String command = parsed[0];
+        String arguments = parsed[1];
 
-        if (trimmed.equals(COMMAND_LIST)) {
-            printList();
-            return false;
+        switch (command) {
+        case COMMAND_BYE:
+            Parser.requireNoArguments(command, arguments);
+            return null; // Return null to signal termination
+        case COMMAND_LIST:
+            Parser.requireNoArguments(command, arguments);
+            return getListString();
+        case COMMAND_MARK:
+            return updateTask(arguments, true);
+        case COMMAND_UNMARK:
+            return updateTask(arguments, false);
+        case COMMAND_TODO:
+            return addTodo(arguments);
+        case COMMAND_DEADLINE:
+            return addDeadline(arguments);
+        case COMMAND_EVENT:
+            return addEvent(arguments);
+        default:
+            throw new DawnException(Parser.unknownCommandMessage(command));
         }
-
-        if (trimmed.startsWith(COMMAND_UNMARK)) {
-            updateTask(trimmed, false);
-            return false;
-        }
-
-        if (trimmed.startsWith(COMMAND_MARK)) {
-            updateTask(trimmed, true);
-            return false;
-        }
-
-        String commandToProcess = trimmed;
-        if (commandToProcess.startsWith(COMMAND_ADD + " ")) {
-            commandToProcess = commandToProcess.substring(COMMAND_ADD.length() + 1).trim();
-        }
-
-        if (commandToProcess.startsWith(COMMAND_TODO)) {
-            String args = commandToProcess.substring(COMMAND_TODO.length());
-            addTodo(args);
-            return false;
-        }
-
-        if (commandToProcess.startsWith(COMMAND_DEADLINE)) {
-            String args = commandToProcess.substring(COMMAND_DEADLINE.length());
-            addDeadline(args);
-            return false;
-        }
-
-        if (commandToProcess.startsWith(COMMAND_EVENT)) {
-            String args = commandToProcess.substring(COMMAND_EVENT.length());
-            addEvent(args);
-            return false;
-        }
-
-        System.out.println("Invalid command\n");
-        return false;
     }
 
-    public void printList() {
-        System.out.println("Here are the tasks in your list:");
+    /** Returns the current task list in insertion order. */
+    public String getListString() {
+        StringBuilder sb = new StringBuilder("Here are the tasks in your list:\n");
         for (int i = 0; i < taskList.size(); i++) {
-            System.out.printf("%d.%s\n", i + 1, taskList.get(i));
+            sb.append(String.format("%d.%s\n", i + 1, taskList.getTask(i)));
         }
+        return sb.toString();
     }
 
-    public void updateTask(String input, boolean done) {
-        String digits = input.replaceAll("\\D", "");
-        if (digits.isEmpty()) {
-            System.out.println("Task not found\n");
-            return;
-        }
-        int index = Integer.parseInt(digits) - 1;
+    /** Validates a task number before marking or unmarking that task, returning feedback. */
+    public String updateTask(String arguments, boolean done) throws DawnException {
+        int index = Parser.parseTaskNumber(arguments, done);
         if (index < 0 || index >= taskList.size()) {
-            System.out.println("Task not found\n");
-            return;
+            String command = done ? COMMAND_MARK : COMMAND_UNMARK;
+            throw new DawnException("Task number not found. Use: " + command + " [task number]");
         }
-        Task task = taskList.get(index);
+
+        Task task = taskList.getTask(index);
         task.setDone(done);
         String message = done ? "Nice! I've marked this task as done:\n\t"
                 : "OK, I've marked this task as not done yet:\n\t";
-        System.out.println(message + task + "\n");
+        return message + task + "\n\n";
     }
 
-    private boolean isCapacityReached() {
-        if (taskList.size() >= MAX_TASKS) {
-            System.out.println("Error, " + MAX_TASKS + " tasks present\n");
-            return true;
-        }
-        return false;
+    /** Adds a todo only when it has a non-blank description, returning feedback. */
+    public String addTodo(String arguments) throws DawnException {
+        String description = Parser.parseTodoArgs(arguments);
+        return addTaskMessage(new ToDo(description));
     }
 
-    private void addTask(Task task) {
-        taskList.add(task);
-        System.out.println("added: " + task.getDescription() + "\n");
+    /** Validates a deadline description and marker before adding the task, returning feedback. */
+    public String addDeadline(String arguments) throws DawnException {
+        String[] parsed = Parser.parseDeadlineArgs(arguments);
+        return addTaskMessage(new Deadline(parsed[0], parsed[1]));
     }
 
-    public void addTodo(String args) {
-        if (isCapacityReached()) {
-            return;
-        }
-        String description = args.trim();
-        if (description.isEmpty()) {
-            System.out.println("Invalid task: description cannot be blank\n");
-            return;
-        }
-        addTask(new ToDo(description));
+    /** Validates an event description, start, and end before adding the task, returning feedback. */
+    public String addEvent(String arguments) throws DawnException {
+        String[] parsed = Parser.parseEventArgs(arguments);
+        return addTaskMessage(new Event(parsed[0], parsed[1], parsed[2]));
     }
 
-    public void addDeadline(String args) {
-        if (isCapacityReached()) {
-            return;
-        }
-        if (!args.contains(DEADLINE_SEPARATOR)) {
-            System.out.println("Invalid task: description cannot be blank\n");
-            return;
-        }
-        String[] parts = args.split(DEADLINE_SEPARATOR, 2);
-        String description = parts[0].trim();
-        String dueDate = parts[1].trim();
-        if (description.isEmpty() || dueDate.isEmpty()) {
-            System.out.println("Invalid task: description cannot be blank\n");
-            return;
-        }
-        addTask(new Deadline(description, dueDate));
-    }
-
-    public void addEvent(String args) {
-        if (isCapacityReached()) {
-            return;
-        }
-        if (!args.contains(EVENT_START_SEPARATOR) || !args.contains(EVENT_END_SEPARATOR)) {
-            System.out.println("Invalid task: description cannot be blank\n");
-            return;
-        }
-        String[] fromParts = args.split(EVENT_START_SEPARATOR, 2);
-        String description = fromParts[0].trim();
-        String[] toParts = fromParts[1].split(EVENT_END_SEPARATOR, 2);
-        String startDate = toParts[0].trim();
-        String endDate = toParts[1].trim();
-        if (description.isEmpty() || startDate.isEmpty() || endDate.isEmpty()) {
-            System.out.println("Invalid task: description cannot be blank\n");
-            return;
-        }
-        addTask(new Event(description, startDate, endDate));
+    /** Adds an already validated task and returns the addition feedback. */
+    private String addTaskMessage(Task task) throws DawnException {
+        taskList.addTask(task);
+        return "added: " + task.getDescription() + "\n\n";
     }
 }

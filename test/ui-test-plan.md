@@ -163,8 +163,8 @@ ____________________________________________________________
 ${BYE}
 ```
 
-### TC-04: Reject malformed commands without ending the session
-**Aim:** Confirm that invalid task input and an unavailable task number show errors, after which `bye` still exits normally.
+### TC-04: Reject missing todo details and unavailable task numbers
+**Aim:** Confirm that specific validation feedback is shown and that the session continues after each error.
 **Inputs:**
 ```text
 todo
@@ -177,14 +177,242 @@ ${INTRO}
 
 ____________________________________________________________
 
-Invalid task: description cannot be blank
+A todo needs a description. Use: todo [description]
 
 ____________________________________________________________
 
 ____________________________________________________________
 
-Task not found
+Task number not found. Use: mark [task number]
 
+____________________________________________________________
+
+____________________________________________________________
+
+${BYE}
+```
+
+### TC-05: Require exact command words and reject the removed add alias
+**Aim:** Confirm that malformed task-command words do not create tasks and receive helpful feedback.
+**Inputs:**
+```text
+todoadd read a book
+addtodo read a book
+add todo read a book
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+____________________________________________________________
+
+Command not recognised. Did you mean: todo [description]?
+
+____________________________________________________________
+
+____________________________________________________________
+
+Command not recognised. Did you mean: todo [description]?
+
+____________________________________________________________
+
+____________________________________________________________
+
+Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, bye.
+
+____________________________________________________________
+
+____________________________________________________________
+
+${BYE}
+```
+
+### TC-06: Explain malformed deadline commands
+**Aim:** Confirm that deadline errors distinguish missing markers, descriptions, and due dates.
+**Inputs:**
+```text
+deadline watch lecture /by
+deadline watch lecture by Friday
+deadline /by Friday
+deadline watch lecture /by Friday
+list
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+____________________________________________________________
+
+The due date cannot be blank. Use: deadline [description] /by [due date]
+
+____________________________________________________________
+
+____________________________________________________________
+
+A deadline needs the /by keyword. Use: deadline [description] /by [due date]
+
+____________________________________________________________
+
+____________________________________________________________
+
+The deadline description cannot be blank. Use: deadline [description] /by [due date]
+
+____________________________________________________________
+
+____________________________________________________________
+
+added: watch lecture
+
+____________________________________________________________
+
+____________________________________________________________
+
+Here are the tasks in your list:
+1.[D][ ] watch lecture (by: Friday)
+____________________________________________________________
+
+____________________________________________________________
+
+${BYE}
+```
+
+### TC-07: Validate task numbers and commands without arguments
+**Aim:** Confirm that task numbers must be positive integers and that `list` and `bye` reject arguments.
+**Inputs:**
+```text
+todo read book
+mark
+unmark
+mark abc12
+unmark 0
+mark 2
+list extra
+bye now
+list
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+____________________________________________________________
+
+added: read book
+
+____________________________________________________________
+
+____________________________________________________________
+
+A task number is required. Use: mark [task number]
+
+____________________________________________________________
+
+____________________________________________________________
+
+A task number is required. Use: unmark [task number]
+
+____________________________________________________________
+
+____________________________________________________________
+
+The task number must be a positive integer. Use: mark [task number]
+
+____________________________________________________________
+
+____________________________________________________________
+
+The task number must be a positive integer. Use: unmark [task number]
+
+____________________________________________________________
+
+____________________________________________________________
+
+Task number not found. Use: mark [task number]
+
+____________________________________________________________
+
+____________________________________________________________
+
+The list command does not accept arguments. Use: list
+
+____________________________________________________________
+
+____________________________________________________________
+
+The bye command does not accept arguments. Use: bye
+
+____________________________________________________________
+
+____________________________________________________________
+
+Here are the tasks in your list:
+1.[T][ ] read book
+____________________________________________________________
+
+____________________________________________________________
+
+${BYE}
+```
+
+### TC-08: Explain malformed event commands
+**Aim:** Confirm that event errors identify the missing or misplaced field without adding an invalid task.
+**Inputs:**
+```text
+event /from 10am /to 11am
+event meeting /from /to 11am
+event meeting /from 10am /to
+event meeting from 10am /to 11am
+event meeting /to 11am /from 10am
+event meeting /from 10am /to 11am
+list
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+____________________________________________________________
+
+The event description cannot be blank. Use: event [description] /from [start] /to [end]
+
+____________________________________________________________
+
+____________________________________________________________
+
+The event start cannot be blank. Use: event [description] /from [start] /to [end]
+
+____________________________________________________________
+
+____________________________________________________________
+
+The event end cannot be blank. Use: event [description] /from [start] /to [end]
+
+____________________________________________________________
+
+____________________________________________________________
+
+An event needs the /from keyword. Use: event [description] /from [start] /to [end]
+
+____________________________________________________________
+
+____________________________________________________________
+
+The /to keyword must come after /from. Use: event [description] /from [start] /to [end]
+
+____________________________________________________________
+
+____________________________________________________________
+
+added: meeting
+
+____________________________________________________________
+
+____________________________________________________________
+
+Here are the tasks in your list:
+1.[E][ ] meeting (from: 10am to: 11am)
 ____________________________________________________________
 
 ____________________________________________________________
