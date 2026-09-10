@@ -1,3 +1,7 @@
+package dawn.task;
+
+import dawn.exception.DawnException;
+
 import java.util.ArrayList;
 
 /** Encapsulates the operations and state of the task collection. */

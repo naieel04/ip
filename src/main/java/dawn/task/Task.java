@@ -1,3 +1,6 @@
+package dawn.task;
+
+/** Represents a task's description and completion status. */
 public class Task {
     private String description;
     private boolean isDone;

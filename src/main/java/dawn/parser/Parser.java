@@ -1,3 +1,7 @@
+package dawn.parser;
+
+import dawn.exception.DawnException;
+
 import java.util.Locale;
 
 /** Parses user input and validates command arguments. */

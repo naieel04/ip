@@ -1,3 +1,5 @@
+package dawn.task;
+
 /** Subclass Event: A task with a description, start date, and end date. */
 public class Event extends Task {
     private String startDate;
