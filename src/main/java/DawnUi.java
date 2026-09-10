@@ -58,7 +58,7 @@ public class DawnUi {
     }
 
     public void showError(String error) {
-        System.out.println(MAX_LINE + error + "\n" + MAX_LINE);
+        System.out.println(error + "\n\n" + MAX_LINE);
     }
 
     public void printDivider() {
