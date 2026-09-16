@@ -5,7 +5,7 @@ Run these tests from the repository root after compiling with Java 25:
 ```powershell
 $javaSources = @(Get-ChildItem -Path src\main\java -Recurse -Filter *.java | Select-Object -ExpandProperty FullName)
 javac -d out\production\ip $javaSources
-powershell -ExecutionPolicy Bypass -File .codex\skills\test-ui\scripts\run-ui-tests.ps1 -ProgramCommand "java -cp out/production/ip dawn.Dawn"
+powershell -ExecutionPolicy Bypass -File .gemini\skills\test-ui\scripts\run-ui-tests.ps1 -ProgramCommand "java -cp out/production/ip dawn.Dawn"
 ```
 
 Each case is a new console session. The listed inputs are entered in order, and the expected output is the complete session transcript. The runner expands the following output tokens before it compares output exactly, apart from platform line endings, final newlines, and trailing padding on a line.
@@ -57,6 +57,11 @@ Bye. Hope to see you again soon!
 ____________________________________________________________
 ```
 
+### LINE
+```text
+____________________________________________________________
+```
+
 ## Test cases
 
 ### TC-01: Exit cleanly
@@ -69,7 +74,7 @@ bye
 ```text
 ${INTRO}
 
-____________________________________________________________
+${LINE}
 
 ${BYE}
 ```
@@ -88,33 +93,33 @@ bye
 ```text
 ${INTRO}
 
-____________________________________________________________
+${LINE}
 
 added: read book
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 added: submit report
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 added: team meeting
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 Here are the tasks in your list:
 1.[T][ ] read book
 2.[D][ ] submit report (by: Friday)
 3.[E][ ] team meeting (from: 2pm to: 3pm)
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 ${BYE}
 ```
@@ -133,33 +138,33 @@ bye
 ```text
 ${INTRO}
 
-____________________________________________________________
+${LINE}
 
 added: revise notes
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 Nice! I've marked this task as done:
 	[T][X] revise notes
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 OK, I've marked this task as not done yet:
 	[T][ ] revise notes
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 Here are the tasks in your list:
 1.[T][ ] revise notes
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 ${BYE}
 ```
@@ -176,19 +181,19 @@ bye
 ```text
 ${INTRO}
 
-____________________________________________________________
+${LINE}
 
 A todo needs a description. Use: todo [description]
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 Task number not found. Use: mark [task number]
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 ${BYE}
 ```
@@ -206,25 +211,25 @@ bye
 ```text
 ${INTRO}
 
-____________________________________________________________
+${LINE}
 
 Command not recognised. Did you mean: todo [description]?
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 Command not recognised. Did you mean: todo [description]?
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, bye.
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 ${BYE}
 ```
@@ -244,37 +249,37 @@ bye
 ```text
 ${INTRO}
 
-____________________________________________________________
+${LINE}
 
 The due date cannot be blank. Use: deadline [description] /by [due date]
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 A deadline needs the /by keyword. Use: deadline [description] /by [due date]
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 The deadline description cannot be blank. Use: deadline [description] /by [due date]
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 added: watch lecture
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 Here are the tasks in your list:
 1.[D][ ] watch lecture (by: Friday)
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 ${BYE}
 ```
@@ -298,61 +303,61 @@ bye
 ```text
 ${INTRO}
 
-____________________________________________________________
+${LINE}
 
 added: read book
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 A task number is required. Use: mark [task number]
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 A task number is required. Use: unmark [task number]
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 The task number must be a positive integer. Use: mark [task number]
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 The task number must be a positive integer. Use: unmark [task number]
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 Task number not found. Use: mark [task number]
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 The list command does not accept arguments. Use: list
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 The bye command does not accept arguments. Use: bye
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 Here are the tasks in your list:
 1.[T][ ] read book
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 ${BYE}
 ```
@@ -374,49 +379,79 @@ bye
 ```text
 ${INTRO}
 
-____________________________________________________________
+${LINE}
 
 The event description cannot be blank. Use: event [description] /from [start] /to [end]
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 The event start cannot be blank. Use: event [description] /from [start] /to [end]
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 The event end cannot be blank. Use: event [description] /from [start] /to [end]
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 An event needs the /from keyword. Use: event [description] /from [start] /to [end]
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 The /to keyword must come after /from. Use: event [description] /from [start] /to [end]
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 added: meeting
 
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
 
 Here are the tasks in your list:
 1.[E][ ] meeting (from: 10am to: 11am)
-____________________________________________________________
+${LINE}
 
-____________________________________________________________
+${LINE}
+
+${BYE}
+```
+
+### TC-09: Load tasks from persistent storage
+**Aim:** Confirm that Dawn automatically loads tasks from data/dawn.txt and skips corrupted lines with a warning.
+**File input:**
+```text
+T | 1 | revise notes
+X | 0 | unknown type
+D | 0 | submit report | tonight
+```
+**Inputs:**
+```text
+list
+bye
+```
+**Expected output:**
+```text
+Warning: Corrupted task line skipped: [X | 0 | unknown type] - Unknown task type identifier: X
+${INTRO}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[T][X] revise notes
+2.[D][ ] submit report (by: tonight)
+${LINE}
+
+${LINE}
 
 ${BYE}
 ```
