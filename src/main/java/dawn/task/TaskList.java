@@ -27,4 +27,9 @@ public class TaskList {
         }
         tasks.add(task);
     }
+
+    /** Removes and returns the task at the given zero-based index. */
+    public Task removeTask(int index) {
+        return tasks.remove(index);
+    }
 }

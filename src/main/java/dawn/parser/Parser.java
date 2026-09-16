@@ -11,6 +11,7 @@ public class Parser {
     public static final String EVENT_USAGE = "event [description] /from [start] /to [end]";
     public static final String MARK_USAGE = "mark [task number]";
     public static final String UNMARK_USAGE = "unmark [task number]";
+    public static final String DELETE_USAGE = "delete [task number]";
 
     private static final String DEADLINE_MARKER = "/by";
     private static final String EVENT_START_MARKER = "/from";
@@ -27,8 +28,15 @@ public class Parser {
         return new String[]{command, arguments};
     }
 
-    public static int parseTaskNumber(String arguments, boolean done) throws DawnException {
-        String usage = done ? MARK_USAGE : UNMARK_USAGE;
+    /**
+     * Parses a one-based task number and converts it to a zero-based list index.
+     *
+     * @param arguments raw command arguments
+     * @param usage expected command format shown when validation fails
+     * @return the corresponding zero-based task index
+     * @throws DawnException if the argument is missing or is not a positive integer
+     */
+    public static int parseTaskNumber(String arguments, String usage) throws DawnException {
         if (arguments.isEmpty()) {
             throw new DawnException("A task number is required. Use: " + usage);
         }
@@ -131,6 +139,9 @@ public class Parser {
         if (normalizedCommand.contains("mark")) {
             return "Command not recognised. Did you mean: " + MARK_USAGE + "?";
         }
-        return "Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, bye.";
+        if (normalizedCommand.contains("delete")) {
+            return "Command not recognised. Did you mean: " + DELETE_USAGE + "?";
+        }
+        return "Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, bye.";
     }
 }
