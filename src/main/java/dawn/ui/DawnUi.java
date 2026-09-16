@@ -43,10 +43,6 @@ public class DawnUi {
         System.out.println(error + "\n\n" + MAX_LINE);
     }
 
-    public void printDivider() {
-        System.out.println(MAX_LINE);
-    }
-
     /**
      * Reads the next command line from input and passes it to CommandHandler.
      *
@@ -69,12 +65,4 @@ public class DawnUi {
         return false;
     }
 
-    // Backwards-compatible methods if needed
-    public String getIntroMessage() {
-        return INTRO_MESSAGE;
-    }
-
-    public String getByeMessage() {
-        return BYE_MESSAGE;
-    }
 }
