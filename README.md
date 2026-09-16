@@ -23,3 +23,21 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    ```
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+
+## Building a runnable JAR
+
+The project uses the Gradle Shadow plugin to produce one runnable JAR containing
+the application and any future external dependencies. From the repository root,
+run:
+
+```powershell
+.\gradlew.bat shadowJar
+```
+
+The resulting file is `build\libs\dawn.jar`. Run it with Java 25:
+
+```powershell
+java -jar build\libs\dawn.jar
+```
+
+On macOS or Linux, use `./gradlew shadowJar` and `java -jar build/libs/dawn.jar`.

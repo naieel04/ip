@@ -8,24 +8,13 @@ import java.util.Scanner;
 /** Handles console input and displays Dawn's messages and command feedback. */
 public class DawnUi {
     public static final String NAME_BANNER = """
-            ⬜⬜⬜⬜⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜
-            ⬜⬜⬛⬛🟦🟦🟦🟦⬛⬛⬜⬜⬜⬜⬜
-            ⬜⬛🟦🟦🟦🟦🟦🟦🟦🟦⬛⬜⬜⬜⬜
-            ⬜⬛🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛⬜⬜⬜
-            ⬛🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛⬜⬜⬜
-            ⬛🟦🟦🟦🟦🟦⬜⬜⬜🟦🟦⬛⬜⬜⬜
-            ⬛🟦🟦🟦🟦⬜⬜⬜⬜🟦🟦⬛⬜⬜⬜
-            ⬛🟧🟧🟦⬜⬜⬛⬜⬜🟦🟦⬛⬜⬜⬜
-            ⬜⬛🟧🟧⬜⬜⬛⬜🟦🟦⬛⬜⬜⬜⬜
-            ⬜⬜⬛⬛🟦🟦🟦🟦🟦⬛🟦⬛⬜⬛⬛
-            ⬜⬜⬛🟦⬛⬛⬛⬛⬛🟦🟦🟦⬛🟦⬛
-            ⬜⬜⬜⬛⬛🟦🟦🟦⬛⬛⬛🟦🟦⬛⬜
-            ⬜⬜⬜⬛⬜⬛⬛⬛🟦🟦🟦⬛🟦⬛⬜
-            ⬜⬜⬜⬛🟦🟦⬜⬛🟦🟦🟦⬛⬛⬜⬜
-            ⬜⬜⬛🟧🟦🟦🟦🟦⬛🟦🟦⬛⬜⬜⬜
-            ⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜
-            ⬜⬜⬜⬜⬜⬜⬛🟧🟧⬛⬜⬜⬜⬜⬜
-            ⬜⬜⬜⬜⬜⬜⬜⬛⬛⬜⬜⬜⬜⬜⬜ \n""";
+            ██████╗  █████╗ ██╗    ██╗███╗   ██╗
+            ██╔══██╗██╔══██╗██║    ██║████╗  ██║
+            ██║  ██║███████║██║ █╗ ██║██╔██╗ ██║
+            ██║  ██║██╔══██║██║███╗██║██║╚██╗██║
+            ██████╔╝██║  ██║╚███╔███╔╝██║ ╚████║
+            ╚═════╝ ╚═╝  ╚═╝ ╚══╝╚══╝ ╚═╝  ╚═══╝
+            \n""";
     public static final String MAX_LINE = "____________________________________________________________\n";
     public static final String INTRO_MESSAGE = MAX_LINE + NAME_BANNER + "Hello! I'm Dawn.\nWhat can I do for you?\n" + MAX_LINE;
     public static final String BYE_MESSAGE = "Bye. Hope to see you again soon!\n" + MAX_LINE;
