@@ -2,16 +2,19 @@ package dawn;
 
 import dawn.command.CommandHandler;
 import dawn.exception.DawnException;
+import dawn.storage.Storage;
 import dawn.ui.DawnUi;
 
 /** Starts Dawn and coordinates the console application's lifecycle. */
 public class Dawn {
     private final DawnUi ui;
     private final CommandHandler commandHandler;
+    private final Storage storage;
 
     public Dawn() {
-        this.commandHandler = new CommandHandler();
-        this.ui = new DawnUi(commandHandler);
+        this.storage = new Storage("data/dawn.txt");
+        this.commandHandler = new CommandHandler(this.storage);
+        this.ui = new DawnUi(this.commandHandler);
     }
 
     public void run() {

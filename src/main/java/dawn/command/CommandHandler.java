@@ -2,6 +2,7 @@ package dawn.command;
 
 import dawn.exception.DawnException;
 import dawn.parser.Parser;
+import dawn.storage.Storage;
 import dawn.task.Deadline;
 import dawn.task.Event;
 import dawn.task.Task;
@@ -19,9 +20,11 @@ public class CommandHandler {
     private static final String COMMAND_EVENT = "event";
 
     private final TaskList taskList;
+    private final Storage storage;
 
-    public CommandHandler() {
+    public CommandHandler(Storage storage) {
         this.taskList = new TaskList();
+        this.storage = storage;
     }
 
     /**
@@ -77,6 +80,9 @@ public class CommandHandler {
 
         Task task = taskList.getTask(index);
         task.setDone(done);
+        
+        storage.save(taskList); // Save mutation
+
         String message = done ? "Nice! I've marked this task as done:\n\t"
                 : "OK, I've marked this task as not done yet:\n\t";
         return message + task + "\n\n";
@@ -103,6 +109,7 @@ public class CommandHandler {
     /** Adds an already validated task and returns the addition feedback. */
     private String addTaskMessage(Task task) throws DawnException {
         taskList.addTask(task);
+        storage.save(taskList); // Save mutation
         return "added: " + task.getDescription() + "\n\n";
     }
 }
