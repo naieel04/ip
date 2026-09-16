@@ -23,7 +23,11 @@ public class CommandHandler {
     private final Storage storage;
 
     public CommandHandler(Storage storage) {
-        this.taskList = new TaskList();
+        this(storage, new TaskList());
+    }
+
+    public CommandHandler(Storage storage, TaskList initialTasks) {
+        this.taskList = initialTasks;
         this.storage = storage;
     }
 

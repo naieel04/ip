@@ -13,7 +13,17 @@ public class Dawn {
 
     public Dawn() {
         this.storage = new Storage("data/dawn.txt");
-        this.commandHandler = new CommandHandler(this.storage);
+        
+        // Attempt to load existing tasks, falling back to a clean list on catastrophic I/O failure
+        CommandHandler initHandler;
+        try {
+            initHandler = new CommandHandler(this.storage, this.storage.load());
+        } catch (DawnException e) {
+            System.out.println("Warning: Could not start with stored tasks. Initializing fresh list. (" + e.getMessage() + ")");
+            initHandler = new CommandHandler(this.storage);
+        }
+        
+        this.commandHandler = initHandler;
         this.ui = new DawnUi(this.commandHandler);
     }
 
