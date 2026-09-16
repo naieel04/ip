@@ -1,11 +1,11 @@
-# Dawn UI test plan
+﻿# Dawn UI test plan
 
 Run these tests from the repository root after compiling with Java 25:
 
 ```powershell
 $javaSources = @(Get-ChildItem -Path src\main\java -Recurse -Filter *.java | Select-Object -ExpandProperty FullName)
 javac -d out\production\ip $javaSources
-powershell -ExecutionPolicy Bypass -File .codex\skills\test-ui\scripts\run-ui-tests.ps1 -ProgramCommand "java -cp out/production/ip dawn.Dawn"
+powershell -ExecutionPolicy Bypass -File .codex\skills\test-ui\scripts\run-ui-tests.ps1 -ProgramCommand 'java "-Dstdout.encoding=UTF-8" -cp out/production/ip dawn.Dawn'
 ```
 
 Each case is a new console session. The listed inputs are entered in order, and the expected output is the complete session transcript. The runner expands the following output tokens before it compares output exactly, apart from platform line endings, final newlines, and trailing padding on a line.
@@ -15,38 +15,24 @@ Each case is a new console session. The listed inputs are entered in order, and 
 ### INTRO
 ```text
 ____________________________________________________________
-                         :::xxxxxxxxxxx;:::.
-                   .xxxx+;:..............:;xx;
-                ;xx+;::::.....................;x+
-             .xx+;:;++++;:.................;++++xxx:
-            .x+:;+;.     .;;.............::        .xx
-           +x;:+:          .;..........:;.           .x+
-          x+::x..+.         ;:.........;:        .xX:  xx
-         x+;:+..$$X         ;;.........;.        .X$;  .x;
-        ;x;:;+  .:          ;;.........+.               +;
-       .x;::;;              +:.........;;               ;;
-       x+:;:;x             +;...........;.              +;
-      .x;:;::;X.         ;+..............;;            ;x;
-      ++;:::;::;x+;:;;xx;..................+;.        xxx
-      ++:::::;::::...........................:+xx+++++::x;
-      ++::;::;:;::......................................x;
-      +x;::;::::::.......;xxx+;........;+XXXXx;........:x;
-       x;:::;:;:::......+XxxxxxxXXXXXXxxxxxxxxX:.......;x.
-       +x;:::::;:;:.....+xxxxxxxxxxxxxxxxxxxxxX:.......+x
-       .xx;:;::::::.....;Xxxxxxxxxxxxxxxxxxxxxx:......;x.
-         +x;:;;:;:;:.....:x+x+x+xx+++xxxxxx+X+.......:x;
-          xx;::::;:::......:;x++++++++;++x+;........;x.
-      :+:x;xxx;::::;::............................:xx
-  .xx+;;:;;;+xxx;;:::;::........................;xx.
- ;x;:::;::::::;xxxxx;;;:::..................:;xxx.
-.x;::::::;::;:::+xx;;;+XXxx++;;;;;;;;;;;xx+;;;.;x:
-x;:;:;:::::::;:;;x;...;+x  ;; ...  ..:.    . ;:.;x;
-x;:::::++xx;::::;+....;X. :;.       .:.     ..;..;X.
-x;:;:::::::;x:::++...:x+  +. .  . . .:.. .   .x..:x.
-:x;::;::::::x;::;+..:xx; .+........:::::..:::.+:.:x.
- ;x;::;::;:;x:;::;xxX+x; ;; .........::... . .+;+x.
-  ;xx;;;;+xx;;;:;;;+x+x; .+.       ..:.    . ;+.
-Hello! I'm Dawn.
+⬜⬜⬜⬜⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜
+⬜⬜⬛⬛🟦🟦🟦🟦⬛⬛⬜⬜⬜⬜⬜
+⬜⬛🟦🟦🟦🟦🟦🟦🟦🟦⬛⬜⬜⬜⬜
+⬜⬛🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛⬜⬜⬜
+⬛🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛⬜⬜⬜
+⬛🟦🟦🟦🟦🟦⬜⬜⬜🟦🟦⬛⬜⬜⬜
+⬛🟦🟦🟦🟦⬜⬜⬜⬜🟦🟦⬛⬜⬜⬜
+⬛🟧🟧🟦⬜⬜⬛⬜⬜🟦🟦⬛⬜⬜⬜
+⬜⬛🟧🟧⬜⬜⬛⬜🟦🟦⬛⬜⬜⬜⬜
+⬜⬜⬛⬛🟦🟦🟦🟦🟦⬛🟦⬛⬜⬛⬛
+⬜⬜⬛🟦⬛⬛⬛⬛⬛🟦🟦🟦⬛🟦⬛
+⬜⬜⬜⬛⬛🟦🟦🟦⬛⬛⬛🟦🟦⬛⬜
+⬜⬜⬜⬛⬜⬛⬛⬛🟦🟦🟦⬛🟦⬛⬜
+⬜⬜⬜⬛🟦🟦⬜⬛🟦🟦🟦⬛⬛⬜⬜
+⬜⬜⬛🟧🟦🟦🟦🟦⬛🟦🟦⬛⬜⬜⬜
+⬜⬜⬜⬛⬛⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬛🟧🟧⬛⬜⬜⬜⬜⬜
+⬜⬜⬜⬜⬜⬜⬜⬛⬛⬜⬜⬜⬜⬜⬜Hello! I'm Dawn.
 What can I do for you?
 ____________________________________________________________
 ```
@@ -220,8 +206,118 @@ ____________________________________________________________
 
 ____________________________________________________________
 
-Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, bye.
+Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, bye.
 
+____________________________________________________________
+
+____________________________________________________________
+
+${BYE}
+```
+
+### TC-09: Delete a task by its displayed number
+**Aim:** Confirm that `delete` removes the selected task, reports it on an indented line, and renumbers the remaining list.
+**Inputs:**
+```text
+todo read book
+deadline submit report /by Friday
+event team meeting /from 2pm /to 3pm
+delete 2
+list
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+____________________________________________________________
+
+added: read book
+
+____________________________________________________________
+
+____________________________________________________________
+
+added: submit report
+
+____________________________________________________________
+
+____________________________________________________________
+
+added: team meeting
+
+____________________________________________________________
+
+____________________________________________________________
+
+Noted. I've removed this task:
+	[D][ ] submit report (by: Friday)
+Now you have 2 tasks in the list
+
+____________________________________________________________
+
+____________________________________________________________
+
+Here are the tasks in your list:
+1.[T][ ] read book
+2.[E][ ] team meeting (from: 2pm to: 3pm)
+____________________________________________________________
+
+____________________________________________________________
+
+${BYE}
+```
+
+### TC-10: Reject malformed and unavailable delete task numbers
+**Aim:** Confirm that `delete` explains its required format and leaves the task list unchanged after invalid requests.
+**Inputs:**
+```text
+todo read book
+delete
+delete /1
+delete 0
+delete 2
+list
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+____________________________________________________________
+
+added: read book
+
+____________________________________________________________
+
+____________________________________________________________
+
+A task number is required. Use: delete [task number]
+
+____________________________________________________________
+
+____________________________________________________________
+
+The task number must be a positive integer. Use: delete [task number]
+
+____________________________________________________________
+
+____________________________________________________________
+
+The task number must be a positive integer. Use: delete [task number]
+
+____________________________________________________________
+
+____________________________________________________________
+
+Task number not found. Use: delete [task number]
+
+____________________________________________________________
+
+____________________________________________________________
+
+Here are the tasks in your list:
+1.[T][ ] read book
 ____________________________________________________________
 
 ____________________________________________________________

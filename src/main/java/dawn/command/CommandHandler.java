@@ -14,6 +14,7 @@ public class CommandHandler {
     private static final String COMMAND_LIST = "list";
     private static final String COMMAND_MARK = "mark";
     private static final String COMMAND_UNMARK = "unmark";
+    private static final String COMMAND_DELETE = "delete";
     private static final String COMMAND_TODO = "todo";
     private static final String COMMAND_DEADLINE = "deadline";
     private static final String COMMAND_EVENT = "event";
@@ -47,6 +48,8 @@ public class CommandHandler {
             return updateTask(arguments, true);
         case COMMAND_UNMARK:
             return updateTask(arguments, false);
+        case COMMAND_DELETE:
+            return deleteTask(arguments);
         case COMMAND_TODO:
             return addTodo(arguments);
         case COMMAND_DEADLINE:
@@ -69,9 +72,10 @@ public class CommandHandler {
 
     /** Validates a task number before marking or unmarking that task, returning feedback. */
     public String updateTask(String arguments, boolean done) throws DawnException {
-        int index = Parser.parseTaskNumber(arguments, done);
+        String command = done ? COMMAND_MARK : COMMAND_UNMARK;
+        String usage = done ? Parser.MARK_USAGE : Parser.UNMARK_USAGE;
+        int index = Parser.parseTaskNumber(arguments, usage);
         if (index < 0 || index >= taskList.size()) {
-            String command = done ? COMMAND_MARK : COMMAND_UNMARK;
             throw new DawnException("Task number not found. Use: " + command + " [task number]");
         }
 
@@ -80,6 +84,18 @@ public class CommandHandler {
         String message = done ? "Nice! I've marked this task as done:\n\t"
                 : "OK, I've marked this task as not done yet:\n\t";
         return message + task + "\n\n";
+    }
+
+    /** Deletes the requested one-based task number and returns three-line feedback. */
+    public String deleteTask(String arguments) throws DawnException {
+        int index = Parser.parseTaskNumber(arguments, Parser.DELETE_USAGE);
+        if (index < 0 || index >= taskList.size()) {
+            throw new DawnException("Task number not found. Use: " + Parser.DELETE_USAGE);
+        }
+
+        Task removedTask = taskList.removeTask(index);
+        return "Noted. I've removed this task:\n\t" + removedTask
+                + "\nNow you have " + taskList.size() + " tasks in the list\n\n";
     }
 
     /** Adds a todo only when it has a non-blank description, returning feedback. */
