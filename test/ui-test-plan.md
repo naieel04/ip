@@ -431,3 +431,39 @@ ${LINE}
 
 ${BYE}
 ```
+
+### TC-10: Delete a task loaded from storage
+**Aim:** Confirm that delete removes the selected stored task and keeps the remaining task correctly numbered.
+**File input:**
+```text
+T | 0 | read book
+D | 1 | submit report | tomorrow
+```
+**Inputs:**
+```text
+delete 1
+list
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+Noted. I've removed this task:
+	[T][ ] read book
+Now you have 1 tasks in the list
+
+${LINE}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[D][X] submit report (by: tomorrow)
+${LINE}
+
+${LINE}
+
+${BYE}
+```

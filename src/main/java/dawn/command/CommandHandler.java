@@ -104,6 +104,7 @@ public class CommandHandler {
         }
 
         Task removedTask = taskList.removeTask(index);
+        storage.save(taskList);
         return "Noted. I've removed this task:\n\t" + removedTask
                 + "\nNow you have " + taskList.size() + " tasks in the list\n\n";
     }
