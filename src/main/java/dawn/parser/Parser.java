@@ -206,26 +206,29 @@ public class Parser {
     public static String unknownCommandMessage(String commandWord) {
         String normalizedCommand = commandWord.toLowerCase(Locale.ROOT);
         if (normalizedCommand.contains("todo")) {
-            return "Command not recognised. Did you mean: " + TODO_USAGE + "?";
+            return "Command not recognised.\nDid you mean: " + TODO_USAGE + "?";
         }
         if (normalizedCommand.contains("deadline")) {
-            return "Command not recognised. Did you mean: " + DEADLINE_USAGE + "?";
+            return "Command not recognised.\nDid you mean: " + DEADLINE_USAGE + "?";
         }
         if (normalizedCommand.contains("event")) {
-            return "Command not recognised. Did you mean: " + EVENT_USAGE + "?";
+            return "Command not recognised.\nDid you mean: " + EVENT_USAGE + "?";
         }
         if (normalizedCommand.contains("unmark")) {
-            return "Command not recognised. Did you mean: " + UNMARK_USAGE + "?";
+            return "Command not recognised.\nDid you mean: " + UNMARK_USAGE + "?";
         }
         if (normalizedCommand.contains("mark")) {
-            return "Command not recognised. Did you mean: " + MARK_USAGE + "?";
+            return "Command not recognised.\nDid you mean: " + MARK_USAGE + "?";
         }
         if (normalizedCommand.contains("delete")) {
-            return "Command not recognised. Did you mean: " + DELETE_USAGE + "?";
+            return "Command not recognised.\nDid you mean: " + DELETE_USAGE + "?";
         }
         if (normalizedCommand.contains("view") || normalizedCommand.contains("schedule")) {
-            return "Command not recognised. Did you mean: " + VIEW_USAGE + "?";
+            return "Command not recognised.\nDid you mean: " + VIEW_USAGE + "?";
         }
-        return "Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, view, bye.";
+        return "Command not recognised.\nSupported commands:\n"
+                + "  - todo, deadline, event\n"
+                + "  - list, mark, unmark, delete\n"
+                + "  - view, bye";
     }
 }

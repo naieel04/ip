@@ -64,6 +64,17 @@ ____________________________________________________________
 
 Hello! I'm Dawn.
 What can I do for you?
+
+Here are the commands you can use:
+  todo [description]                     - Add a todo task
+  deadline [description] /by [due date]  - Add a deadline task
+  event [desc] /from [start] /to [end]   - Add an event task
+  list                                   - List all tasks
+  mark [task number]                     - Mark a task as done
+  unmark [task number]                   - Mark a task as not done
+  delete [task number]                   - Delete a task
+  view [date]                            - View tasks on a specific date
+  bye                                    - Exit the application
 ____________________________________________________________
 ```
 
@@ -234,49 +245,60 @@ ${INTRO}
 
 ${LINE}
 
-Command not recognised. Did you mean: todo [description]?
+Command not recognised.
+Did you mean: todo [description]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised. Did you mean: todo [description]?
+Command not recognised.
+Did you mean: todo [description]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised. Did you mean: deadline [description] /by [due date]?
+Command not recognised.
+Did you mean: deadline [description] /by [due date]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised. Did you mean: event [description] /from [start] /to [end]?
+Command not recognised.
+Did you mean: event [description] /from [start] /to [end]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised. Did you mean: mark [task number]?
+Command not recognised.
+Did you mean: mark [task number]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised. Did you mean: unmark [task number]?
+Command not recognised.
+Did you mean: unmark [task number]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised. Did you mean: delete [task number]?
+Command not recognised.
+Did you mean: delete [task number]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, view, bye.
+Command not recognised.
+Supported commands:
+  - todo, deadline, event
+  - list, mark, unmark, delete
+  - view, bye
 
 ${LINE}
 
@@ -642,13 +664,21 @@ ${LINE}
 
 ${LINE}
 
-Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, view, bye.
+Command not recognised.
+Supported commands:
+  - todo, deadline, event
+  - list, mark, unmark, delete
+  - view, bye
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, view, bye.
+Command not recognised.
+Supported commands:
+  - todo, deadline, event
+  - list, mark, unmark, delete
+  - view, bye
 
 ${LINE}
 
