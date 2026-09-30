@@ -1,5 +1,7 @@
 package dawn.task;
 
+import java.time.LocalDate;
+
 /** Represents a task's description and completion status. */
 public class Task {
     private String description;
@@ -36,6 +38,16 @@ public class Task {
 
     public String toFileString() {
         return (isDone ? "1" : "0") + " | " + description;
+    }
+
+    /**
+     * Checks if this task occurs on the specified calendar date.
+     *
+     * @param date the date to check against
+     * @return {@code true} if the task occurs on the given date, {@code false} otherwise
+     */
+    public boolean isOnDate(LocalDate date) {
+        return false;
     }
 
     @Override

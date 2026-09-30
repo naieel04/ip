@@ -7,9 +7,11 @@ import dawn.command.ExitCommand;
 import dawn.command.ListCommand;
 import dawn.command.MarkCommand;
 import dawn.command.UnmarkCommand;
+import dawn.command.ViewCommand;
 import dawn.exception.DawnException;
 import dawn.task.Deadline;
 import dawn.task.Event;
+import dawn.task.TaskDateTime;
 import dawn.task.ToDo;
 
 import java.util.Locale;
@@ -24,6 +26,8 @@ public class Parser {
     public static final String COMMAND_TODO = "todo";
     public static final String COMMAND_DEADLINE = "deadline";
     public static final String COMMAND_EVENT = "event";
+    public static final String COMMAND_VIEW = "view";
+    public static final String COMMAND_SCHEDULE = "schedule";
 
     public static final String TODO_USAGE = "todo [description]";
     public static final String DEADLINE_USAGE = "deadline [description] /by [due date]";
@@ -31,6 +35,7 @@ public class Parser {
     public static final String MARK_USAGE = "mark [task number]";
     public static final String UNMARK_USAGE = "unmark [task number]";
     public static final String DELETE_USAGE = "delete [task number]";
+    public static final String VIEW_USAGE = "view [date]";
 
     private static final String DEADLINE_MARKER = "/by";
     private static final String EVENT_START_MARKER = "/from";
@@ -64,11 +69,12 @@ public class Parser {
         case COMMAND_TODO:
             return new AddCommand(new ToDo(parseTodoArgs(arguments)));
         case COMMAND_DEADLINE:
-            String[] deadlineArgs = parseDeadlineArgs(arguments);
-            return new AddCommand(new Deadline(deadlineArgs[0], deadlineArgs[1]));
+            return new AddCommand(parseDeadlineArgs(arguments));
         case COMMAND_EVENT:
-            String[] eventArgs = parseEventArgs(arguments);
-            return new AddCommand(new Event(eventArgs[0], eventArgs[1], eventArgs[2]));
+            return new AddCommand(parseEventArgs(arguments));
+        case COMMAND_VIEW:
+        case COMMAND_SCHEDULE:
+            return parseViewArgs(arguments);
         default:
             throw new DawnException(unknownCommandMessage(command));
         }
@@ -121,23 +127,24 @@ public class Parser {
         return arguments;
     }
 
-    public static String[] parseDeadlineArgs(String arguments) throws DawnException {
+    public static Deadline parseDeadlineArgs(String arguments) throws DawnException {
         int byIndex = findStandaloneMarker(arguments, DEADLINE_MARKER);
         if (byIndex < 0) {
             throw new DawnException("A deadline needs the /by keyword. Use: " + DEADLINE_USAGE);
         }
         String description = arguments.substring(0, byIndex).trim();
-        String dueDate = arguments.substring(byIndex + DEADLINE_MARKER.length()).trim();
+        String dueDateStr = arguments.substring(byIndex + DEADLINE_MARKER.length()).trim();
         if (description.isEmpty()) {
             throw new DawnException("The deadline description cannot be blank. Use: " + DEADLINE_USAGE);
         }
-        if (dueDate.isEmpty()) {
+        if (dueDateStr.isEmpty()) {
             throw new DawnException("The due date cannot be blank. Use: " + DEADLINE_USAGE);
         }
-        return new String[]{description, dueDate};
+        TaskDateTime dueDate = DateTimeParser.parseFlexible(dueDateStr);
+        return new Deadline(description, dueDate);
     }
 
-    public static String[] parseEventArgs(String arguments) throws DawnException {
+    public static Event parseEventArgs(String arguments) throws DawnException {
         int fromIndex = findStandaloneMarker(arguments, EVENT_START_MARKER);
         int toIndex = findStandaloneMarker(arguments, EVENT_END_MARKER);
         if (fromIndex < 0) {
@@ -151,18 +158,28 @@ public class Parser {
         }
 
         String description = arguments.substring(0, fromIndex).trim();
-        String start = arguments.substring(fromIndex + EVENT_START_MARKER.length(), toIndex).trim();
-        String end = arguments.substring(toIndex + EVENT_END_MARKER.length()).trim();
+        String startStr = arguments.substring(fromIndex + EVENT_START_MARKER.length(), toIndex).trim();
+        String endStr = arguments.substring(toIndex + EVENT_END_MARKER.length()).trim();
         if (description.isEmpty()) {
             throw new DawnException("The event description cannot be blank. Use: " + EVENT_USAGE);
         }
-        if (start.isEmpty()) {
+        if (startStr.isEmpty()) {
             throw new DawnException("The event start cannot be blank. Use: " + EVENT_USAGE);
         }
-        if (end.isEmpty()) {
+        if (endStr.isEmpty()) {
             throw new DawnException("The event end cannot be blank. Use: " + EVENT_USAGE);
         }
-        return new String[]{description, start, end};
+        TaskDateTime startDate = DateTimeParser.parseFlexible(startStr);
+        TaskDateTime endDate = DateTimeParser.parseFlexible(endStr);
+        return new Event(description, startDate, endDate);
+    }
+
+    public static Command parseViewArgs(String arguments) throws DawnException {
+        if (arguments.isEmpty()) {
+            throw new DawnException("A date is required. Use: " + VIEW_USAGE);
+        }
+        TaskDateTime targetDateTime = DateTimeParser.parseStrict(arguments);
+        return new ViewCommand(targetDateTime);
     }
 
     public static void requireNoArguments(String command, String arguments) throws DawnException {
@@ -189,23 +206,29 @@ public class Parser {
     public static String unknownCommandMessage(String commandWord) {
         String normalizedCommand = commandWord.toLowerCase(Locale.ROOT);
         if (normalizedCommand.contains("todo")) {
-            return "Command not recognised. Did you mean: " + TODO_USAGE + "?";
+            return "Command not recognised.\nDid you mean: " + TODO_USAGE + "?";
         }
         if (normalizedCommand.contains("deadline")) {
-            return "Command not recognised. Did you mean: " + DEADLINE_USAGE + "?";
+            return "Command not recognised.\nDid you mean: " + DEADLINE_USAGE + "?";
         }
         if (normalizedCommand.contains("event")) {
-            return "Command not recognised. Did you mean: " + EVENT_USAGE + "?";
+            return "Command not recognised.\nDid you mean: " + EVENT_USAGE + "?";
         }
         if (normalizedCommand.contains("unmark")) {
-            return "Command not recognised. Did you mean: " + UNMARK_USAGE + "?";
+            return "Command not recognised.\nDid you mean: " + UNMARK_USAGE + "?";
         }
         if (normalizedCommand.contains("mark")) {
-            return "Command not recognised. Did you mean: " + MARK_USAGE + "?";
+            return "Command not recognised.\nDid you mean: " + MARK_USAGE + "?";
         }
         if (normalizedCommand.contains("delete")) {
-            return "Command not recognised. Did you mean: " + DELETE_USAGE + "?";
+            return "Command not recognised.\nDid you mean: " + DELETE_USAGE + "?";
         }
-        return "Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, bye.";
+        if (normalizedCommand.contains("view") || normalizedCommand.contains("schedule")) {
+            return "Command not recognised.\nDid you mean: " + VIEW_USAGE + "?";
+        }
+        return "Command not recognised.\nSupported commands:\n"
+                + "  - todo, deadline, event\n"
+                + "  - list, mark, unmark, delete\n"
+                + "  - view, bye";
     }
 }

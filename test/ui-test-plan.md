@@ -1,4 +1,4 @@
-﻿# Dawn UI test plan
+# Dawn UI test plan
 
 Run these tests from the repository root after compiling with Java 25:
 
@@ -64,6 +64,17 @@ ____________________________________________________________
 
 Hello! I'm Dawn.
 What can I do for you?
+
+Here are the commands you can use:
+  todo [description]                     - Add a todo task
+  deadline [description] /by [due date]  - Add a deadline task
+  event [desc] /from [start] /to [end]   - Add an event task
+  list                                   - List all tasks
+  mark [task number]                     - Mark a task as done
+  unmark [task number]                   - Mark a task as not done
+  delete [task number]                   - Delete a task
+  view [date]                            - View tasks on a specific date
+  bye                                    - Exit the application
 ____________________________________________________________
 ```
 
@@ -100,7 +111,7 @@ ${BYE}
 **Inputs:**
 ```text
 todo read book
-deadline submit report /by Friday
+deadline submit report /by 2019-10-15
 event team meeting /from 2pm /to 3pm
 list
 bye
@@ -131,7 +142,7 @@ ${LINE}
 
 Here are the tasks in your list:
 1.[T][ ] read book
-2.[D][ ] submit report (by: Friday)
+2.[D][ ] submit report (by: 15 Oct 2019)
 3.[E][ ] team meeting (from: 2pm to: 3pm)
 ${LINE}
 
@@ -225,6 +236,8 @@ eventnow camp /from 2pm /to 4pm
 marking 1
 unmarking 1
 deleteitem 1
+viewtasks 2019-10-15
+schedules 2019-10-15
 add todo read a book
 bye
 ```
@@ -234,49 +247,74 @@ ${INTRO}
 
 ${LINE}
 
-Command not recognised. Did you mean: todo [description]?
+Command not recognised.
+Did you mean: todo [description]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised. Did you mean: todo [description]?
+Command not recognised.
+Did you mean: todo [description]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised. Did you mean: deadline [description] /by [due date]?
+Command not recognised.
+Did you mean: deadline [description] /by [due date]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised. Did you mean: event [description] /from [start] /to [end]?
+Command not recognised.
+Did you mean: event [description] /from [start] /to [end]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised. Did you mean: mark [task number]?
+Command not recognised.
+Did you mean: mark [task number]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised. Did you mean: unmark [task number]?
+Command not recognised.
+Did you mean: unmark [task number]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised. Did you mean: delete [task number]?
+Command not recognised.
+Did you mean: delete [task number]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, bye.
+Command not recognised.
+Did you mean: view [date]?
+
+${LINE}
+
+${LINE}
+
+Command not recognised.
+Did you mean: view [date]?
+
+${LINE}
+
+${LINE}
+
+Command not recognised.
+Supported commands:
+  - todo, deadline, event
+  - list, mark, unmark, delete
+  - view, bye
 
 ${LINE}
 
@@ -286,13 +324,14 @@ ${BYE}
 ```
 
 ### TC-06: Explain malformed deadline commands
-**Aim:** Confirm that deadline errors distinguish missing markers, descriptions, and due dates.
+**Aim:** Explain malformed deadline commands, including missing /by, missing description, missing due date, and freeform date strings.
 **Inputs:**
 ```text
 deadline watch lecture /by
-deadline watch lecture by Friday
-deadline /by Friday
+deadline watch lecture by 2019-10-15
+deadline /by 2019-10-15
 deadline watch lecture /by Friday
+deadline watch lecture /by 2019-10-15
 list
 bye
 ```
@@ -326,8 +365,15 @@ ${LINE}
 
 ${LINE}
 
+added: watch lecture
+
+${LINE}
+
+${LINE}
+
 Here are the tasks in your list:
 1.[D][ ] watch lecture (by: Friday)
+2.[D][ ] watch lecture (by: 15 Oct 2019)
 ${LINE}
 
 ${LINE}
@@ -581,7 +627,7 @@ ${BYE}
 **File input:**
 ```text
 T | 0 | read book
-D | 1 | submit report | tomorrow
+D | 1 | submit report | 2019-12-02 1800
 ```
 **Inputs:**
 ```text
@@ -604,7 +650,7 @@ ${LINE}
 ${LINE}
 
 Here are the tasks in your list:
-1.[D][X] submit report (by: tomorrow)
+1.[D][X] submit report (by: 02 Dec 2019 18:00)
 ${LINE}
 
 ${LINE}
@@ -634,13 +680,21 @@ ${LINE}
 
 ${LINE}
 
-Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, bye.
+Command not recognised.
+Supported commands:
+  - todo, deadline, event
+  - list, mark, unmark, delete
+  - view, bye
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, bye.
+Command not recognised.
+Supported commands:
+  - todo, deadline, event
+  - list, mark, unmark, delete
+  - view, bye
 
 ${LINE}
 
@@ -713,7 +767,7 @@ deadline submit work/by tomorrow
 deadline submit work /bytomorrow
 event camp/from Monday /to Tuesday
 event camp /from Monday/to Tuesday
-deadline read book /by author /by Friday
+deadline read book by/author /by 2019-10-15
 list
 bye
 ```
@@ -747,14 +801,14 @@ ${LINE}
 
 ${LINE}
 
-added: read book
+added: read book by/author
 
 ${LINE}
 
 ${LINE}
 
 Here are the tasks in your list:
-1.[D][ ] read book (by: author /by Friday)
+1.[D][ ] read book by/author (by: 15 Oct 2019)
 ${LINE}
 
 ${LINE}
@@ -957,6 +1011,593 @@ ${LINE}
 
 added: replacement task
 
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-16: Strict date-time validation for deadlines (leap year, midnight, noon, and display formatting)
+**Aim:** Confirm that valid date-time formats (including leap day, midnight, noon, and standard formats) are accepted and displayed cleanly.
+**Inputs:**
+```text
+deadline finish homework /by 2/12/2019 0000
+deadline noon meeting /by 2/12/2019 1200
+deadline leap day sprint /by 29/02/2020 0900
+deadline standard date /by 2019-10-15
+list
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+added: finish homework
+
+${LINE}
+
+${LINE}
+
+added: noon meeting
+
+${LINE}
+
+${LINE}
+
+added: leap day sprint
+
+${LINE}
+
+${LINE}
+
+added: standard date
+
+${LINE}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[D][ ] finish homework (by: 02 Dec 2019 00:00)
+2.[D][ ] noon meeting (by: 02 Dec 2019 12:00)
+3.[D][ ] leap day sprint (by: 29 Feb 2020 09:00)
+4.[D][ ] standard date (by: 15 Oct 2019)
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-17: Rejection of impossible calendar dates and out-of-range time values
+**Aim:** Confirm that non-leap years, impossible days, invalid months, hours, minutes, and unsupported text formats are strictly rejected.
+**Inputs:**
+```text
+deadline bad leap /by 29/02/2019 0900
+deadline feb 31 /by 31/02/2019 1800
+deadline month 13 /by 2019-13-02 1800
+deadline day 32 /by 32/01/2019 1800
+deadline hour 25 /by 2/12/2019 2500
+deadline minute 60 /by 2/12/2019 1860
+deadline feb 30 /by 2019-02-30
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-18: Storage persistence round-trip and corrupted date handling for deadlines
+**Aim:** Confirm that deadlines with valid dates are loaded and serialized losslessly, while stored deadlines with malformed dates are skipped with warnings.
+**File input:**
+```text
+D | 0 | project submission | 2019-12-02 1800
+D | 0 | corrupted deadline | 2019-13-02 1800
+D | 1 | day only deadline | 2019-10-15
+```
+**Inputs:**
+```text
+list
+bye
+```
+**Expected output:**
+```text
+Warning: Corrupted task line skipped: [D | 0 | corrupted deadline | 2019-13-02 1800] - Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+${INTRO}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[D][ ] project submission (by: 02 Dec 2019 18:00)
+2.[D][X] day only deadline (by: 15 Oct 2019)
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-19: View command for date filtering
+**Aim:** Confirm that view filters tasks occurring on a specific date, informs the user when a time is supplied, handles dates with no tasks, rejects blank arguments, and validates date formats.
+**Inputs:**
+```text
+deadline assignment /by 2019-12-02 1800
+deadline project /by 2/12/2019 2359
+deadline other day /by 2019-12-03
+event conference /from 2019-12-01 /to 2019-12-03
+view 2019-12-02
+view 2019-12-02 1800
+view 2019-12-04
+view
+view invalid-date
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+added: assignment
+
+${LINE}
+
+${LINE}
+
+added: project
+
+${LINE}
+
+${LINE}
+
+added: other day
+
+${LINE}
+
+${LINE}
+
+added: conference
+
+${LINE}
+
+${LINE}
+
+Here are the tasks occurring on 02 Dec 2019:
+1.[D][ ] assignment (by: 02 Dec 2019 18:00)
+2.[D][ ] project (by: 02 Dec 2019 23:59)
+3.[E][ ] conference (from: 01 Dec 2019 to: 03 Dec 2019)
+${LINE}
+
+${LINE}
+
+Note: 'view' queries tasks for the entire day (02 Dec 2019).
+
+Here are the tasks occurring on 02 Dec 2019:
+1.[D][ ] assignment (by: 02 Dec 2019 18:00)
+2.[D][ ] project (by: 02 Dec 2019 23:59)
+3.[E][ ] conference (from: 01 Dec 2019 to: 03 Dec 2019)
+${LINE}
+
+${LINE}
+
+No tasks occurring on 04 Dec 2019.
+
+${LINE}
+
+${LINE}
+
+A date is required. Use: view [date]
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-20: Event date validation, formatting, and impossible dates rejection
+**Aim:** Confirm that events format valid dates and times consistently, accept freeform descriptions, and reject impossible dates or invalid time components without creating tasks.
+**Inputs:**
+```text
+event retreat /from 2026-10-01 /to 2026-10-05
+event final exam /from 2/12/2019 0900 /to 2/12/2019 1100
+event orientation /from Monday /to Wednesday
+event bad start /from 2019-13-01 /to 2019-10-05
+event feb 30 /from 2019-02-30 /to 2019-03-01
+event bad leap /from 29/02/2019 0900 /to 01/03/2019 0900
+event bad hour /from 2/12/2019 2500 /to 2/12/2019 2600
+event bad minute /from 2/12/2019 0960 /to 2/12/2019 1100
+list
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+added: retreat
+
+${LINE}
+
+${LINE}
+
+added: final exam
+
+${LINE}
+
+${LINE}
+
+added: orientation
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[E][ ] retreat (from: 01 Oct 2026 to: 05 Oct 2026)
+2.[E][ ] final exam (from: 02 Dec 2019 09:00 to: 02 Dec 2019 11:00)
+3.[E][ ] orientation (from: Monday to: Wednesday)
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-21: Multi-case corrupted storage recovery and valid task preservation
+**Aim:** Verify that storage loading skips various corrupted task lines with descriptive warnings, successfully loads valid tasks across types, and supports further mutations.
+**File input:**
+```text
+T | 1
+D | 0 | submit paper
+E | 0 | conference | 2026-10-01
+E | 0 | hackathon | 2019-13-02 | 2019-13-05
+Z | 0 | alien task
+T | 0 | read book
+D | 1 | submit assignment | 2026-10-02 1400
+E | 0 | workshop | 2026-10-01 | 2026-10-03
+```
+**Inputs:**
+```text
+list
+mark 1
+delete 3
+list
+bye
+```
+**Expected output:**
+```text
+Warning: Corrupted task line skipped: [T | 1] - Missing essential task components.
+Warning: Corrupted task line skipped: [D | 0 | submit paper] - Deadline is missing the due date.
+Warning: Corrupted task line skipped: [E | 0 | conference | 2026-10-01] - Event is missing start or end dates.
+Warning: Corrupted task line skipped: [E | 0 | hackathon | 2019-13-02 | 2019-13-05] - Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Warning: Corrupted task line skipped: [Z | 0 | alien task] - Unknown task type identifier: Z
+${INTRO}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[T][ ] read book
+2.[D][X] submit assignment (by: 02 Oct 2026 14:00)
+3.[E][ ] workshop (from: 01 Oct 2026 to: 03 Oct 2026)
+${LINE}
+
+${LINE}
+
+Nice! I've marked this task as done:
+	[T][X] read book
+
+${LINE}
+
+${LINE}
+
+Noted. I've removed this task:
+	[E][ ] workshop (from: 01 Oct 2026 to: 03 Oct 2026)
+Now you have 2 tasks in the list
+
+${LINE}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[T][X] read book
+2.[D][X] submit assignment (by: 02 Oct 2026 14:00)
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-22: Task list deletion boundaries across positions and sequential re-indexing
+**Aim:** Verify that deleting tasks from the middle, front, and end of the list properly re-indexes remaining tasks, and confirm that out-of-range and non-integer deletion indices are rejected.
+**Inputs:**
+```text
+todo first task
+todo second task
+todo third task
+todo fourth task
+delete 2
+list
+delete 1
+list
+delete 2
+list
+delete 0
+delete -2
+delete 2
+delete abc
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+added: first task
+
+${LINE}
+
+${LINE}
+
+added: second task
+
+${LINE}
+
+${LINE}
+
+added: third task
+
+${LINE}
+
+${LINE}
+
+added: fourth task
+
+${LINE}
+
+${LINE}
+
+Noted. I've removed this task:
+	[T][ ] second task
+Now you have 3 tasks in the list
+
+${LINE}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[T][ ] first task
+2.[T][ ] third task
+3.[T][ ] fourth task
+${LINE}
+
+${LINE}
+
+Noted. I've removed this task:
+	[T][ ] first task
+Now you have 2 tasks in the list
+
+${LINE}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[T][ ] third task
+2.[T][ ] fourth task
+${LINE}
+
+${LINE}
+
+Noted. I've removed this task:
+	[T][ ] fourth task
+Now you have 1 tasks in the list
+
+${LINE}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[T][ ] third task
+${LINE}
+
+${LINE}
+
+The task number must be a positive integer. Use: delete [task number]
+
+${LINE}
+
+${LINE}
+
+The task number must be a positive integer. Use: delete [task number]
+
+${LINE}
+
+${LINE}
+
+Task number not found. Use: delete [task number]
+
+${LINE}
+
+${LINE}
+
+The task number must be a positive integer. Use: delete [task number]
+
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-23: Multi-day event queries with view and schedule alias on populated and empty lists
+**Aim:** Verify that date queries correctly detect events on start, middle, and end days, handle empty lists, support the schedule command alias, and display the informational note when time is passed.
+**Inputs:**
+```text
+view 2026-10-02
+todo untimed task
+deadline urgent /by 2026-10-02 1800
+event conference /from 2026-10-01 /to 2026-10-03
+deadline freeform /by tonight
+view 2026-10-01
+schedule 2026-10-02
+view 2026-10-03
+view 2026-10-04
+view 2026-10-02 0900
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+No tasks occurring on 02 Oct 2026.
+
+${LINE}
+
+${LINE}
+
+added: untimed task
+
+${LINE}
+
+${LINE}
+
+added: urgent
+
+${LINE}
+
+${LINE}
+
+added: conference
+
+${LINE}
+
+${LINE}
+
+added: freeform
+
+${LINE}
+
+${LINE}
+
+Here are the tasks occurring on 01 Oct 2026:
+1.[E][ ] conference (from: 01 Oct 2026 to: 03 Oct 2026)
+${LINE}
+
+${LINE}
+
+Here are the tasks occurring on 02 Oct 2026:
+1.[D][ ] urgent (by: 02 Oct 2026 18:00)
+2.[E][ ] conference (from: 01 Oct 2026 to: 03 Oct 2026)
+${LINE}
+
+${LINE}
+
+Here are the tasks occurring on 03 Oct 2026:
+1.[E][ ] conference (from: 01 Oct 2026 to: 03 Oct 2026)
+${LINE}
+
+${LINE}
+
+No tasks occurring on 04 Oct 2026.
+
+${LINE}
+
+${LINE}
+
+Note: 'view' queries tasks for the entire day (02 Oct 2026).
+
+Here are the tasks occurring on 02 Oct 2026:
+1.[D][ ] urgent (by: 02 Oct 2026 18:00)
+2.[E][ ] conference (from: 01 Oct 2026 to: 03 Oct 2026)
 ${LINE}
 
 ${LINE}

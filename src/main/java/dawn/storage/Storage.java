@@ -1,9 +1,11 @@
 package dawn.storage;
 
 import dawn.exception.DawnException;
+import dawn.parser.DateTimeParser;
 import dawn.task.Deadline;
 import dawn.task.Event;
 import dawn.task.Task;
+import dawn.task.TaskDateTime;
 import dawn.task.TaskList;
 import dawn.task.ToDo;
 
@@ -11,32 +13,41 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
-/** Handles saving and loading tasks to and from a persistent text file. */
+/** Handles reading from and writing to the local data storage file. */
 public class Storage {
     private final Path filePath;
 
+    /**
+     * Constructs a Storage instance tied to a specific file path string.
+     *
+     * @param filePath string path to the persistence file (e.g. "data/dawn.txt")
+     */
     public Storage(String filePath) {
         this.filePath = Paths.get(filePath);
     }
 
-    /** 
-     * Saves the current task list to the file, creating the file and parent directories if they don't exist. 
+    /**
+     * Saves the current list of tasks to the persistent text file.
+     * Creates any missing parent directories automatically.
+     *
+     * @param taskList the list of tasks to persist
+     * @throws DawnException if an I/O write error occurs
      */
     public void save(TaskList taskList) throws DawnException {
         try {
-            if (Files.notExists(filePath.getParent())) {
+            if (filePath.getParent() != null && Files.notExists(filePath.getParent())) {
                 Files.createDirectories(filePath.getParent());
             }
-            
-            StringBuilder sb = new StringBuilder();
+
+            List<String> lines = new ArrayList<>();
             for (int i = 0; i < taskList.size(); i++) {
-                Task task = taskList.getTask(i);
-                sb.append(task.toFileString()).append(System.lineSeparator());
+                lines.add(taskList.getTask(i).toFileString());
             }
-            
-            Files.writeString(filePath, sb.toString(), java.nio.charset.StandardCharsets.UTF_8);
+
+            Files.write(filePath, lines, java.nio.charset.StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new DawnException("Failed to save tasks to file: " + e.getMessage());
         }
@@ -99,12 +110,15 @@ public class Storage {
             if (parts.length < 4) {
                 throw new Exception("Deadline is missing the due date.");
             }
-            return new Deadline(description, parts[3].trim(), isDone);
+            TaskDateTime dueDate = DateTimeParser.parseFlexible(parts[3].trim());
+            return new Deadline(description, dueDate, isDone);
         case "E":
             if (parts.length < 5) {
                 throw new Exception("Event is missing start or end dates.");
             }
-            return new Event(description, parts[3].trim(), parts[4].trim(), isDone);
+            TaskDateTime startDate = DateTimeParser.parseFlexible(parts[3].trim());
+            TaskDateTime endDate = DateTimeParser.parseFlexible(parts[4].trim());
+            return new Event(description, startDate, endDate, isDone);
         default:
             throw new Exception("Unknown task type identifier: " + type);
         }

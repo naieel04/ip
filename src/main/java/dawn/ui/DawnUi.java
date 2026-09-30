@@ -5,10 +5,10 @@ import java.util.Scanner;
 /** Handles console input and displays Dawn's messages and command feedback. */
 public class DawnUi {
     public static final String TXT_NAME_BANNER = """
-            ██████╗  █████╗ ██╗    ██╗███╗   ██╗
-            ██╔══██╗██╔══██╗██║    ██║████╗  ██║
-            ██║  ██║███████║██║ █╗ ██║██╔██╗ ██║
-            ██║  ██║██╔══██║██║███╗██║██║╚██╗██║
+            ██████╗  █████╗ ██╗    ██╗████╗   ██╗
+            ██╔══██╗██╔══██╗██║    ██║██████╗  ██║
+            ██║  ██║███████║██║ █╗ ██║██╔████╗ ██║
+            ██║  ██║██╔══██║██║███╗██║██║╚████╗██║
             ██████╔╝██║  ██║╚███╔███╔╝██║ ╚████║
             ╚═════╝ ╚═╝  ╚═╝ ╚══╝╚══╝ ╚═╝  ╚═══╝
             \n""";
@@ -62,8 +62,22 @@ public class DawnUi {
             \n""";
 
     public static final String MAX_LINE = "____________________________________________________________\n";
+    public static final String COMMAND_GUIDE = """
+            Here are the commands you can use:
+              todo [description]                     - Add a todo task
+              deadline [description] /by [due date]  - Add a deadline task
+              event [desc] /from [start] /to [end]   - Add an event task
+              list                                   - List all tasks
+              mark [task number]                     - Mark a task as done
+              unmark [task number]                   - Mark a task as not done
+              delete [task number]                   - Delete a task
+              view [date]                            - View tasks on a specific date
+              bye                                    - Exit the application""";
+
     public static final String INTRO_MESSAGE = MAX_LINE + IMG_NAME_BANNER
-            + "Hello! I'm Dawn.\nWhat can I do for you?\n" + MAX_LINE;
+            + "Hello! I'm Dawn.\nWhat can I do for you?\n\n"
+            + COMMAND_GUIDE + "\n"
+            + MAX_LINE;
     public static final String BYE_MESSAGE = "Bye. Hope to see you again soon!\n" + MAX_LINE;
 
     private final Scanner scanner;
