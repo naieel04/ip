@@ -1,11 +1,30 @@
 package dawn.parser;
 
+import dawn.command.AddCommand;
+import dawn.command.Command;
+import dawn.command.DeleteCommand;
+import dawn.command.ExitCommand;
+import dawn.command.ListCommand;
+import dawn.command.MarkCommand;
+import dawn.command.UnmarkCommand;
 import dawn.exception.DawnException;
+import dawn.task.Deadline;
+import dawn.task.Event;
+import dawn.task.ToDo;
 
 import java.util.Locale;
 
 /** Parses user input and validates command arguments. */
 public class Parser {
+    public static final String COMMAND_BYE = "bye";
+    public static final String COMMAND_LIST = "list";
+    public static final String COMMAND_MARK = "mark";
+    public static final String COMMAND_UNMARK = "unmark";
+    public static final String COMMAND_DELETE = "delete";
+    public static final String COMMAND_TODO = "todo";
+    public static final String COMMAND_DEADLINE = "deadline";
+    public static final String COMMAND_EVENT = "event";
+
     public static final String TODO_USAGE = "todo [description]";
     public static final String DEADLINE_USAGE = "deadline [description] /by [due date]";
     public static final String EVENT_USAGE = "event [description] /from [start] /to [end]";
@@ -17,6 +36,51 @@ public class Parser {
     private static final String EVENT_START_MARKER = "/from";
     private static final String EVENT_END_MARKER = "/to";
 
+    /**
+     * Parses a raw user input string into an executable {@link Command}.
+     *
+     * @param input the raw user input line
+     * @return the corresponding executable {@link Command}
+     * @throws DawnException if the input is malformed or unrecognised
+     */
+    public static Command parse(String input) throws DawnException {
+        String[] parsed = parseCommand(input);
+        String command = parsed[0];
+        String arguments = parsed[1];
+
+        switch (command) {
+        case COMMAND_BYE:
+            requireNoArguments(command, arguments);
+            return new ExitCommand();
+        case COMMAND_LIST:
+            requireNoArguments(command, arguments);
+            return new ListCommand();
+        case COMMAND_MARK:
+            return new MarkCommand(parseTaskNumber(arguments, MARK_USAGE));
+        case COMMAND_UNMARK:
+            return new UnmarkCommand(parseTaskNumber(arguments, UNMARK_USAGE));
+        case COMMAND_DELETE:
+            return new DeleteCommand(parseTaskNumber(arguments, DELETE_USAGE));
+        case COMMAND_TODO:
+            return new AddCommand(new ToDo(parseTodoArgs(arguments)));
+        case COMMAND_DEADLINE:
+            String[] deadlineArgs = parseDeadlineArgs(arguments);
+            return new AddCommand(new Deadline(deadlineArgs[0], deadlineArgs[1]));
+        case COMMAND_EVENT:
+            String[] eventArgs = parseEventArgs(arguments);
+            return new AddCommand(new Event(eventArgs[0], eventArgs[1], eventArgs[2]));
+        default:
+            throw new DawnException(unknownCommandMessage(command));
+        }
+    }
+
+    /**
+     * Splits a raw command string into the command word and raw arguments.
+     *
+     * @param input raw input string
+     * @return two-element array with command word and arguments
+     * @throws DawnException if input is blank
+     */
     public static String[] parseCommand(String input) throws DawnException {
         String trimmedInput = input.trim();
         if (trimmedInput.isEmpty()) {

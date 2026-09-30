@@ -1,48 +1,67 @@
 package dawn;
 
-import dawn.command.CommandHandler;
+import dawn.command.Command;
 import dawn.exception.DawnException;
+import dawn.parser.Parser;
 import dawn.storage.Storage;
+import dawn.task.TaskList;
 import dawn.ui.DawnUi;
 
 /** Starts Dawn and coordinates the console application's lifecycle. */
 public class Dawn {
     private final DawnUi ui;
-    private final CommandHandler commandHandler;
     private final Storage storage;
+    private TaskList tasks;
 
-    public Dawn() {
-        this.storage = new Storage("data/dawn.txt");
-        
-        // Attempt to load existing tasks, falling back to a clean list on catastrophic I/O failure
-        CommandHandler initHandler;
+    /**
+     * Initializes Dawn with persistent storage at the given file path.
+     *
+     * @param filePath the path to the tasks file
+     */
+    public Dawn(String filePath) {
+        this.ui = new DawnUi();
+        this.storage = new Storage(filePath);
         try {
-            initHandler = new CommandHandler(this.storage, this.storage.load());
+            this.tasks = this.storage.load();
         } catch (DawnException e) {
-            System.out.println("Warning: Could not start with stored tasks. Initializing fresh list. (" + e.getMessage() + ")");
-            initHandler = new CommandHandler(this.storage);
+            ui.showLoadingError();
+            this.tasks = new TaskList();
         }
-        
-        this.commandHandler = initHandler;
-        this.ui = new DawnUi(this.commandHandler);
     }
 
+    /** Initializes Dawn with the default storage file path. */
+    public Dawn() {
+        this("data/dawn.txt");
+    }
+
+    /** Runs the main application event loop until the exit command is received. */
     public void run() {
         ui.showIntro();
         boolean isExit = false;
         while (!isExit) {
+            String fullCommand = ui.readCommand();
+            if (fullCommand == null) {
+                break;
+            }
+            ui.showLine();
             try {
-                isExit = ui.processNextCommand();
+                Command command = Parser.parse(fullCommand);
+                command.execute(tasks, ui, storage);
+                isExit = command.isExit();
             } catch (DawnException e) {
                 ui.showError(e.getMessage());
             } catch (Exception e) {
                 ui.showError("An unexpected error occurred: " + e.getMessage());
+            } finally {
+                if (!isExit) {
+                    ui.showLine();
+                }
             }
         }
         ui.showBye();
     }
 
     public static void main(String[] args) {
-        new Dawn().run();
+        new Dawn("data/dawn.txt").run();
     }
 }

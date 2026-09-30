@@ -5,7 +5,7 @@ Run these tests from the repository root after compiling with Java 25:
 ```powershell
 $javaSources = @(Get-ChildItem -Path src\main\java -Recurse -Filter *.java | Select-Object -ExpandProperty FullName)
 javac -d out\production\ip $javaSources
-powershell -ExecutionPolicy Bypass -File .codex\skills\test-ui\scripts\run-ui-tests.ps1 -ProgramCommand 'java "-Dstdout.encoding=UTF-8" -cp out/production/ip dawn.Dawn'
+powershell -ExecutionPolicy Bypass -File .gemini\skills\test-ui\scripts\run-ui-tests.ps1 -ProgramCommand 'java "-Dstdout.encoding=UTF-8" -cp out/production/ip dawn.Dawn'
 ```
 
 Each case is a new console session. The listed inputs are entered in order, and the expected output is the complete session transcript. The runner expands the following output tokens before it compares output exactly, apart from platform line endings, final newlines, and trailing padding on a line.
@@ -15,12 +15,52 @@ Each case is a new console session. The listed inputs are entered in order, and 
 ### INTRO
 ```text
 ____________________________________________________________
-██████╗  █████╗ ██╗    ██╗███╗   ██╗
-██╔══██╗██╔══██╗██║    ██║████╗  ██║
-██║  ██║███████║██║ █╗ ██║██╔██╗ ██║
-██║  ██║██╔══██║██║███╗██║██║╚██╗██║
-██████╔╝██║  ██║╚███╔███╔╝██║ ╚████║
-╚═════╝ ╚═╝  ╚═╝ ╚══╝╚══╝ ╚═╝  ╚═══╝
+
+                             ..#+++.-+++##+.                    
+                         .#...##..............+-                
+                      .+.....##+....................            
+                    ..................................          
+                  -............................   ..            
+                ..     ...................... +##########       
+               .########. .......  ........ -#############+     
+              ###########+  ... .##. ... . -################    
+             ###### #######.#. ###### .##-.#######. #########   
+            ######  . #####.+#####+###### #####. ..   #######.  
+            #####  +###+####.#- +###+..#++##### ####   #######  
+           -####.  +###+####  #########  #####- ####   -######  
+           +####.   ##+ #### ########### #####.   .    .######. 
+           +####.       ####.##########..#####.        +######. 
+   ##      .####.      .####.-#######-.#.######        #######. 
+  ####      #####      #####+-#+---+###.########      ########  
+##+#+###    ######+   ######## +###### ######################.  
+  ##+#       ####################...#########################   
+    #         ##############################################    
+              .###########################################+     
+                #########################################       
+                 .######################-       .######         
+                   .####-  .....####-.+++-......-.. .           
+                      .#+........+.+#.................###.      
+                ###.+#................................######.   
+            +#####.++.............  ............... .##..#####. 
+          .####### #............. #- ............ .##..+####### 
+          ########+.#.......... .####+   ....   +##+ +#########. 
+         .########+   ......  .########+.#####.###+ ########### 
+          #########-.## ..-##+.#######.+######++##..##########  
+          .######### #+-###### ####### ########.##..########.   
+            .######+ ##.###### ######## ######.#### ######.     
+              .####.-##+.#### ##########- .- .###### .###.      
+              .++. #######++##########################.         
+                   ###################################...       
+                   -################################## .        
+                    #################################.          
+                     ###############################.           
+                      #############################             
+                      . ########################+..+.           
+                   -###-.##.                 .+##.-###.         
+                 .########+++                -+++#######        
+               .-.+#######+.                  .########+#.      
+               -#+.+###+.                       .+####+#+..     
+                 .-                                 +##..#+     
 
 Hello! I'm Dawn.
 What can I do for you?
@@ -174,12 +214,17 @@ ${LINE}
 ${BYE}
 ```
 
-### TC-05: Require exact command words and reject the removed add alias
-**Aim:** Confirm that malformed task-command words do not create tasks and receive helpful feedback.
+### TC-05: Require exact command words and suggest intended commands
+**Aim:** Confirm that unrecognized command words suggest matching command syntax or display the supported command list.
 **Inputs:**
 ```text
 todoadd read a book
 addtodo read a book
+deadlineurgent submit /by Friday
+eventnow camp /from 2pm /to 4pm
+marking 1
+unmarking 1
+deleteitem 1
 add todo read a book
 bye
 ```
@@ -196,6 +241,36 @@ ${LINE}
 ${LINE}
 
 Command not recognised. Did you mean: todo [description]?
+
+${LINE}
+
+${LINE}
+
+Command not recognised. Did you mean: deadline [description] /by [due date]?
+
+${LINE}
+
+${LINE}
+
+Command not recognised. Did you mean: event [description] /from [start] /to [end]?
+
+${LINE}
+
+${LINE}
+
+Command not recognised. Did you mean: mark [task number]?
+
+${LINE}
+
+${LINE}
+
+Command not recognised. Did you mean: unmark [task number]?
+
+${LINE}
+
+${LINE}
+
+Command not recognised. Did you mean: delete [task number]?
 
 ${LINE}
 
@@ -261,15 +336,23 @@ ${BYE}
 ```
 
 ### TC-07: Validate task numbers and commands without arguments
-**Aim:** Confirm that task numbers must be positive integers and that `list` and `bye` reject arguments.
+**Aim:** Confirm that task numbers must be positive integers without overflowing, and that `list` and `bye` reject arguments.
 **Inputs:**
 ```text
 todo read book
 mark
 unmark
+delete
 mark abc12
 unmark 0
+delete -1
+delete 0
+delete abc
+mark 99999999999999999999
+unmark 99999999999999999999
+delete 99999999999999999999
 mark 2
+delete 2
 list extra
 bye now
 list
@@ -299,6 +382,12 @@ ${LINE}
 
 ${LINE}
 
+A task number is required. Use: delete [task number]
+
+${LINE}
+
+${LINE}
+
 The task number must be a positive integer. Use: mark [task number]
 
 ${LINE}
@@ -311,7 +400,49 @@ ${LINE}
 
 ${LINE}
 
+The task number must be a positive integer. Use: delete [task number]
+
+${LINE}
+
+${LINE}
+
+The task number must be a positive integer. Use: delete [task number]
+
+${LINE}
+
+${LINE}
+
+The task number must be a positive integer. Use: delete [task number]
+
+${LINE}
+
+${LINE}
+
+The task number must be a positive integer. Use: mark [task number]
+
+${LINE}
+
+${LINE}
+
+The task number must be a positive integer. Use: unmark [task number]
+
+${LINE}
+
+${LINE}
+
+The task number must be a positive integer. Use: delete [task number]
+
+${LINE}
+
+${LINE}
+
 Task number not found. Use: mark [task number]
+
+${LINE}
+
+${LINE}
+
+Task number not found. Use: delete [task number]
 
 ${LINE}
 
@@ -346,6 +477,7 @@ event /from 10am /to 11am
 event meeting /from /to 11am
 event meeting /from 10am /to
 event meeting from 10am /to 11am
+event meeting /from 10am
 event meeting /to 11am /from 10am
 event meeting /from 10am /to 11am
 list
@@ -381,6 +513,12 @@ ${LINE}
 
 ${LINE}
 
+An event needs the /to keyword. Use: event [description] /from [start] /to [end]
+
+${LINE}
+
+${LINE}
+
 The /to keyword must come after /from. Use: event [description] /from [start] /to [end]
 
 ${LINE}
@@ -402,13 +540,16 @@ ${LINE}
 ${BYE}
 ```
 
-### TC-09: Load tasks from persistent storage
-**Aim:** Confirm that Dawn automatically loads tasks from data/dawn.txt and skips corrupted lines with a warning.
+### TC-09: Load tasks from persistent storage and skip corrupted lines
+**Aim:** Confirm that Dawn loads saved tasks from data/dawn.txt, handles various corrupted line formats with warnings, and displays valid tasks.
 **File input:**
 ```text
 T | 1 | revise notes
+corrupted line without delimiters
+D | 0 | submit report
+E | 1 | project sync | 2pm
 X | 0 | unknown type
-D | 0 | submit report | tonight
+E | 0 | hackathon | Friday 6pm | Sunday 6pm
 ```
 **Inputs:**
 ```text
@@ -417,6 +558,9 @@ bye
 ```
 **Expected output:**
 ```text
+Warning: Corrupted task line skipped: [corrupted line without delimiters] - Missing essential task components.
+Warning: Corrupted task line skipped: [D | 0 | submit report] - Deadline is missing the due date.
+Warning: Corrupted task line skipped: [E | 1 | project sync | 2pm] - Event is missing start or end dates.
 Warning: Corrupted task line skipped: [X | 0 | unknown type] - Unknown task type identifier: X
 ${INTRO}
 
@@ -424,7 +568,7 @@ ${LINE}
 
 Here are the tasks in your list:
 1.[T][X] revise notes
-2.[D][ ] submit report (by: tonight)
+2.[E][ ] hackathon (from: Friday 6pm to: Sunday 6pm)
 ${LINE}
 
 ${LINE}
@@ -461,6 +605,358 @@ ${LINE}
 
 Here are the tasks in your list:
 1.[D][X] submit report (by: tomorrow)
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-11: Empty list display, blank input handling, and whitespace padding
+**Aim:** Confirm that list on an empty list shows the header cleanly, blank lines display supported commands, and whitespace around commands is trimmed.
+**Inputs:**
+```text
+list
+
+   
+todo buy groceries
+list
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+Here are the tasks in your list:
+${LINE}
+
+${LINE}
+
+Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, bye.
+
+${LINE}
+
+${LINE}
+
+Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, bye.
+
+${LINE}
+
+${LINE}
+
+added: buy groceries
+
+${LINE}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[T][ ] buy groceries
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-12: Delete all tasks until list is empty and deletion boundaries
+**Aim:** Confirm that deleting all tasks updates the count down to 0, subsequent list displays an empty list, and deleting from an empty list reports that the task number was not found.
+**Inputs:**
+```text
+todo temporary task
+delete 1
+list
+delete 1
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+added: temporary task
+
+${LINE}
+
+${LINE}
+
+Noted. I've removed this task:
+	[T][ ] temporary task
+Now you have 0 tasks in the list
+
+${LINE}
+
+${LINE}
+
+Here are the tasks in your list:
+${LINE}
+
+${LINE}
+
+Task number not found. Use: delete [task number]
+
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-13: Standalone marker boundary validation for deadline and event
+**Aim:** Confirm that /by, /from, and /to must have whitespace boundaries to be recognized as markers, and multiple /by markers in the description/date are handled deterministically.
+**Inputs:**
+```text
+deadline submit work/by tomorrow
+deadline submit work /bytomorrow
+event camp/from Monday /to Tuesday
+event camp /from Monday/to Tuesday
+deadline read book /by author /by Friday
+list
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+A deadline needs the /by keyword. Use: deadline [description] /by [due date]
+
+${LINE}
+
+${LINE}
+
+A deadline needs the /by keyword. Use: deadline [description] /by [due date]
+
+${LINE}
+
+${LINE}
+
+An event needs the /from keyword. Use: event [description] /from [start] /to [end]
+
+${LINE}
+
+${LINE}
+
+An event needs the /to keyword. Use: event [description] /from [start] /to [end]
+
+${LINE}
+
+${LINE}
+
+added: read book
+
+${LINE}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[D][ ] read book (by: author /by Friday)
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-14: Mark and unmark idempotency
+**Aim:** Confirm that repeatedly marking a completed task or unmarking an incomplete task preserves the status and outputs feedback without error.
+**Inputs:**
+```text
+todo practice coding
+mark 1
+mark 1
+unmark 1
+unmark 1
+list
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+added: practice coding
+
+${LINE}
+
+${LINE}
+
+Nice! I've marked this task as done:
+	[T][X] practice coding
+
+${LINE}
+
+${LINE}
+
+Nice! I've marked this task as done:
+	[T][X] practice coding
+
+${LINE}
+
+${LINE}
+
+OK, I've marked this task as not done yet:
+	[T][ ] practice coding
+
+${LINE}
+
+${LINE}
+
+OK, I've marked this task as not done yet:
+	[T][ ] practice coding
+
+${LINE}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[T][ ] practice coding
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-15: Maximum task list capacity boundary
+**Aim:** Confirm that TaskList rejects additions when the 100-task limit is reached, and allows new tasks after deleting an item.
+**File input:**
+```text
+T | 0 | task 1
+T | 0 | task 2
+T | 0 | task 3
+T | 0 | task 4
+T | 0 | task 5
+T | 0 | task 6
+T | 0 | task 7
+T | 0 | task 8
+T | 0 | task 9
+T | 0 | task 10
+T | 0 | task 11
+T | 0 | task 12
+T | 0 | task 13
+T | 0 | task 14
+T | 0 | task 15
+T | 0 | task 16
+T | 0 | task 17
+T | 0 | task 18
+T | 0 | task 19
+T | 0 | task 20
+T | 0 | task 21
+T | 0 | task 22
+T | 0 | task 23
+T | 0 | task 24
+T | 0 | task 25
+T | 0 | task 26
+T | 0 | task 27
+T | 0 | task 28
+T | 0 | task 29
+T | 0 | task 30
+T | 0 | task 31
+T | 0 | task 32
+T | 0 | task 33
+T | 0 | task 34
+T | 0 | task 35
+T | 0 | task 36
+T | 0 | task 37
+T | 0 | task 38
+T | 0 | task 39
+T | 0 | task 40
+T | 0 | task 41
+T | 0 | task 42
+T | 0 | task 43
+T | 0 | task 44
+T | 0 | task 45
+T | 0 | task 46
+T | 0 | task 47
+T | 0 | task 48
+T | 0 | task 49
+T | 0 | task 50
+T | 0 | task 51
+T | 0 | task 52
+T | 0 | task 53
+T | 0 | task 54
+T | 0 | task 55
+T | 0 | task 56
+T | 0 | task 57
+T | 0 | task 58
+T | 0 | task 59
+T | 0 | task 60
+T | 0 | task 61
+T | 0 | task 62
+T | 0 | task 63
+T | 0 | task 64
+T | 0 | task 65
+T | 0 | task 66
+T | 0 | task 67
+T | 0 | task 68
+T | 0 | task 69
+T | 0 | task 70
+T | 0 | task 71
+T | 0 | task 72
+T | 0 | task 73
+T | 0 | task 74
+T | 0 | task 75
+T | 0 | task 76
+T | 0 | task 77
+T | 0 | task 78
+T | 0 | task 79
+T | 0 | task 80
+T | 0 | task 81
+T | 0 | task 82
+T | 0 | task 83
+T | 0 | task 84
+T | 0 | task 85
+T | 0 | task 86
+T | 0 | task 87
+T | 0 | task 88
+T | 0 | task 89
+T | 0 | task 90
+T | 0 | task 91
+T | 0 | task 92
+T | 0 | task 93
+T | 0 | task 94
+T | 0 | task 95
+T | 0 | task 96
+T | 0 | task 97
+T | 0 | task 98
+T | 0 | task 99
+T | 0 | task 100
+```
+**Inputs:**
+```text
+todo task 101
+delete 100
+todo replacement task
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+Dawn can store at most 100 tasks.
+
+${LINE}
+
+${LINE}
+
+Noted. I've removed this task:
+	[T][ ] task 100
+Now you have 99 tasks in the list
+
+${LINE}
+
+${LINE}
+
+added: replacement task
+
 ${LINE}
 
 ${LINE}
