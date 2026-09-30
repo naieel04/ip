@@ -6,6 +6,13 @@ import dawn.ui.DawnUi;
 
 /** Represents a command to display all tasks in the task list. */
 public class ListCommand extends Command {
+    /**
+     * Executes the list command, displaying all currently stored tasks in sequence.
+     *
+     * @param tasks the current list of tasks
+     * @param ui the user interface component
+     * @param storage the file storage system
+     */
     @Override
     public void execute(TaskList tasks, DawnUi ui, Storage storage) {
         StringBuilder sb = new StringBuilder("Here are the tasks in your list:\n");

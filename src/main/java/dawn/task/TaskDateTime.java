@@ -21,32 +21,62 @@ public class TaskDateTime {
     private final LocalDateTime dateTime;
     private final String rawText;
 
+    /**
+     * Constructs a TaskDateTime representing just a date.
+     *
+     * @param date the date payload
+     */
     public TaskDateTime(LocalDate date) {
         this.date = Objects.requireNonNull(date);
         this.dateTime = null;
         this.rawText = null;
     }
 
+    /**
+     * Constructs a TaskDateTime representing a date and time.
+     *
+     * @param dateTime the date-time payload
+     */
     public TaskDateTime(LocalDateTime dateTime) {
         this.dateTime = Objects.requireNonNull(dateTime);
         this.date = null;
         this.rawText = null;
     }
 
+    /**
+     * Constructs a TaskDateTime from freeform text when no valid calendar date is parsed.
+     *
+     * @param rawText the string literal
+     */
     public TaskDateTime(String rawText) {
         this.rawText = Objects.requireNonNull(rawText).trim();
         this.date = null;
         this.dateTime = null;
     }
 
+    /**
+     * Checks if this instance contains a time component.
+     *
+     * @return {@code true} if time is present
+     */
     public boolean hasTime() {
         return dateTime != null;
     }
 
+    /**
+     * Checks if this instance contains a calendar date component.
+     *
+     * @return {@code true} if date or date-time is present
+     */
     public boolean hasDate() {
         return date != null || dateTime != null;
     }
 
+    /**
+     * Extracts the local date component from this instance.
+     *
+     * @return the local date, or {@code null} if this is raw text
+     */
     public LocalDate toLocalDate() {
         if (dateTime != null) {
             return dateTime.toLocalDate();
@@ -54,6 +84,12 @@ public class TaskDateTime {
         return date;
     }
 
+    /**
+     * Checks if this instance falls exactly on the given calendar date.
+     *
+     * @param targetDate the date to compare against
+     * @return {@code true} if dates match exactly
+     */
     public boolean isOnDate(LocalDate targetDate) {
         if (targetDate == null) {
             return false;
@@ -62,6 +98,11 @@ public class TaskDateTime {
         return thisDate != null && thisDate.equals(targetDate);
     }
 
+    /**
+     * Formats this date or time for UI viewing according to English locale standards.
+     *
+     * @return the formatted display string
+     */
     public String toDisplayString() {
         if (dateTime != null) {
             return dateTime.format(DISPLAY_DATETIME_FORMATTER);
@@ -72,6 +113,11 @@ public class TaskDateTime {
         return rawText;
     }
 
+    /**
+     * Formats this date or time for persistent storage encoding.
+     *
+     * @return the formatted string suited for line-based saves
+     */
     public String toStorageString() {
         if (dateTime != null) {
             return dateTime.format(STORAGE_DATETIME_FORMATTER);
@@ -98,10 +144,5 @@ public class TaskDateTime {
     @Override
     public int hashCode() {
         return Objects.hash(date, dateTime, rawText);
-    }
-
-    @Override
-    public String toString() {
-        return toDisplayString();
     }
 }
