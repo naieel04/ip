@@ -125,6 +125,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Extrapolates and validates the description for a ToDo task from the command arguments.
+     *
+     * @param arguments the raw command arguments
+     * @return the validated task description safely extracted
+     * @throws DawnException if the description is blank
+     */
     public static String parseTodoArgs(String arguments) throws DawnException {
         if (arguments.isEmpty()) {
             throw new DawnException("A todo needs a description. Use: " + TODO_USAGE);
@@ -132,6 +139,13 @@ public class Parser {
         return arguments;
     }
 
+    /**
+     * Parses the arguments for a Deadline task into a description and due date.
+     *
+     * @param arguments the raw command arguments containing description and /by clause
+     * @return a constructed Deadline task
+     * @throws DawnException if markers are missing or fields are blank
+     */
     public static Deadline parseDeadlineArgs(String arguments) throws DawnException {
         int byIndex = findStandaloneMarker(arguments, DEADLINE_MARKER);
         if (byIndex < 0) {
@@ -149,6 +163,13 @@ public class Parser {
         return new Deadline(description, dueDate);
     }
 
+    /**
+     * Parses the arguments for an Event task into a description, start date, and end date.
+     *
+     * @param arguments the raw command arguments containing description, /from, and /to clauses
+     * @return a constructed Event task
+     * @throws DawnException if markers are missing out of order, or fields are blank
+     */
     public static Event parseEventArgs(String arguments) throws DawnException {
         int fromIndex = findStandaloneMarker(arguments, EVENT_START_MARKER);
         int toIndex = findStandaloneMarker(arguments, EVENT_END_MARKER);
@@ -178,6 +199,13 @@ public class Parser {
         return new Event(description, startDate, endDate);
     }
 
+    /**
+     * Parses the arguments for a view command to extract the target date.
+     *
+     * @param arguments the raw command arguments
+     * @return an executable ViewCommand holding the target date
+     * @throws DawnException if the date is blank or malformed
+     */
     public static Command parseViewArgs(String arguments) throws DawnException {
         if (arguments.isEmpty()) {
             throw new DawnException("A date is required. Use: " + VIEW_USAGE);
@@ -186,6 +214,13 @@ public class Parser {
         return new ViewCommand(targetDateTime);
     }
 
+    /**
+     * Parses the arguments for a find command to extract the search keyword.
+     *
+     * @param arguments the raw command arguments
+     * @return an executable FindCommand holding the extracted keyword
+     * @throws DawnException if the keyword is blank
+     */
     public static Command parseFindArgs(String arguments) throws DawnException {
         if (arguments.isEmpty()) {
             throw new DawnException("A search keyword is required. Use: " + FIND_USAGE);
@@ -193,12 +228,26 @@ public class Parser {
         return new FindCommand(arguments);
     }
 
+    /**
+     * Asserts that no trailing arguments were supplied for a command that does not accept any.
+     *
+     * @param command the command word invoked
+     * @param arguments the trailing arguments string
+     * @throws DawnException if arguments is not empty
+     */
     public static void requireNoArguments(String command, String arguments) throws DawnException {
         if (!arguments.isEmpty()) {
             throw new DawnException("The " + command + " command does not accept arguments. Use: " + command);
         }
     }
 
+    /**
+     * Searches for a command marker token bounded by whitespace matching standard separator rules.
+     *
+     * @param text the text to search within
+     * @param marker the specific marker sequence to find
+     * @return the zero-based index marking the start of the token, or -1 if no standalone match is found
+     */
     private static int findStandaloneMarker(String text, String marker) {
         int index = text.indexOf(marker);
         while (index >= 0) {
@@ -214,6 +263,12 @@ public class Parser {
         return -1;
     }
 
+    /**
+     * Generates a helpful error message when an unrecognized command is typed, detecting plausible typos.
+     *
+     * @param commandWord the malformed command word received
+     * @return a structured string diagnosing the typo or listing valid commands
+     */
     public static String unknownCommandMessage(String commandWord) {
         String normalizedCommand = commandWord.toLowerCase(Locale.ROOT);
         if (normalizedCommand.contains("todo")) {
