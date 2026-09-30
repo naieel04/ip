@@ -1,5 +1,7 @@
 package dawn.task;
 
+import java.time.LocalDate;
+
 /** Subclass Deadline: A task with a due date and description. */
 public class Deadline extends Task {
     private TaskDateTime dueDate;
@@ -20,6 +22,11 @@ public class Deadline extends Task {
 
     public void setDueDate(TaskDateTime dueDate) {
         this.dueDate = dueDate;
+    }
+
+    @Override
+    public boolean isOnDate(LocalDate date) {
+        return dueDate.toLocalDate().equals(date);
     }
 
     @Override

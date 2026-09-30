@@ -6,6 +6,7 @@ import dawn.command.DeleteCommand;
 import dawn.command.ExitCommand;
 import dawn.command.ListCommand;
 import dawn.command.MarkCommand;
+import dawn.command.ScheduleCommand;
 import dawn.command.UnmarkCommand;
 import dawn.exception.DawnException;
 import dawn.task.Deadline;
@@ -25,6 +26,7 @@ public class Parser {
     public static final String COMMAND_TODO = "todo";
     public static final String COMMAND_DEADLINE = "deadline";
     public static final String COMMAND_EVENT = "event";
+    public static final String COMMAND_SCHEDULE = "schedule";
 
     public static final String TODO_USAGE = "todo [description]";
     public static final String DEADLINE_USAGE = "deadline [description] /by [due date]";
@@ -32,6 +34,7 @@ public class Parser {
     public static final String MARK_USAGE = "mark [task number]";
     public static final String UNMARK_USAGE = "unmark [task number]";
     public static final String DELETE_USAGE = "delete [task number]";
+    public static final String SCHEDULE_USAGE = "schedule [date]";
 
     private static final String DEADLINE_MARKER = "/by";
     private static final String EVENT_START_MARKER = "/from";
@@ -69,6 +72,8 @@ public class Parser {
         case COMMAND_EVENT:
             String[] eventArgs = parseEventArgs(arguments);
             return new AddCommand(new Event(eventArgs[0], eventArgs[1], eventArgs[2]));
+        case COMMAND_SCHEDULE:
+            return parseScheduleArgs(arguments);
         default:
             throw new DawnException(unknownCommandMessage(command));
         }
@@ -166,6 +171,14 @@ public class Parser {
         return new String[]{description, start, end};
     }
 
+    public static Command parseScheduleArgs(String arguments) throws DawnException {
+        if (arguments.isEmpty()) {
+            throw new DawnException("A date is required. Use: " + SCHEDULE_USAGE);
+        }
+        TaskDateTime targetDateTime = DateTimeParser.parse(arguments);
+        return new ScheduleCommand(targetDateTime.toLocalDate());
+    }
+
     public static void requireNoArguments(String command, String arguments) throws DawnException {
         if (!arguments.isEmpty()) {
             throw new DawnException("The " + command + " command does not accept arguments. Use: " + command);
@@ -206,6 +219,9 @@ public class Parser {
         }
         if (normalizedCommand.contains("delete")) {
             return "Command not recognised. Did you mean: " + DELETE_USAGE + "?";
+        }
+        if (normalizedCommand.contains("schedule")) {
+            return "Command not recognised. Did you mean: " + SCHEDULE_USAGE + "?";
         }
         return "Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, bye.";
     }

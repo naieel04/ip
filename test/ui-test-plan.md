@@ -1117,3 +1117,76 @@ ${LINE}
 
 ${BYE}
 ```
+
+### TC-19: Schedule command for date filtering
+**Aim:** Confirm that schedule filters tasks occurring on a specific date, handles dates with no tasks, rejects blank arguments, and validates date formats.
+**Inputs:**
+```text
+deadline assignment /by 2019-12-02 1800
+deadline project /by 2/12/2019 2359
+deadline other day /by 2019-12-03
+event conference /from 2019-12-01 /to 2019-12-03
+schedule 2019-12-02
+schedule 2019-12-04
+schedule
+schedule invalid-date
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+added: assignment
+
+${LINE}
+
+${LINE}
+
+added: project
+
+${LINE}
+
+${LINE}
+
+added: other day
+
+${LINE}
+
+${LINE}
+
+added: conference
+
+${LINE}
+
+${LINE}
+
+Here are the tasks occurring on Dec 02 2019:
+1.[D][ ] assignment (by: Dec 02 2019, 6:00PM)
+2.[D][ ] project (by: Dec 02 2019, 11:59PM)
+3.[E][ ] conference (from: 2019-12-01 to: 2019-12-03)
+${LINE}
+
+${LINE}
+
+No tasks occurring on Dec 04 2019.
+
+${LINE}
+
+${LINE}
+
+A date is required. Use: schedule [date]
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+${BYE}
+```
