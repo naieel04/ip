@@ -50,7 +50,7 @@
 
 Adds a standard task without any specific date attached to it.
 
-* **Format:** <kbd>todo</kbd> `[description]`
+* **Format:** `todo [description]`
 * **Examples:**
   * `todo read a book`
   * `todo wash the dishes`
@@ -64,7 +64,7 @@ Adds a task that needs to be done by a specific deadline.
 > [!TIP]
 > The due date can be flexibly inputted as plain text, or in standard date/time shapes such as `yyyy-mm-dd` (e.g. 2026-10-12) or specific day/month variations (e.g. 12 Oct 2026).
 
-* **Format:** <kbd>deadline</kbd> `[description]` <kbd>/by</kbd> `[due date]`
+* **Format:** `deadline [description] /by [due date]`
 * **Examples:**
   * `deadline submit assignment /by 2026-11-20`
   * `deadline return library book /by tomorrow night`
@@ -75,7 +75,7 @@ Adds a task that needs to be done by a specific deadline.
 
 Adds an event task that spans a duration defined by a start time and an end time.
 
-* **Format:** <kbd>event</kbd> `[description]` <kbd>/from</kbd> `[start time]` <kbd>/to</kbd> `[end time]`
+* **Format:** `event [description] /from [start time] /to [end time]`
 * **Examples:**
   * `event project meeting /from 2026-10-02 1400 /to 2026-10-02 1600`
   * `event career fair /from Monday 10am /to Wednesday 5pm`
@@ -86,7 +86,7 @@ Adds an event task that spans a duration defined by a start time and an end time
 
 Displays all the tasks currently saved in your task list, alongside their completion statuses.
 
-* **Format:** <kbd>list</kbd>
+* **Format:** `list`
 
 ---
 
@@ -94,7 +94,7 @@ Displays all the tasks currently saved in your task list, alongside their comple
 
 Marks the task at the specified numerical index in the list as completed.
 
-* **Format:** <kbd>mark</kbd> `[task number]`
+* **Format:** `mark [task number]`
 * **Examples:**
   * `mark 1` *(Marks the 1st task as done).*
 
@@ -104,7 +104,7 @@ Marks the task at the specified numerical index in the list as completed.
 
 Marks a previously completed task at the specified index as uncompleted.
 
-* **Format:** <kbd>unmark</kbd> `[task number]`
+* **Format:** `unmark [task number]`
 * **Examples:**
   * `unmark 1` *(Unmarks the 1st task).*
 
@@ -117,7 +117,7 @@ Permanently deletes the task at the specified index from your tracker.
 > [!WARNING]
 > This action cannot be undone.
 
-* **Format:** <kbd>delete</kbd> `[task number]`
+* **Format:** `delete [task number]`
 * **Examples:**
   * `delete 3` *(Deletes the 3rd task in the list).*
 
@@ -127,7 +127,7 @@ Permanently deletes the task at the specified index from your tracker.
 
 Retrieves and displays all tasks whose description contains the specified keyword. This search is case-insensitive.
 
-* **Format:** <kbd>find</kbd> `[keyword]`
+* **Format:** `find [keyword]`
 * **Examples:**
   * `find meeting`
   * `find BOOK`
@@ -138,7 +138,7 @@ Retrieves and displays all tasks whose description contains the specified keywor
 
 Shows all deadline and event tasks that organically occur on a particular calendar date.
 
-* **Format:** <kbd>view</kbd> `[YYYY-MM-DD]`
+* **Format:** `view [YYYY-MM-DD]`
 * **Examples:**
   * `view 2026-10-02`
 
@@ -148,7 +148,7 @@ Shows all deadline and event tasks that organically occur on a particular calend
 
 Safely exits the chatbot interface.
 
-* **Format:** <kbd>bye</kbd>
+* **Format:** `bye`
 
 ---
 
@@ -166,13 +166,13 @@ Safely exits the chatbot interface.
 
 | Action | Format | Examples |
 |--------|--------|----------|
-| **Add ToDo** | <kbd>todo</kbd> `[description]` | `todo read a book` |
-| **Add Deadline** | <kbd>deadline</kbd> `[description]` <kbd>/by</kbd> `[due date]` | `deadline submit assignment /by 2026-11-20` |
-| **Add Event** | <kbd>event</kbd> `[description]` <kbd>/from</kbd> `[start]` <kbd>/to</kbd> `[end]` | `event project meeting /from 1400 /to 1600` |
-| **List** | <kbd>list</kbd> | `list` |
-| **Mark** | <kbd>mark</kbd> `[task number]` | `mark 1` |
-| **Unmark** | <kbd>unmark</kbd> `[task number]` | `unmark 1` |
-| **Delete** | <kbd>delete</kbd> `[task number]` | `delete 3` |
-| **Find** | <kbd>find</kbd> `[keyword]` | `find meeting` |
-| **View** | <kbd>view</kbd> `[YYYY-MM-DD]` | `view 2026-10-02` |
-| **Exit** | <kbd>bye</kbd> | `bye` |
+| **Add ToDo** | `todo [description]` | `todo read a book` |
+| **Add Deadline** | `deadline [description] /by [due date]` | `deadline submit assignment /by 2026-11-20` |
+| **Add Event** | `event [description] /from [start] /to [end]` | `event project meeting /from 1400 /to 1600` |
+| **List** | `list` | `list` |
+| **Mark** | `mark [task number]` | `mark 1` |
+| **Unmark** | `unmark [task number]` | `unmark 1` |
+| **Delete** | `delete [task number]` | `delete 3` |
+| **Find** | `find [keyword]` | `find meeting` |
+| **View** | `view [YYYY-MM-DD]` | `view 2026-10-02` |
+| **Exit** | `bye` | `bye` |
