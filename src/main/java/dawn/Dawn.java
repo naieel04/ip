@@ -1,7 +1,8 @@
 package dawn;
 
-import dawn.command.CommandHandler;
+import dawn.command.Command;
 import dawn.exception.DawnException;
+import dawn.parser.Parser;
 import dawn.storage.Storage;
 import dawn.task.TaskList;
 import dawn.ui.DawnUi;
@@ -11,7 +12,6 @@ public class Dawn {
     private final DawnUi ui;
     private final Storage storage;
     private TaskList tasks;
-    private final CommandHandler commandHandler;
 
     /**
      * Initializes Dawn with persistent storage at the given file path.
@@ -27,7 +27,6 @@ public class Dawn {
             ui.showLoadingError();
             this.tasks = new TaskList();
         }
-        this.commandHandler = new CommandHandler(this.storage, this.tasks);
     }
 
     /** Initializes Dawn with the default storage file path. */
@@ -46,11 +45,10 @@ public class Dawn {
             }
             ui.showLine();
             try {
-                String feedback = commandHandler.handleCommand(fullCommand);
-                if (feedback == null) {
-                    isExit = true;
-                } else {
-                    ui.showMessage(feedback);
+                Command command = Parser.parse(fullCommand);
+                command.execute(tasks, ui, storage);
+                isExit = command.isExit();
+                if (!isExit) {
                     ui.showLine();
                 }
             } catch (DawnException e) {
