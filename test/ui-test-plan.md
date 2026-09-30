@@ -276,7 +276,7 @@ ${LINE}
 
 ${LINE}
 
-Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, bye.
+Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, view, bye.
 
 ${LINE}
 
@@ -642,13 +642,13 @@ ${LINE}
 
 ${LINE}
 
-Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, bye.
+Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, view, bye.
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, bye.
+Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, view, bye.
 
 ${LINE}
 
@@ -1119,18 +1119,19 @@ ${LINE}
 ${BYE}
 ```
 
-### TC-19: Schedule command for date filtering
-**Aim:** Confirm that schedule filters tasks occurring on a specific date, handles dates with no tasks, rejects blank arguments, and validates date formats.
+### TC-19: View command for date filtering
+**Aim:** Confirm that view filters tasks occurring on a specific date, informs the user when a time is supplied, handles dates with no tasks, rejects blank arguments, and validates date formats.
 **Inputs:**
 ```text
 deadline assignment /by 2019-12-02 1800
 deadline project /by 2/12/2019 2359
 deadline other day /by 2019-12-03
 event conference /from 2019-12-01 /to 2019-12-03
-schedule 2019-12-02
-schedule 2019-12-04
-schedule
-schedule invalid-date
+view 2019-12-02
+view 2019-12-02 1800
+view 2019-12-04
+view
+view invalid-date
 bye
 ```
 **Expected output:**
@@ -1171,13 +1172,23 @@ ${LINE}
 
 ${LINE}
 
+Note: 'view' queries tasks for the entire day (02 Dec 2019).
+
+Here are the tasks occurring on 02 Dec 2019:
+1.[D][ ] assignment (by: 02 Dec 2019 18:00)
+2.[D][ ] project (by: 02 Dec 2019 23:59)
+3.[E][ ] conference (from: 01 Dec 2019 to: 03 Dec 2019)
+${LINE}
+
+${LINE}
+
 No tasks occurring on 04 Dec 2019.
 
 ${LINE}
 
 ${LINE}
 
-A date is required. Use: schedule [date]
+A date is required. Use: view [date]
 
 ${LINE}
 

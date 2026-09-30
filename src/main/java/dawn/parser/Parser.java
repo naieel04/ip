@@ -6,8 +6,8 @@ import dawn.command.DeleteCommand;
 import dawn.command.ExitCommand;
 import dawn.command.ListCommand;
 import dawn.command.MarkCommand;
-import dawn.command.ScheduleCommand;
 import dawn.command.UnmarkCommand;
+import dawn.command.ViewCommand;
 import dawn.exception.DawnException;
 import dawn.task.Deadline;
 import dawn.task.Event;
@@ -26,6 +26,7 @@ public class Parser {
     public static final String COMMAND_TODO = "todo";
     public static final String COMMAND_DEADLINE = "deadline";
     public static final String COMMAND_EVENT = "event";
+    public static final String COMMAND_VIEW = "view";
     public static final String COMMAND_SCHEDULE = "schedule";
 
     public static final String TODO_USAGE = "todo [description]";
@@ -34,7 +35,7 @@ public class Parser {
     public static final String MARK_USAGE = "mark [task number]";
     public static final String UNMARK_USAGE = "unmark [task number]";
     public static final String DELETE_USAGE = "delete [task number]";
-    public static final String SCHEDULE_USAGE = "schedule [date]";
+    public static final String VIEW_USAGE = "view [date]";
 
     private static final String DEADLINE_MARKER = "/by";
     private static final String EVENT_START_MARKER = "/from";
@@ -71,8 +72,9 @@ public class Parser {
             return new AddCommand(parseDeadlineArgs(arguments));
         case COMMAND_EVENT:
             return new AddCommand(parseEventArgs(arguments));
+        case COMMAND_VIEW:
         case COMMAND_SCHEDULE:
-            return parseScheduleArgs(arguments);
+            return parseViewArgs(arguments);
         default:
             throw new DawnException(unknownCommandMessage(command));
         }
@@ -172,12 +174,12 @@ public class Parser {
         return new Event(description, startDate, endDate);
     }
 
-    public static Command parseScheduleArgs(String arguments) throws DawnException {
+    public static Command parseViewArgs(String arguments) throws DawnException {
         if (arguments.isEmpty()) {
-            throw new DawnException("A date is required. Use: " + SCHEDULE_USAGE);
+            throw new DawnException("A date is required. Use: " + VIEW_USAGE);
         }
         TaskDateTime targetDateTime = DateTimeParser.parseStrict(arguments);
-        return new ScheduleCommand(targetDateTime.toLocalDate());
+        return new ViewCommand(targetDateTime);
     }
 
     public static void requireNoArguments(String command, String arguments) throws DawnException {
@@ -221,9 +223,9 @@ public class Parser {
         if (normalizedCommand.contains("delete")) {
             return "Command not recognised. Did you mean: " + DELETE_USAGE + "?";
         }
-        if (normalizedCommand.contains("schedule")) {
-            return "Command not recognised. Did you mean: " + SCHEDULE_USAGE + "?";
+        if (normalizedCommand.contains("view") || normalizedCommand.contains("schedule")) {
+            return "Command not recognised. Did you mean: " + VIEW_USAGE + "?";
         }
-        return "Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, bye.";
+        return "Command not recognised. Supported commands: todo, deadline, event, list, mark, unmark, delete, view, bye.";
     }
 }
