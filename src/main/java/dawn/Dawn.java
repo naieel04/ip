@@ -48,13 +48,14 @@ public class Dawn {
                 Command command = Parser.parse(fullCommand);
                 command.execute(tasks, ui, storage);
                 isExit = command.isExit();
-                if (!isExit) {
-                    ui.showLine();
-                }
             } catch (DawnException e) {
                 ui.showError(e.getMessage());
             } catch (Exception e) {
                 ui.showError("An unexpected error occurred: " + e.getMessage());
+            } finally {
+                if (!isExit) {
+                    ui.showLine();
+                }
             }
         }
         ui.showBye();

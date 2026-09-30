@@ -1,15 +1,16 @@
 package dawn.parser;
 
+import dawn.command.AddCommand;
 import dawn.command.Command;
-import dawn.command.DeadlineCommand;
 import dawn.command.DeleteCommand;
-import dawn.command.EventCommand;
 import dawn.command.ExitCommand;
 import dawn.command.ListCommand;
 import dawn.command.MarkCommand;
-import dawn.command.TodoCommand;
 import dawn.command.UnmarkCommand;
 import dawn.exception.DawnException;
+import dawn.task.Deadline;
+import dawn.task.Event;
+import dawn.task.ToDo;
 
 import java.util.Locale;
 
@@ -61,13 +62,13 @@ public class Parser {
         case COMMAND_DELETE:
             return new DeleteCommand(parseTaskNumber(arguments, DELETE_USAGE));
         case COMMAND_TODO:
-            return new TodoCommand(parseTodoArgs(arguments));
+            return new AddCommand(new ToDo(parseTodoArgs(arguments)));
         case COMMAND_DEADLINE:
             String[] deadlineArgs = parseDeadlineArgs(arguments);
-            return new DeadlineCommand(deadlineArgs[0], deadlineArgs[1]);
+            return new AddCommand(new Deadline(deadlineArgs[0], deadlineArgs[1]));
         case COMMAND_EVENT:
             String[] eventArgs = parseEventArgs(arguments);
-            return new EventCommand(eventArgs[0], eventArgs[1], eventArgs[2]);
+            return new AddCommand(new Event(eventArgs[0], eventArgs[1], eventArgs[2]));
         default:
             throw new DawnException(unknownCommandMessage(command));
         }

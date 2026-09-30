@@ -96,9 +96,9 @@ public class DawnUi {
         System.out.print(message);
     }
 
-    /** Displays an error message wrapped in divider lines. */
+    /** Displays an error message. */
     public void showError(String error) {
-        System.out.println(error + "\n\n" + MAX_LINE);
+        System.out.print(error + "\n\n");
     }
 
     /** Displays a warning when the task storage file cannot be loaded. */
