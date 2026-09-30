@@ -7,41 +7,84 @@ public class Task {
     private String description;
     private boolean isDone;
 
+    /**
+     * Constructs an incomplete task with the specified description.
+     *
+     * @param description the details of the task
+     */
     public Task(String description) {
         this(description, false);
     }
 
+    /**
+     * Constructs a task with the specified description and completion status.
+     *
+     * @param description the details of the task
+     * @param isDone {@code true} if the task is already completed
+     */
     public Task(String description, boolean isDone) {
         this.description = description;
         this.isDone = isDone;
     }
 
+    /**
+     * Retrieves the description of the task.
+     *
+     * @return the task description
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Updates the description of the task.
+     *
+     * @param description the new task description
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * Checks whether the task is marked as completed.
+     *
+     * @return {@code true} if completed
+     */
     public boolean isDone() {
         return isDone;
     }
 
+    /**
+     * Updates the completion status of the task.
+     *
+     * @param done {@code true} to mark as completed, {@code false} to mark as pending
+     */
     public void setDone(boolean done) {
         isDone = done;
     }
 
+    /**
+     * Retrieves the status icon corresponding to the completion state.
+     * X for completed, space for pending.
+     *
+     * @return the status string
+     */
     public String getStatusIcon() {
         return isDone ? "X" : " ";
     }
 
+    /**
+     * Converts the task into a formatted string suitable for persistent storage.
+     *
+     * @return the storage-formatted string representing this task
+     */
     public String toFileString() {
         return (isDone ? "1" : "0") + " | " + description;
     }
 
     /**
      * Checks if this task occurs on the specified calendar date.
+     * By default, returns {@code false} for generic tasks.
      *
      * @param date the date to check against
      * @return {@code true} if the task occurs on the given date, {@code false} otherwise
@@ -63,6 +106,11 @@ public class Task {
         return description.toLowerCase().contains(keyword.toLowerCase());
     }
 
+    /**
+     * Returns the string representation of this task for UI display.
+     *
+     * @return the formatted task string
+     */
     @Override
     public String toString() {
         return String.format("[%s] %s", getStatusIcon(), description);

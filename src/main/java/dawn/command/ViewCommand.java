@@ -17,18 +17,40 @@ public class ViewCommand extends Command {
 
     private final TaskDateTime targetDateTime;
 
+    /**
+     * Constructs a view command tailored for the specified date.
+     *
+     * @param targetDateTime the date to query tasks for
+     */
     public ViewCommand(TaskDateTime targetDateTime) {
         this.targetDateTime = targetDateTime;
     }
 
+    /**
+     * Retrieves the target local date.
+     *
+     * @return the local date queried
+     */
     public LocalDate getTargetDate() {
         return targetDateTime.toLocalDate();
     }
 
+    /**
+     * Retrieves the target task date-time instance.
+     *
+     * @return the date-time encapsulation
+     */
     public TaskDateTime getTargetDateTime() {
         return targetDateTime;
     }
 
+    /**
+     * Executes the view command by matching tasks against the target date.
+     *
+     * @param tasks the current list of tasks
+     * @param ui the user interface component
+     * @param storage the file storage system
+     */
     @Override
     public void execute(TaskList tasks, DawnUi ui, Storage storage) {
         LocalDate targetDate = targetDateTime.toLocalDate();

@@ -9,18 +9,36 @@ public class TaskList {
     private static final int MAX_TASKS = 100;
     private final ArrayList<Task> tasks;
 
+    /** Constructs an empty task list. */
     public TaskList() {
         this.tasks = new ArrayList<>();
     }
 
+    /**
+     * Retrieves the current number of tasks stored.
+     *
+     * @return the number of tasks
+     */
     public int size() {
         return tasks.size();
     }
 
+    /**
+     * Retrieves the task at the specified zero-based index.
+     *
+     * @param index the position of the task
+     * @return the task at the given index
+     */
     public Task getTask(int index) {
         return tasks.get(index);
     }
 
+    /**
+     * Appends a new task to the end of the collection.
+     *
+     * @param task the concrete task to add
+     * @throws DawnException if the list exceeds the maximum storage capacity
+     */
     public void addTask(Task task) throws DawnException {
         if (tasks.size() >= MAX_TASKS) {
             throw new DawnException("Dawn can store at most " + MAX_TASKS + " tasks.");
@@ -28,7 +46,12 @@ public class TaskList {
         tasks.add(task);
     }
 
-    /** Removes and returns the task at the given zero-based index. */
+    /**
+     * Removes and returns the task at the given zero-based index.
+     *
+     * @param index the position of the task to drop
+     * @return the removed task
+     */
     public Task removeTask(int index) {
         return tasks.remove(index);
     }

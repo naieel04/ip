@@ -50,18 +50,18 @@ public class Dawn {
                 isExit = command.isExit();
             } catch (DawnException e) {
                 ui.showError(e.getMessage());
-            } catch (Exception e) {
-                ui.showError("An unexpected error occurred: " + e.getMessage());
             } finally {
-                if (!isExit) {
-                    ui.showLine();
-                }
+                ui.showLine();
             }
         }
-        ui.showBye();
     }
 
+    /**
+     * Entry point for the Dawn application.
+     *
+     * @param args command-line arguments (unused)
+     */
     public static void main(String[] args) {
-        new Dawn("data/dawn.txt").run();
+        new Dawn().run();
     }
 }

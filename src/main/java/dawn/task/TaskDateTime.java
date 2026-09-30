@@ -128,6 +128,12 @@ public class TaskDateTime {
         return rawText;
     }
 
+    /**
+     * Evaluates logical equality based on internal fields matching precisely.
+     *
+     * @param obj the reference object to benchmark against
+     * @return {@code true} if logically equivalent, {@code false} otherwise
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -141,6 +147,11 @@ public class TaskDateTime {
                 && Objects.equals(rawText, other.rawText);
     }
 
+    /**
+     * Computes the hash block.
+     *
+     * @return standard JDK hash code computed against all member fields
+     */
     @Override
     public int hashCode() {
         return Objects.hash(date, dateTime, rawText);
