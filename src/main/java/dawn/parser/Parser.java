@@ -4,6 +4,7 @@ import dawn.command.AddCommand;
 import dawn.command.Command;
 import dawn.command.DeleteCommand;
 import dawn.command.ExitCommand;
+import dawn.command.FindCommand;
 import dawn.command.ListCommand;
 import dawn.command.MarkCommand;
 import dawn.command.UnmarkCommand;
@@ -28,6 +29,7 @@ public class Parser {
     public static final String COMMAND_EVENT = "event";
     public static final String COMMAND_VIEW = "view";
     public static final String COMMAND_SCHEDULE = "schedule";
+    public static final String COMMAND_FIND = "find";
 
     public static final String TODO_USAGE = "todo [description]";
     public static final String DEADLINE_USAGE = "deadline [description] /by [due date]";
@@ -36,6 +38,7 @@ public class Parser {
     public static final String UNMARK_USAGE = "unmark [task number]";
     public static final String DELETE_USAGE = "delete [task number]";
     public static final String VIEW_USAGE = "view [date]";
+    public static final String FIND_USAGE = "find [keyword]";
 
     private static final String DEADLINE_MARKER = "/by";
     private static final String EVENT_START_MARKER = "/from";
@@ -75,6 +78,8 @@ public class Parser {
         case COMMAND_VIEW:
         case COMMAND_SCHEDULE:
             return parseViewArgs(arguments);
+        case COMMAND_FIND:
+            return parseFindArgs(arguments);
         default:
             throw new DawnException(unknownCommandMessage(command));
         }
@@ -156,7 +161,6 @@ public class Parser {
         if (toIndex < fromIndex) {
             throw new DawnException("The /to keyword must come after /from. Use: " + EVENT_USAGE);
         }
-
         String description = arguments.substring(0, fromIndex).trim();
         String startStr = arguments.substring(fromIndex + EVENT_START_MARKER.length(), toIndex).trim();
         String endStr = arguments.substring(toIndex + EVENT_END_MARKER.length()).trim();
@@ -180,6 +184,13 @@ public class Parser {
         }
         TaskDateTime targetDateTime = DateTimeParser.parseStrict(arguments);
         return new ViewCommand(targetDateTime);
+    }
+
+    public static Command parseFindArgs(String arguments) throws DawnException {
+        if (arguments.isEmpty()) {
+            throw new DawnException("A search keyword is required. Use: " + FIND_USAGE);
+        }
+        return new FindCommand(arguments);
     }
 
     public static void requireNoArguments(String command, String arguments) throws DawnException {
@@ -226,9 +237,12 @@ public class Parser {
         if (normalizedCommand.contains("view") || normalizedCommand.contains("schedule")) {
             return "Command not recognised.\nDid you mean: " + VIEW_USAGE + "?";
         }
+        if (normalizedCommand.contains("find")) {
+            return "Command not recognised.\nDid you mean: " + FIND_USAGE + "?";
+        }
         return "Command not recognised.\nSupported commands:\n"
                 + "  - todo, deadline, event\n"
                 + "  - list, mark, unmark, delete\n"
-                + "  - view, bye";
+                + "  - view, find, bye";
     }
 }

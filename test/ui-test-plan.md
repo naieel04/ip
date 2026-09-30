@@ -74,6 +74,7 @@ Here are the commands you can use:
   unmark [task number]                   - Mark a task as not done
   delete [task number]                   - Delete a task
   view [date]                            - View tasks on a specific date
+  find [keyword]                         - Find tasks by keyword
   bye                                    - Exit the application
 ____________________________________________________________
 ```
@@ -238,6 +239,7 @@ unmarking 1
 deleteitem 1
 viewtasks 2019-10-15
 schedules 2019-10-15
+findtasks book
 add todo read a book
 bye
 ```
@@ -311,10 +313,17 @@ ${LINE}
 ${LINE}
 
 Command not recognised.
+Did you mean: find [keyword]?
+
+${LINE}
+
+${LINE}
+
+Command not recognised.
 Supported commands:
   - todo, deadline, event
   - list, mark, unmark, delete
-  - view, bye
+  - view, find, bye
 
 ${LINE}
 
@@ -684,7 +693,7 @@ Command not recognised.
 Supported commands:
   - todo, deadline, event
   - list, mark, unmark, delete
-  - view, bye
+  - view, find, bye
 
 ${LINE}
 
@@ -694,7 +703,7 @@ Command not recognised.
 Supported commands:
   - todo, deadline, event
   - list, mark, unmark, delete
-  - view, bye
+  - view, find, bye
 
 ${LINE}
 
@@ -1598,6 +1607,103 @@ Note: 'view' queries tasks for the entire day (02 Oct 2026).
 Here are the tasks occurring on 02 Oct 2026:
 1.[D][ ] urgent (by: 02 Oct 2026 18:00)
 2.[E][ ] conference (from: 01 Oct 2026 to: 03 Oct 2026)
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+
+### TC-24: Find command for searching tasks by keyword
+**Aim:** Verify that find searches task descriptions by case-insensitive keyword, handles single and multiple matches across task types, notifies when no matches are found, and explains missing search arguments.
+**Inputs:**
+```text
+find book
+todo read book
+deadline return book /by 2019-12-02 1800
+event book club meeting /from 2019-12-01 /to 2019-12-03
+todo buy groceries
+find book
+find BOOK
+find club
+find non-existent
+find
+find    
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+No tasks found matching 'book'.
+
+${LINE}
+
+${LINE}
+
+added: read book
+
+${LINE}
+
+${LINE}
+
+added: return book
+
+${LINE}
+
+${LINE}
+
+added: book club meeting
+
+${LINE}
+
+${LINE}
+
+added: buy groceries
+
+${LINE}
+
+${LINE}
+
+Here are the matching tasks in your list:
+1.[T][ ] read book
+2.[D][ ] return book (by: 02 Dec 2019 18:00)
+3.[E][ ] book club meeting (from: 01 Dec 2019 to: 03 Dec 2019)
+${LINE}
+
+${LINE}
+
+Here are the matching tasks in your list:
+1.[T][ ] read book
+2.[D][ ] return book (by: 02 Dec 2019 18:00)
+3.[E][ ] book club meeting (from: 01 Dec 2019 to: 03 Dec 2019)
+${LINE}
+
+${LINE}
+
+Here are the matching tasks in your list:
+1.[E][ ] book club meeting (from: 01 Dec 2019 to: 03 Dec 2019)
+${LINE}
+
+${LINE}
+
+No tasks found matching 'non-existent'.
+
+${LINE}
+
+${LINE}
+
+A search keyword is required. Use: find [keyword]
+
+${LINE}
+
+${LINE}
+
+A search keyword is required. Use: find [keyword]
+
 ${LINE}
 
 ${LINE}

@@ -72,6 +72,7 @@ public class DawnUi {
               unmark [task number]                   - Mark a task as not done
               delete [task number]                   - Delete a task
               view [date]                            - View tasks on a specific date
+              find [keyword]                         - Find tasks by keyword
               bye                                    - Exit the application""";
 
     public static final String INTRO_MESSAGE = MAX_LINE + IMG_NAME_BANNER
