@@ -236,6 +236,8 @@ eventnow camp /from 2pm /to 4pm
 marking 1
 unmarking 1
 deleteitem 1
+viewtasks 2019-10-15
+schedules 2019-10-15
 add todo read a book
 bye
 ```
@@ -289,6 +291,20 @@ ${LINE}
 
 Command not recognised.
 Did you mean: delete [task number]?
+
+${LINE}
+
+${LINE}
+
+Command not recognised.
+Did you mean: view [date]?
+
+${LINE}
+
+${LINE}
+
+Command not recognised.
+Did you mean: view [date]?
 
 ${LINE}
 
@@ -1226,6 +1242,362 @@ ${LINE}
 
 Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
 
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-20: Event date validation, formatting, and impossible dates rejection
+**Aim:** Confirm that events format valid dates and times consistently, accept freeform descriptions, and reject impossible dates or invalid time components without creating tasks.
+**Inputs:**
+```text
+event retreat /from 2026-10-01 /to 2026-10-05
+event final exam /from 2/12/2019 0900 /to 2/12/2019 1100
+event orientation /from Monday /to Wednesday
+event bad start /from 2019-13-01 /to 2019-10-05
+event feb 30 /from 2019-02-30 /to 2019-03-01
+event bad leap /from 29/02/2019 0900 /to 01/03/2019 0900
+event bad hour /from 2/12/2019 2500 /to 2/12/2019 2600
+event bad minute /from 2/12/2019 0960 /to 2/12/2019 1100
+list
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+added: retreat
+
+${LINE}
+
+${LINE}
+
+added: final exam
+
+${LINE}
+
+${LINE}
+
+added: orientation
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[E][ ] retreat (from: 01 Oct 2026 to: 05 Oct 2026)
+2.[E][ ] final exam (from: 02 Dec 2019 09:00 to: 02 Dec 2019 11:00)
+3.[E][ ] orientation (from: Monday to: Wednesday)
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-21: Multi-case corrupted storage recovery and valid task preservation
+**Aim:** Verify that storage loading skips various corrupted task lines with descriptive warnings, successfully loads valid tasks across types, and supports further mutations.
+**File input:**
+```text
+T | 1
+D | 0 | submit paper
+E | 0 | conference | 2026-10-01
+E | 0 | hackathon | 2019-13-02 | 2019-13-05
+Z | 0 | alien task
+T | 0 | read book
+D | 1 | submit assignment | 2026-10-02 1400
+E | 0 | workshop | 2026-10-01 | 2026-10-03
+```
+**Inputs:**
+```text
+list
+mark 1
+delete 3
+list
+bye
+```
+**Expected output:**
+```text
+Warning: Corrupted task line skipped: [T | 1] - Missing essential task components.
+Warning: Corrupted task line skipped: [D | 0 | submit paper] - Deadline is missing the due date.
+Warning: Corrupted task line skipped: [E | 0 | conference | 2026-10-01] - Event is missing start or end dates.
+Warning: Corrupted task line skipped: [E | 0 | hackathon | 2019-13-02 | 2019-13-05] - Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Warning: Corrupted task line skipped: [Z | 0 | alien task] - Unknown task type identifier: Z
+${INTRO}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[T][ ] read book
+2.[D][X] submit assignment (by: 02 Oct 2026 14:00)
+3.[E][ ] workshop (from: 01 Oct 2026 to: 03 Oct 2026)
+${LINE}
+
+${LINE}
+
+Nice! I've marked this task as done:
+	[T][X] read book
+
+${LINE}
+
+${LINE}
+
+Noted. I've removed this task:
+	[E][ ] workshop (from: 01 Oct 2026 to: 03 Oct 2026)
+Now you have 2 tasks in the list
+
+${LINE}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[T][X] read book
+2.[D][X] submit assignment (by: 02 Oct 2026 14:00)
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-22: Task list deletion boundaries across positions and sequential re-indexing
+**Aim:** Verify that deleting tasks from the middle, front, and end of the list properly re-indexes remaining tasks, and confirm that out-of-range and non-integer deletion indices are rejected.
+**Inputs:**
+```text
+todo first task
+todo second task
+todo third task
+todo fourth task
+delete 2
+list
+delete 1
+list
+delete 2
+list
+delete 0
+delete -2
+delete 2
+delete abc
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+added: first task
+
+${LINE}
+
+${LINE}
+
+added: second task
+
+${LINE}
+
+${LINE}
+
+added: third task
+
+${LINE}
+
+${LINE}
+
+added: fourth task
+
+${LINE}
+
+${LINE}
+
+Noted. I've removed this task:
+	[T][ ] second task
+Now you have 3 tasks in the list
+
+${LINE}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[T][ ] first task
+2.[T][ ] third task
+3.[T][ ] fourth task
+${LINE}
+
+${LINE}
+
+Noted. I've removed this task:
+	[T][ ] first task
+Now you have 2 tasks in the list
+
+${LINE}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[T][ ] third task
+2.[T][ ] fourth task
+${LINE}
+
+${LINE}
+
+Noted. I've removed this task:
+	[T][ ] fourth task
+Now you have 1 tasks in the list
+
+${LINE}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[T][ ] third task
+${LINE}
+
+${LINE}
+
+The task number must be a positive integer. Use: delete [task number]
+
+${LINE}
+
+${LINE}
+
+The task number must be a positive integer. Use: delete [task number]
+
+${LINE}
+
+${LINE}
+
+Task number not found. Use: delete [task number]
+
+${LINE}
+
+${LINE}
+
+The task number must be a positive integer. Use: delete [task number]
+
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-23: Multi-day event queries with view and schedule alias on populated and empty lists
+**Aim:** Verify that date queries correctly detect events on start, middle, and end days, handle empty lists, support the schedule command alias, and display the informational note when time is passed.
+**Inputs:**
+```text
+view 2026-10-02
+todo untimed task
+deadline urgent /by 2026-10-02 1800
+event conference /from 2026-10-01 /to 2026-10-03
+deadline freeform /by tonight
+view 2026-10-01
+schedule 2026-10-02
+view 2026-10-03
+view 2026-10-04
+view 2026-10-02 0900
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+No tasks occurring on 02 Oct 2026.
+
+${LINE}
+
+${LINE}
+
+added: untimed task
+
+${LINE}
+
+${LINE}
+
+added: urgent
+
+${LINE}
+
+${LINE}
+
+added: conference
+
+${LINE}
+
+${LINE}
+
+added: freeform
+
+${LINE}
+
+${LINE}
+
+Here are the tasks occurring on 01 Oct 2026:
+1.[E][ ] conference (from: 01 Oct 2026 to: 03 Oct 2026)
+${LINE}
+
+${LINE}
+
+Here are the tasks occurring on 02 Oct 2026:
+1.[D][ ] urgent (by: 02 Oct 2026 18:00)
+2.[E][ ] conference (from: 01 Oct 2026 to: 03 Oct 2026)
+${LINE}
+
+${LINE}
+
+Here are the tasks occurring on 03 Oct 2026:
+1.[E][ ] conference (from: 01 Oct 2026 to: 03 Oct 2026)
+${LINE}
+
+${LINE}
+
+No tasks occurring on 04 Oct 2026.
+
+${LINE}
+
+${LINE}
+
+Note: 'view' queries tasks for the entire day (02 Oct 2026).
+
+Here are the tasks occurring on 02 Oct 2026:
+1.[D][ ] urgent (by: 02 Oct 2026 18:00)
+2.[E][ ] conference (from: 01 Oct 2026 to: 03 Oct 2026)
 ${LINE}
 
 ${LINE}
