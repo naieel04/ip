@@ -1,4 +1,4 @@
-# Dawn User Guide
+# <span style="color:#0366d6">Dawn User Guide</span>
 
 ## Table of Contents
 * [Introduction](#introduction)
@@ -14,21 +14,18 @@
   * [Searching for tasks by keyword: `find`](#searching-for-tasks-by-keyword-find)
   * [Viewing tasks by date: `view`](#viewing-tasks-by-date-view)
   * [Exiting the application: `bye`](#exiting-the-application-bye)
-* [FAQ](#faq)
 * [Command Summary](#command-summary)
+* [FAQ](#faq)
 
 ---
 
-## Introduction
+## <span style="color:#0366d6">Introduction</span>
 
-**Dawn** is a desktop Command Line Interface (CLI) task management chatbot tailored to help you keep track of your daily tasks, deadlines, and events efficiently. 
-
-> [!NOTE]
-> Optimized for users who prefer using a keyboard, Dawn allows you to manage your schedule seamlessly through standard text commands.
+**Dawn** is a desktop Command Line Interface (CLI) task management chatbot tailored to help you keep track of your daily tasks, deadlines, and events efficiently. Optimized for users who prefer using a keyboard, Dawn allows you to manage your schedule seamlessly through standard text commands.
 
 ---
 
-## Quick Start
+## <span style="color:#0366d6">Quick Start</span>
 
 1. Ensure you have **Java 17** or above installed on your computer.
 2. Download the latest `dawn.jar` release from the repository.
@@ -41,10 +38,9 @@
 
 ---
 
-## Features
+## <span style="color:#0366d6">Features</span>
 
-> [!IMPORTANT]
-> Words in `[brackets]` represent parameters to be supplied by the user.
+*Words in `[brackets]` represent parameters to be supplied by the user.*
 
 ### Adding a todo task: `todo`
 
@@ -152,17 +148,7 @@ Safely exits the chatbot interface.
 
 ---
 
-## FAQ
-
-**Q**: How do I save my data? Do I need to run a save command?  
-**A**: There is no manual save command. Dawn **automatically saves** your tasks to the hard disk in the background after any data creation or modification (e.g., adding, marking, or deleting a task). When you start the application again, your data is seamlessly loaded into the session.
-
-**Q**: Where is my data saved?  
-**A**: Your data is securely saved in a `dawn.txt` file located in the `data/` folder within the same directory as the `.jar` document.
-
----
-
-## Command Summary
+## <span style="color:#0366d6">Command Summary</span>
 
 | Action | Format | Examples |
 |--------|--------|----------|
@@ -176,3 +162,13 @@ Safely exits the chatbot interface.
 | **Find** | `find [keyword]` | `find meeting` |
 | **View** | `view [YYYY-MM-DD]` | `view 2026-10-02` |
 | **Exit** | `bye` | `bye` |
+
+---
+
+## <span style="color:#0366d6">FAQ</span>
+
+**Q**: How do I save my data? Do I need to run a save command?  
+**A**: There is no manual save command. Dawn **automatically saves** your tasks to the hard disk in the background after any data creation or modification (e.g., adding, marking, or deleting a task). When you start the application again, your data is seamlessly loaded into the session.
+
+**Q**: Where is my data saved?  
+**A**: Your data is securely saved in a `dawn.txt` file located in the `data/` folder within the same directory as the `.jar` document.
