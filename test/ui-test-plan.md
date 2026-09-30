@@ -100,7 +100,7 @@ ${BYE}
 **Inputs:**
 ```text
 todo read book
-deadline submit report /by Friday
+deadline submit report /by 2019-10-15
 event team meeting /from 2pm /to 3pm
 list
 bye
@@ -131,7 +131,7 @@ ${LINE}
 
 Here are the tasks in your list:
 1.[T][ ] read book
-2.[D][ ] submit report (by: Friday)
+2.[D][ ] submit report (by: Oct 15 2019)
 3.[E][ ] team meeting (from: 2pm to: 3pm)
 ${LINE}
 
@@ -286,13 +286,14 @@ ${BYE}
 ```
 
 ### TC-06: Explain malformed deadline commands
-**Aim:** Confirm that deadline errors distinguish missing markers, descriptions, and due dates.
+**Aim:** Confirm that deadline errors distinguish missing markers, descriptions, due dates, and invalid date formats.
 **Inputs:**
 ```text
 deadline watch lecture /by
-deadline watch lecture by Friday
-deadline /by Friday
+deadline watch lecture by 2019-10-15
+deadline /by 2019-10-15
 deadline watch lecture /by Friday
+deadline watch lecture /by 2019-10-15
 list
 bye
 ```
@@ -320,6 +321,12 @@ ${LINE}
 
 ${LINE}
 
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
 added: watch lecture
 
 ${LINE}
@@ -327,7 +334,7 @@ ${LINE}
 ${LINE}
 
 Here are the tasks in your list:
-1.[D][ ] watch lecture (by: Friday)
+1.[D][ ] watch lecture (by: Oct 15 2019)
 ${LINE}
 
 ${LINE}
@@ -581,7 +588,7 @@ ${BYE}
 **File input:**
 ```text
 T | 0 | read book
-D | 1 | submit report | tomorrow
+D | 1 | submit report | 2019-12-02 1800
 ```
 **Inputs:**
 ```text
@@ -604,7 +611,7 @@ ${LINE}
 ${LINE}
 
 Here are the tasks in your list:
-1.[D][X] submit report (by: tomorrow)
+1.[D][X] submit report (by: Dec 02 2019, 6:00PM)
 ${LINE}
 
 ${LINE}
@@ -713,7 +720,7 @@ deadline submit work/by tomorrow
 deadline submit work /bytomorrow
 event camp/from Monday /to Tuesday
 event camp /from Monday/to Tuesday
-deadline read book /by author /by Friday
+deadline read book by/author /by 2019-10-15
 list
 bye
 ```
@@ -747,14 +754,14 @@ ${LINE}
 
 ${LINE}
 
-added: read book
+added: read book by/author
 
 ${LINE}
 
 ${LINE}
 
 Here are the tasks in your list:
-1.[D][ ] read book (by: author /by Friday)
+1.[D][ ] read book by/author (by: Oct 15 2019)
 ${LINE}
 
 ${LINE}
@@ -957,6 +964,153 @@ ${LINE}
 
 added: replacement task
 
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-16: Strict date-time validation for deadlines (leap year, midnight, noon, and display formatting)
+**Aim:** Confirm that valid date-time formats (including leap day, midnight, noon, and standard formats) are accepted and displayed cleanly.
+**Inputs:**
+```text
+deadline finish homework /by 2/12/2019 0000
+deadline noon meeting /by 2/12/2019 1200
+deadline leap day sprint /by 29/02/2020 0900
+deadline standard date /by 2019-10-15
+list
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+added: finish homework
+
+${LINE}
+
+${LINE}
+
+added: noon meeting
+
+${LINE}
+
+${LINE}
+
+added: leap day sprint
+
+${LINE}
+
+${LINE}
+
+added: standard date
+
+${LINE}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[D][ ] finish homework (by: Dec 02 2019, 12:00AM)
+2.[D][ ] noon meeting (by: Dec 02 2019, 12:00PM)
+3.[D][ ] leap day sprint (by: Feb 29 2020, 9:00AM)
+4.[D][ ] standard date (by: Oct 15 2019)
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-17: Rejection of impossible calendar dates and out-of-range time values
+**Aim:** Confirm that non-leap years, impossible days, invalid months, hours, minutes, and unsupported text formats are strictly rejected.
+**Inputs:**
+```text
+deadline bad leap /by 29/02/2019 0900
+deadline feb 31 /by 31/02/2019 1800
+deadline month 13 /by 2019-13-02 1800
+deadline day 32 /by 32/01/2019 1800
+deadline hour 25 /by 2/12/2019 2500
+deadline minute 60 /by 2/12/2019 1860
+deadline unsupported /by tomorrow
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-18: Storage persistence round-trip and corrupted date handling for deadlines
+**Aim:** Confirm that deadlines with valid dates are loaded and serialized losslessly, while stored deadlines with malformed dates are skipped with warnings.
+**File input:**
+```text
+D | 0 | project submission | 2019-12-02 1800
+D | 0 | corrupted deadline | 2019-13-02 1800
+D | 1 | day only deadline | 2019-10-15
+```
+**Inputs:**
+```text
+list
+bye
+```
+**Expected output:**
+```text
+Warning: Corrupted task line skipped: [D | 0 | corrupted deadline | 2019-13-02 1800] - Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+${INTRO}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[D][ ] project submission (by: Dec 02 2019, 6:00PM)
+2.[D][X] day only deadline (by: Oct 15 2019)
 ${LINE}
 
 ${LINE}
