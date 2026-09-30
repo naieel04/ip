@@ -70,8 +70,7 @@ public class Parser {
         case COMMAND_DEADLINE:
             return new AddCommand(parseDeadlineArgs(arguments));
         case COMMAND_EVENT:
-            String[] eventArgs = parseEventArgs(arguments);
-            return new AddCommand(new Event(eventArgs[0], eventArgs[1], eventArgs[2]));
+            return new AddCommand(parseEventArgs(arguments));
         case COMMAND_SCHEDULE:
             return parseScheduleArgs(arguments);
         default:
@@ -139,11 +138,11 @@ public class Parser {
         if (dueDateStr.isEmpty()) {
             throw new DawnException("The due date cannot be blank. Use: " + DEADLINE_USAGE);
         }
-        TaskDateTime dueDate = DateTimeParser.parse(dueDateStr);
+        TaskDateTime dueDate = DateTimeParser.parseFlexible(dueDateStr);
         return new Deadline(description, dueDate);
     }
 
-    public static String[] parseEventArgs(String arguments) throws DawnException {
+    public static Event parseEventArgs(String arguments) throws DawnException {
         int fromIndex = findStandaloneMarker(arguments, EVENT_START_MARKER);
         int toIndex = findStandaloneMarker(arguments, EVENT_END_MARKER);
         if (fromIndex < 0) {
@@ -157,25 +156,27 @@ public class Parser {
         }
 
         String description = arguments.substring(0, fromIndex).trim();
-        String start = arguments.substring(fromIndex + EVENT_START_MARKER.length(), toIndex).trim();
-        String end = arguments.substring(toIndex + EVENT_END_MARKER.length()).trim();
+        String startStr = arguments.substring(fromIndex + EVENT_START_MARKER.length(), toIndex).trim();
+        String endStr = arguments.substring(toIndex + EVENT_END_MARKER.length()).trim();
         if (description.isEmpty()) {
             throw new DawnException("The event description cannot be blank. Use: " + EVENT_USAGE);
         }
-        if (start.isEmpty()) {
+        if (startStr.isEmpty()) {
             throw new DawnException("The event start cannot be blank. Use: " + EVENT_USAGE);
         }
-        if (end.isEmpty()) {
+        if (endStr.isEmpty()) {
             throw new DawnException("The event end cannot be blank. Use: " + EVENT_USAGE);
         }
-        return new String[]{description, start, end};
+        TaskDateTime startDate = DateTimeParser.parseFlexible(startStr);
+        TaskDateTime endDate = DateTimeParser.parseFlexible(endStr);
+        return new Event(description, startDate, endDate);
     }
 
     public static Command parseScheduleArgs(String arguments) throws DawnException {
         if (arguments.isEmpty()) {
             throw new DawnException("A date is required. Use: " + SCHEDULE_USAGE);
         }
-        TaskDateTime targetDateTime = DateTimeParser.parse(arguments);
+        TaskDateTime targetDateTime = DateTimeParser.parseStrict(arguments);
         return new ScheduleCommand(targetDateTime.toLocalDate());
     }
 

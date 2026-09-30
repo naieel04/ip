@@ -9,11 +9,15 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 /** Parses and validates date and time inputs using strict calendar rules. */
 public class DateTimeParser {
     public static final String DATE_TIME_USAGE =
             "yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)";
+
+    private static final Pattern DATE_PATTERN =
+            Pattern.compile("^\\d{1,4}[-/]\\d{1,2}([-/]\\d{1,4})?(\\s+.*)?$");
 
     private static final DateTimeFormatter[] DATE_TIME_FORMATTERS = {
         DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm", Locale.ENGLISH)
@@ -36,7 +40,7 @@ public class DateTimeParser {
      * @return the parsed {@link TaskDateTime}
      * @throws DawnException if the input is malformed, has invalid values, or unsupported format
      */
-    public static TaskDateTime parse(String input) throws DawnException {
+    public static TaskDateTime parseStrict(String input) throws DawnException {
         if (input == null || input.trim().isEmpty()) {
             throw new DawnException("The date cannot be blank. Use: " + DATE_TIME_USAGE);
         }
@@ -61,5 +65,34 @@ public class DateTimeParser {
         }
 
         throw new DawnException("Invalid date or time format. Use: " + DATE_TIME_USAGE);
+    }
+
+    /**
+     * Parses a date flexibly into a {@link TaskDateTime}.
+     * If the input matches a date-like pattern, strict parsing is enforced.
+     * Otherwise, freeform text is preserved.
+     *
+     * @param input the raw date string
+     * @return the parsed {@link TaskDateTime}
+     * @throws DawnException if the input is blank or contains an invalid calendar date
+     */
+    public static TaskDateTime parseFlexible(String input) throws DawnException {
+        if (input == null || input.trim().isEmpty()) {
+            throw new DawnException("The date cannot be blank. Use: " + DATE_TIME_USAGE);
+        }
+        String trimmed = input.trim();
+
+        if (DATE_PATTERN.matcher(trimmed).matches()) {
+            return parseStrict(trimmed);
+        }
+
+        return new TaskDateTime(trimmed);
+    }
+
+    /**
+     * Alias for {@link #parseStrict(String)}.
+     */
+    public static TaskDateTime parse(String input) throws DawnException {
+        return parseStrict(input);
     }
 }

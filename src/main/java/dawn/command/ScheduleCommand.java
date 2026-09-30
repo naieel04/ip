@@ -12,7 +12,7 @@ import java.util.Locale;
 /** Command to display tasks occurring on a specific calendar date. */
 public class ScheduleCommand extends Command {
     private static final DateTimeFormatter DISPLAY_FORMATTER =
-            DateTimeFormatter.ofPattern("MMM dd yyyy", Locale.ENGLISH);
+            DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH);
 
     private final LocalDate targetDate;
 

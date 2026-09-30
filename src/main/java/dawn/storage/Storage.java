@@ -16,19 +16,25 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Handles loading tasks from and saving tasks to disk. */
+/** Handles reading from and writing to the local data storage file. */
 public class Storage {
     private final Path filePath;
 
+    /**
+     * Constructs a Storage instance tied to a specific file path string.
+     *
+     * @param filePath string path to the persistence file (e.g. "data/dawn.txt")
+     */
     public Storage(String filePath) {
         this.filePath = Paths.get(filePath);
     }
 
     /**
-     * Saves the current list of tasks to the text file.
-     * 
-     * @param taskList the TaskList containing tasks to save.
-     * @throws DawnException if writing fails.
+     * Saves the current list of tasks to the persistent text file.
+     * Creates any missing parent directories automatically.
+     *
+     * @param taskList the list of tasks to persist
+     * @throws DawnException if an I/O write error occurs
      */
     public void save(TaskList taskList) throws DawnException {
         try {
@@ -104,13 +110,15 @@ public class Storage {
             if (parts.length < 4) {
                 throw new Exception("Deadline is missing the due date.");
             }
-            TaskDateTime dueDate = DateTimeParser.parse(parts[3].trim());
+            TaskDateTime dueDate = DateTimeParser.parseFlexible(parts[3].trim());
             return new Deadline(description, dueDate, isDone);
         case "E":
             if (parts.length < 5) {
                 throw new Exception("Event is missing start or end dates.");
             }
-            return new Event(description, parts[3].trim(), parts[4].trim(), isDone);
+            TaskDateTime startDate = DateTimeParser.parseFlexible(parts[3].trim());
+            TaskDateTime endDate = DateTimeParser.parseFlexible(parts[4].trim());
+            return new Event(description, startDate, endDate, isDone);
         default:
             throw new Exception("Unknown task type identifier: " + type);
         }

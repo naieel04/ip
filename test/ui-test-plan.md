@@ -1,4 +1,4 @@
-﻿# Dawn UI test plan
+# Dawn UI test plan
 
 Run these tests from the repository root after compiling with Java 25:
 
@@ -131,7 +131,7 @@ ${LINE}
 
 Here are the tasks in your list:
 1.[T][ ] read book
-2.[D][ ] submit report (by: Oct 15 2019)
+2.[D][ ] submit report (by: 15 Oct 2019)
 3.[E][ ] team meeting (from: 2pm to: 3pm)
 ${LINE}
 
@@ -286,7 +286,7 @@ ${BYE}
 ```
 
 ### TC-06: Explain malformed deadline commands
-**Aim:** Confirm that deadline errors distinguish missing markers, descriptions, due dates, and invalid date formats.
+**Aim:** Explain malformed deadline commands, including missing /by, missing description, missing due date, and freeform date strings.
 **Inputs:**
 ```text
 deadline watch lecture /by
@@ -321,7 +321,7 @@ ${LINE}
 
 ${LINE}
 
-Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+added: watch lecture
 
 ${LINE}
 
@@ -334,7 +334,8 @@ ${LINE}
 ${LINE}
 
 Here are the tasks in your list:
-1.[D][ ] watch lecture (by: Oct 15 2019)
+1.[D][ ] watch lecture (by: Friday)
+2.[D][ ] watch lecture (by: 15 Oct 2019)
 ${LINE}
 
 ${LINE}
@@ -611,7 +612,7 @@ ${LINE}
 ${LINE}
 
 Here are the tasks in your list:
-1.[D][X] submit report (by: Dec 02 2019, 6:00PM)
+1.[D][X] submit report (by: 02 Dec 2019 18:00)
 ${LINE}
 
 ${LINE}
@@ -761,7 +762,7 @@ ${LINE}
 ${LINE}
 
 Here are the tasks in your list:
-1.[D][ ] read book by/author (by: Oct 15 2019)
+1.[D][ ] read book by/author (by: 15 Oct 2019)
 ${LINE}
 
 ${LINE}
@@ -1013,10 +1014,10 @@ ${LINE}
 ${LINE}
 
 Here are the tasks in your list:
-1.[D][ ] finish homework (by: Dec 02 2019, 12:00AM)
-2.[D][ ] noon meeting (by: Dec 02 2019, 12:00PM)
-3.[D][ ] leap day sprint (by: Feb 29 2020, 9:00AM)
-4.[D][ ] standard date (by: Oct 15 2019)
+1.[D][ ] finish homework (by: 02 Dec 2019 00:00)
+2.[D][ ] noon meeting (by: 02 Dec 2019 12:00)
+3.[D][ ] leap day sprint (by: 29 Feb 2020 09:00)
+4.[D][ ] standard date (by: 15 Oct 2019)
 ${LINE}
 
 ${LINE}
@@ -1034,7 +1035,7 @@ deadline month 13 /by 2019-13-02 1800
 deadline day 32 /by 32/01/2019 1800
 deadline hour 25 /by 2/12/2019 2500
 deadline minute 60 /by 2/12/2019 1860
-deadline unsupported /by tomorrow
+deadline feb 30 /by 2019-02-30
 bye
 ```
 **Expected output:**
@@ -1109,8 +1110,8 @@ ${INTRO}
 ${LINE}
 
 Here are the tasks in your list:
-1.[D][ ] project submission (by: Dec 02 2019, 6:00PM)
-2.[D][X] day only deadline (by: Oct 15 2019)
+1.[D][ ] project submission (by: 02 Dec 2019 18:00)
+2.[D][X] day only deadline (by: 15 Oct 2019)
 ${LINE}
 
 ${LINE}
@@ -1162,15 +1163,15 @@ ${LINE}
 
 ${LINE}
 
-Here are the tasks occurring on Dec 02 2019:
-1.[D][ ] assignment (by: Dec 02 2019, 6:00PM)
-2.[D][ ] project (by: Dec 02 2019, 11:59PM)
-3.[E][ ] conference (from: 2019-12-01 to: 2019-12-03)
+Here are the tasks occurring on 02 Dec 2019:
+1.[D][ ] assignment (by: 02 Dec 2019 18:00)
+2.[D][ ] project (by: 02 Dec 2019 23:59)
+3.[E][ ] conference (from: 01 Dec 2019 to: 03 Dec 2019)
 ${LINE}
 
 ${LINE}
 
-No tasks occurring on Dec 04 2019.
+No tasks occurring on 04 Dec 2019.
 
 ${LINE}
 
