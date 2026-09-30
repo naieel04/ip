@@ -1,9 +1,11 @@
 package dawn.storage;
 
 import dawn.exception.DawnException;
+import dawn.parser.DateTimeParser;
 import dawn.task.Deadline;
 import dawn.task.Event;
 import dawn.task.Task;
+import dawn.task.TaskDateTime;
 import dawn.task.TaskList;
 import dawn.task.ToDo;
 
@@ -11,9 +13,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
-/** Handles saving and loading tasks to and from a persistent text file. */
+/** Handles loading tasks from and saving tasks to disk. */
 public class Storage {
     private final Path filePath;
 
@@ -21,22 +24,24 @@ public class Storage {
         this.filePath = Paths.get(filePath);
     }
 
-    /** 
-     * Saves the current task list to the file, creating the file and parent directories if they don't exist. 
+    /**
+     * Saves the current list of tasks to the text file.
+     * 
+     * @param taskList the TaskList containing tasks to save.
+     * @throws DawnException if writing fails.
      */
     public void save(TaskList taskList) throws DawnException {
         try {
-            if (Files.notExists(filePath.getParent())) {
+            if (filePath.getParent() != null && Files.notExists(filePath.getParent())) {
                 Files.createDirectories(filePath.getParent());
             }
-            
-            StringBuilder sb = new StringBuilder();
+
+            List<String> lines = new ArrayList<>();
             for (int i = 0; i < taskList.size(); i++) {
-                Task task = taskList.getTask(i);
-                sb.append(task.toFileString()).append(System.lineSeparator());
+                lines.add(taskList.getTask(i).toFileString());
             }
-            
-            Files.writeString(filePath, sb.toString(), java.nio.charset.StandardCharsets.UTF_8);
+
+            Files.write(filePath, lines, java.nio.charset.StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new DawnException("Failed to save tasks to file: " + e.getMessage());
         }
@@ -99,7 +104,8 @@ public class Storage {
             if (parts.length < 4) {
                 throw new Exception("Deadline is missing the due date.");
             }
-            return new Deadline(description, parts[3].trim(), isDone);
+            TaskDateTime dueDate = DateTimeParser.parse(parts[3].trim());
+            return new Deadline(description, dueDate, isDone);
         case "E":
             if (parts.length < 5) {
                 throw new Exception("Event is missing start or end dates.");

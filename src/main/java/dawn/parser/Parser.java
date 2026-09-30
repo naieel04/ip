@@ -10,6 +10,7 @@ import dawn.command.UnmarkCommand;
 import dawn.exception.DawnException;
 import dawn.task.Deadline;
 import dawn.task.Event;
+import dawn.task.TaskDateTime;
 import dawn.task.ToDo;
 
 import java.util.Locale;
@@ -64,8 +65,7 @@ public class Parser {
         case COMMAND_TODO:
             return new AddCommand(new ToDo(parseTodoArgs(arguments)));
         case COMMAND_DEADLINE:
-            String[] deadlineArgs = parseDeadlineArgs(arguments);
-            return new AddCommand(new Deadline(deadlineArgs[0], deadlineArgs[1]));
+            return new AddCommand(parseDeadlineArgs(arguments));
         case COMMAND_EVENT:
             String[] eventArgs = parseEventArgs(arguments);
             return new AddCommand(new Event(eventArgs[0], eventArgs[1], eventArgs[2]));
@@ -121,20 +121,21 @@ public class Parser {
         return arguments;
     }
 
-    public static String[] parseDeadlineArgs(String arguments) throws DawnException {
+    public static Deadline parseDeadlineArgs(String arguments) throws DawnException {
         int byIndex = findStandaloneMarker(arguments, DEADLINE_MARKER);
         if (byIndex < 0) {
             throw new DawnException("A deadline needs the /by keyword. Use: " + DEADLINE_USAGE);
         }
         String description = arguments.substring(0, byIndex).trim();
-        String dueDate = arguments.substring(byIndex + DEADLINE_MARKER.length()).trim();
+        String dueDateStr = arguments.substring(byIndex + DEADLINE_MARKER.length()).trim();
         if (description.isEmpty()) {
             throw new DawnException("The deadline description cannot be blank. Use: " + DEADLINE_USAGE);
         }
-        if (dueDate.isEmpty()) {
+        if (dueDateStr.isEmpty()) {
             throw new DawnException("The due date cannot be blank. Use: " + DEADLINE_USAGE);
         }
-        return new String[]{description, dueDate};
+        TaskDateTime dueDate = DateTimeParser.parse(dueDateStr);
+        return new Deadline(description, dueDate);
     }
 
     public static String[] parseEventArgs(String arguments) throws DawnException {
