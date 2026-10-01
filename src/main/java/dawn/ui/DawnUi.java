@@ -1,5 +1,7 @@
 package dawn.ui;
 
+import dawn.parser.CommandWord;
+
 import java.util.Scanner;
 
 /** Handles user interactions, message rendering, and error formatting. */
@@ -53,18 +55,7 @@ public class DawnUi {
             \n""";
 
     public static final String MAX_LINE = "____________________________________________________________\n";
-    public static final String COMMAND_GUIDE = """
-            Here are the commands you can use:
-              todo [description]                     - Add a todo task
-              deadline [description] /by [due date]  - Add a deadline task
-              event [desc] /from [start] /to [end]   - Add an event task
-              list                                   - List all tasks
-              mark [task number]                     - Mark a task as done
-              unmark [task number]                   - Mark a task as not done
-              delete [task number]                   - Delete a task
-              view [date]                            - View tasks on a specific date
-              find [keyword]                         - Find tasks by keyword
-              bye                                    - Exit the application""";
+    public static final String COMMAND_GUIDE = CommandWord.commandGuide();
 
     public static final String INTRO_MESSAGE = MAX_LINE + "\n" + IMG_NAME_BANNER
             + "Hello! I'm Dawn.\nWhat can I do for you?\n\n"

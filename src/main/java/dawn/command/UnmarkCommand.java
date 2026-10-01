@@ -1,7 +1,7 @@
 package dawn.command;
 
 import dawn.exception.DawnException;
-import dawn.parser.Parser;
+import dawn.parser.CommandWord;
 import dawn.storage.Storage;
 import dawn.task.Task;
 import dawn.task.TaskList;
@@ -31,7 +31,7 @@ public class UnmarkCommand extends Command {
     @Override
     public void execute(TaskList tasks, DawnUi ui, Storage storage) throws DawnException {
         if (taskIndex < 0 || taskIndex >= tasks.size()) {
-            throw new DawnException("Task number not found. Use: " + Parser.UNMARK_USAGE);
+            throw new DawnException("Task number not found. Use: " + CommandWord.UNMARK.usage());
         }
         Task task = tasks.getTask(taskIndex);
         boolean wasDone = task.isDone();

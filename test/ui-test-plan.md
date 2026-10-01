@@ -66,16 +66,17 @@ Hello! I'm Dawn.
 What can I do for you?
 
 Here are the commands you can use:
-  todo [description]                     - Add a todo task
-  deadline [description] /by [due date]  - Add a deadline task
-  event [desc] /from [start] /to [end]   - Add an event task
-  list                                   - List all tasks
-  mark [task number]                     - Mark a task as done
-  unmark [task number]                   - Mark a task as not done
-  delete [task number]                   - Delete a task
-  view [date]                            - View tasks on a specific date
-  find [keyword]                         - Find tasks by keyword
-  bye                                    - Exit the application
+  todo [description]                           - Add a todo task
+  deadline [description] /by [due date]        - Add a deadline task
+  event [description] /from [start] /to [end]  - Add an event task
+  list                                         - List all tasks
+  mark [task number]                           - Mark a task as done
+  unmark [task number]                         - Mark a task as not done
+  delete [task number]                         - Delete a task
+  view [date]                                  - View tasks on a specific date
+  schedule [date]                              - Alias for view
+  find [keyword]                               - Find tasks by keyword
+  bye                                          - Exit the application
 ____________________________________________________________
 ```
 
@@ -323,7 +324,7 @@ Command not recognised.
 Supported commands:
   - todo, deadline, event
   - list, mark, unmark, delete
-  - view, find, bye
+  - view, schedule, find, bye
 
 ${LINE}
 
@@ -693,7 +694,7 @@ Command not recognised.
 Supported commands:
   - todo, deadline, event
   - list, mark, unmark, delete
-  - view, find, bye
+  - view, schedule, find, bye
 
 ${LINE}
 
@@ -703,7 +704,7 @@ Command not recognised.
 Supported commands:
   - todo, deadline, event
   - list, mark, unmark, delete
-  - view, find, bye
+  - view, schedule, find, bye
 
 ${LINE}
 
