@@ -34,7 +34,12 @@ public class DeleteCommand extends Command {
             throw new DawnException("Task number not found. Use: " + Parser.DELETE_USAGE);
         }
         Task removedTask = tasks.removeTask(taskIndex);
-        storage.save(tasks);
+        try {
+            storage.save(tasks);
+        } catch (DawnException e) {
+            tasks.insertTask(taskIndex, removedTask);
+            throw e;
+        }
         ui.showMessage("Noted. I've removed this task:\n\t" + removedTask
                 + "\nNow you have " + tasks.size() + " tasks in the list\n\n");
     }

@@ -34,8 +34,14 @@ public class MarkCommand extends Command {
             throw new DawnException("Task number not found. Use: " + Parser.MARK_USAGE);
         }
         Task task = tasks.getTask(taskIndex);
+        boolean wasDone = task.isDone();
         task.setDone(true);
-        storage.save(tasks);
+        try {
+            storage.save(tasks);
+        } catch (DawnException e) {
+            task.setDone(wasDone);
+            throw e;
+        }
         ui.showMessage("Nice! I've marked this task as done:\n\t" + task + "\n\n");
     }
 }

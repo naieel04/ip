@@ -1710,3 +1710,33 @@ ${LINE}
 
 ${BYE}
 ```
+
+### TC-25: Load versioned tasks with escaped text
+**Aim:** Confirm that saved todos, deadlines, and events preserve pipes and backslashes in their descriptions.
+**File input:**
+```text
+V2 | T | 0 | read \| review
+V2 | D | 1 | submit A\\B \| final | 2019-12-02 1800
+V2 | E | 0 | plan \| demo | 2019-12-01 | 2019-12-03
+```
+**Inputs:**
+```text
+list
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+Here are the tasks in your list:
+1.[T][ ] read | review
+2.[D][X] submit A\B | final (by: 02 Dec 2019 18:00)
+3.[E][ ] plan | demo (from: 01 Dec 2019 to: 03 Dec 2019)
+${LINE}
+
+${LINE}
+
+${BYE}
+```

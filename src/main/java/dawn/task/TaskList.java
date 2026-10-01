@@ -47,6 +47,20 @@ public class TaskList {
     }
 
     /**
+     * Inserts a task at its original position when a failed save is rolled back.
+     *
+     * @param index the position at which to restore the task
+     * @param task the task to restore
+     * @throws DawnException if the list is already at capacity
+     */
+    public void insertTask(int index, Task task) throws DawnException {
+        if (tasks.size() >= MAX_TASKS) {
+            throw new DawnException("Dawn can store at most " + MAX_TASKS + " tasks.");
+        }
+        tasks.add(index, task);
+    }
+
+    /**
      * Removes and returns the task at the given zero-based index.
      *
      * @param index the position of the task to drop

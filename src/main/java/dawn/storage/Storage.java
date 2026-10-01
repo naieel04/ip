@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,26 +31,38 @@ public class Storage {
     }
 
     /**
-     * Saves the current list of tasks to the persistent text file.
-     * Creates any missing parent directories automatically.
+     * Saves the current list of tasks to a temporary file, then replaces the
+     * persistent file atomically. Creates missing parent directories.
      *
      * @param taskList the list of tasks to persist
-     * @throws DawnException if an I/O write error occurs
+     * @throws DawnException if serialization or an I/O operation fails
      */
     public void save(TaskList taskList) throws DawnException {
+        Path temporaryFile = null;
         try {
-            if (filePath.getParent() != null && Files.notExists(filePath.getParent())) {
-                Files.createDirectories(filePath.getParent());
-            }
+            Path destination = filePath.toAbsolutePath();
+            Path directory = destination.getParent();
+            Files.createDirectories(directory);
 
             List<String> lines = new ArrayList<>();
             for (int i = 0; i < taskList.size(); i++) {
-                lines.add(taskList.getTask(i).toFileString());
+                lines.add(serializeTask(taskList.getTask(i)));
             }
 
-            Files.write(filePath, lines, java.nio.charset.StandardCharsets.UTF_8);
+            // Stage the complete file beside the destination before replacing it.
+            temporaryFile = Files.createTempFile(directory, "dawn-", ".tmp");
+            Files.write(temporaryFile, lines, java.nio.charset.StandardCharsets.UTF_8);
+            replaceSavedFile(temporaryFile, destination);
         } catch (IOException e) {
             throw new DawnException("Failed to save tasks to file: " + e.getMessage());
+        } finally {
+            if (temporaryFile != null) {
+                try {
+                    Files.deleteIfExists(temporaryFile);
+                } catch (IOException ignored) {
+                    // A failed cleanup must not conceal the save failure.
+                }
+            }
         }
     }
 
@@ -93,6 +106,10 @@ public class Storage {
     }
 
     private Task parseLineToTask(String line) throws Exception {
+        if (line.startsWith("V2 | ")) {
+            return parseVersionedLine(line);
+        }
+
         // Example format: T | 1 | read book
         String[] parts = line.split("\\s*\\|\\s*");
         if (parts.length < 3) {
@@ -122,5 +139,112 @@ public class Storage {
         default:
             throw new Exception("Unknown task type identifier: " + type);
         }
+    }
+
+    /** Replaces a complete save file atomically; overridable to simulate a failed move in tests. */
+    protected void replaceSavedFile(Path temporaryFile, Path destination) throws IOException {
+        Files.move(temporaryFile, destination, StandardCopyOption.ATOMIC_MOVE,
+                StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    /** Writes a versioned record so escaped fields cannot be confused with old data. */
+    private String serializeTask(Task task) throws DawnException {
+        String prefix = "V2 | ";
+        String status = task.isDone() ? "1" : "0";
+        String description = escapeField(task.getDescription());
+        if (task instanceof Deadline deadline) {
+            return prefix + "D | " + status + " | " + description + " | "
+                    + escapeField(deadline.getDueDate().toStorageString());
+        }
+        if (task instanceof Event event) {
+            return prefix + "E | " + status + " | " + description + " | "
+                    + escapeField(event.getStartDate().toStorageString()) + " | "
+                    + escapeField(event.getEndDate().toStorageString());
+        }
+        if (task instanceof ToDo) {
+            return prefix + "T | " + status + " | " + description;
+        }
+        throw new DawnException("Unsupported task type: " + task.getClass().getSimpleName());
+    }
+
+    /** Escapes field separators, backslashes, and line breaks in new records. */
+    private static String escapeField(String value) {
+        return value.replace("\\", "\\\\")
+                .replace("|", "\\|")
+                .replace("\r", "\\r")
+                .replace("\n", "\\n");
+    }
+
+    /** Reads only versioned records using the matching escape rules. */
+    private Task parseVersionedLine(String line) throws Exception {
+        List<String> fields = splitEscapedFields(line);
+        if (fields.size() < 4 || !fields.get(0).equals("V2")) {
+            throw new Exception("Missing essential task components.");
+        }
+        String type = fields.get(1);
+        String status = fields.get(2);
+        if (!status.equals("0") && !status.equals("1")) {
+            throw new Exception("Invalid task status.");
+        }
+        boolean isDone = status.equals("1");
+        String description = fields.get(3);
+        switch (type) {
+        case "T":
+            requireFieldCount(fields, 4);
+            return new ToDo(description, isDone);
+        case "D":
+            requireFieldCount(fields, 5);
+            return new Deadline(description, DateTimeParser.parseFlexible(fields.get(4)), isDone);
+        case "E":
+            requireFieldCount(fields, 6);
+            return new Event(description, DateTimeParser.parseFlexible(fields.get(4)),
+                    DateTimeParser.parseFlexible(fields.get(5)), isDone);
+        default:
+            throw new Exception("Unknown task type identifier: " + type);
+        }
+    }
+
+    /** Rejects missing or surplus fields instead of silently changing saved task text. */
+    private static void requireFieldCount(List<String> fields, int expected) throws Exception {
+        if (fields.size() != expected) {
+            throw new Exception("Expected " + expected + " fields, found " + fields.size() + ".");
+        }
+    }
+
+    /** Splits on literal separators while decoding escaped characters within fields. */
+    private static List<String> splitEscapedFields(String line) throws Exception {
+        List<String> fields = new ArrayList<>();
+        StringBuilder field = new StringBuilder();
+        for (int i = 0; i < line.length(); i++) {
+            char current = line.charAt(i);
+            if (current == '\\') {
+                if (++i == line.length()) {
+                    throw new Exception("Incomplete escape sequence.");
+                }
+                char escaped = line.charAt(i);
+                switch (escaped) {
+                case '\\':
+                case '|':
+                    field.append(escaped);
+                    break;
+                case 'r':
+                    field.append('\r');
+                    break;
+                case 'n':
+                    field.append('\n');
+                    break;
+                default:
+                    throw new Exception("Unknown escape sequence: \\" + escaped);
+                }
+            } else if (line.startsWith(" | ", i)) {
+                fields.add(field.toString());
+                field.setLength(0);
+                i += 2;
+            } else {
+                field.append(current);
+            }
+        }
+        fields.add(field.toString());
+        return fields;
     }
 }

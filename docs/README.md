@@ -28,7 +28,7 @@
 
 ## <span style="color:#006064">Quick Start</span>
 
-1. Ensure you have **Java 17** or above installed on your computer.
+1. Ensure you have **Java 25** or above installed on your computer.
 2. Download the latest `dawn.jar` release from the repository.
 3. Open a command prompt or terminal in the folder where the `.jar` file is located.
 4. Start the application by running the following command:

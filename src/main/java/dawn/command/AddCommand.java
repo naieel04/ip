@@ -30,7 +30,12 @@ public class AddCommand extends Command {
     @Override
     public void execute(TaskList tasks, DawnUi ui, Storage storage) throws DawnException {
         tasks.addTask(task);
-        storage.save(tasks);
+        try {
+            storage.save(tasks);
+        } catch (DawnException e) {
+            tasks.removeTask(tasks.size() - 1);
+            throw e;
+        }
         ui.showMessage("added: " + task.getDescription() + "\n\n");
     }
 }

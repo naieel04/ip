@@ -66,7 +66,7 @@ public class DawnUi {
               find [keyword]                         - Find tasks by keyword
               bye                                    - Exit the application""";
 
-    public static final String INTRO_MESSAGE = MAX_LINE + IMG_NAME_BANNER
+    public static final String INTRO_MESSAGE = MAX_LINE + "\n" + IMG_NAME_BANNER
             + "Hello! I'm Dawn.\nWhat can I do for you?\n\n"
             + COMMAND_GUIDE + "\n"
             + MAX_LINE;

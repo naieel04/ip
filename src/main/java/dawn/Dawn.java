@@ -51,8 +51,13 @@ public class Dawn {
             } catch (DawnException e) {
                 ui.showError(e.getMessage());
             } finally {
-                ui.showLine();
+                if (!isExit) {
+                    ui.showLine();
+                }
             }
+        }
+        if (isExit) {
+            ui.showBye();
         }
     }
 

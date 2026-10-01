@@ -34,8 +34,14 @@ public class UnmarkCommand extends Command {
             throw new DawnException("Task number not found. Use: " + Parser.UNMARK_USAGE);
         }
         Task task = tasks.getTask(taskIndex);
+        boolean wasDone = task.isDone();
         task.setDone(false);
-        storage.save(tasks);
+        try {
+            storage.save(tasks);
+        } catch (DawnException e) {
+            task.setDone(wasDone);
+            throw e;
+        }
         ui.showMessage("OK, I've marked this task as not done yet:\n\t" + task + "\n\n");
     }
 }
