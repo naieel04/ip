@@ -1963,6 +1963,58 @@ ${LINE}
 ${BYE}
 ```
 
+### TC-30: End the session when input closes
+**Aim:** Confirm that EOF after a command exits cleanly without an exception or an unsolicited goodbye. This session intentionally omits `bye`.
+**Inputs:**
+```text
+list
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+Your list is empty. I was starting to get bored.
+${LINE}
+```
+
+### TC-31: Find uppercase I using either letter case
+**Aim:** Confirm that both lowercase and uppercase keywords find the same task. The focused code quality check also exercises this session with a Turkish default locale.
+**Inputs:**
+```text
+todo FILE report
+find file
+find FILE
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+Pip! Added this task: FILE report
+
+${LINE}
+
+${LINE}
+
+I found these tasks in your list:
+1.[T][ ] FILE report
+${LINE}
+
+${LINE}
+
+I found these tasks in your list:
+1.[T][ ] FILE report
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
 ## Focused storage failure verification
 
 The companion Java checks exercise failures that cannot be represented by a
@@ -1983,3 +2035,35 @@ javac -d out/test $javaSources test/dawn/PiplupStorageTest.java test/StorageRegr
 java -cp out/test dawn.PiplupStorageTest
 java -cp out/test StorageRegressionTest
 ```
+
+## Focused code quality verification
+
+`test/dawn/CodeQualityRegressionTest.java` complements the console cases with:
+
+- EOF on an entirely empty input stream and after saving a task.
+- The session `todo FILE report`, `find file`, `find FILE`, `bye` under a Turkish
+  default locale. Both searches must show `1.[T][ ] FILE report` as a match.
+- Loading 100 valid saved tasks followed by an invalid-status record and a valid
+  101st task. The loader must retain the first 100 tasks, report both warnings,
+  and leave the saved file unchanged.
+
+Run with Java 25:
+
+```powershell
+$javaSources = @(Get-ChildItem src/main/java -Recurse -Filter *.java | Select-Object -ExpandProperty FullName)
+javac -d out/test $javaSources test/dawn/CodeQualityRegressionTest.java
+java -cp out/test dawn.CodeQualityRegressionTest
+```
+
+## Performance comparison
+
+Compile the original and updated sources into separate directories using Java 25.
+Then run `python test/compare-performance.py BEFORE_CLASSPATH AFTER_CLASSPATH`.
+The script runs a 423-command session up to the 100-task limit, covering every
+task type, mark/unmark, searches, date queries, deletion, list, help, and exit.
+It compares the complete output and saved file, and reports median elapsed time
+over five measured runs per version after a warm-up pair. Each run uses isolated
+temporary storage under `_temp`; results are written to
+`_temp/performance-comparison.json`. Timing includes JVM startup and file I/O and
+is a smoke check for a regression in this workload, not proof of performance for
+every environment or input.

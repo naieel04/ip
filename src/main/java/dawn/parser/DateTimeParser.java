@@ -11,7 +11,9 @@ import java.time.format.ResolverStyle;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-/** Parses and validates date and time inputs using strict calendar rules. */
+/**
+ * Parses and validates date and time inputs using strict calendar rules.
+ */
 public class DateTimeParser {
     public static final String DATE_TIME_USAGE =
             "yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)";
@@ -36,9 +38,9 @@ public class DateTimeParser {
     /**
      * Parses a date or date-time string strictly into a {@link TaskDateTime}.
      *
-     * @param input the raw date/time string
-     * @return the parsed {@link TaskDateTime}
-     * @throws DawnException if the input is malformed, has invalid values, or unsupported format
+     * @param input the raw date/time string.
+     * @return the parsed {@link TaskDateTime}.
+     * @throws DawnException if the input is malformed, has invalid values, or unsupported format.
      */
     public static TaskDateTime parseStrict(String input) throws DawnException {
         if (input == null || input.trim().isEmpty()) {
@@ -72,9 +74,9 @@ public class DateTimeParser {
      * If the input matches a date-like pattern, strict parsing is enforced.
      * Otherwise, freeform text is preserved.
      *
-     * @param input the raw date string
-     * @return the parsed {@link TaskDateTime}
-     * @throws DawnException if the input is blank or contains an invalid calendar date
+     * @param input the raw date string.
+     * @return the parsed {@link TaskDateTime}.
+     * @throws DawnException if the input is blank or contains an invalid calendar date.
      */
     public static TaskDateTime parseFlexible(String input) throws DawnException {
         if (input == null || input.trim().isEmpty()) {
@@ -89,10 +91,4 @@ public class DateTimeParser {
         return new TaskDateTime(trimmed);
     }
 
-    /**
-     * Alias for {@link #parseStrict(String)}.
-     */
-    public static TaskDateTime parse(String input) throws DawnException {
-        return parseStrict(input);
-    }
 }

@@ -7,34 +7,27 @@ import dawn.ui.DawnUi;
 
 import java.util.ArrayList;
 
-/** Command to find tasks containing a specific search keyword in their description. */
+/**
+ * Command to find tasks containing a specific search keyword in their description.
+ */
 public class FindCommand extends Command {
     private final String keyword;
 
     /**
      * Constructs a find command for the given keyword.
      *
-     * @param keyword the case-insensitive keyword to look for
+     * @param keyword the case-insensitive keyword to look for.
      */
     public FindCommand(String keyword) {
         this.keyword = keyword;
     }
 
     /**
-     * Retrieves the keyword associated with this command.
-     *
-     * @return the search keyword
-     */
-    public String getKeyword() {
-        return keyword;
-    }
-
-    /**
      * Executes the find command, filtering the task list and displaying the matches.
      *
-     * @param tasks the current list of tasks
-     * @param ui the user interface component
-     * @param storage the file storage system
+     * @param tasks the current list of tasks.
+     * @param ui the user interface component.
+     * @param storage the file storage system.
      */
     @Override
     public void execute(TaskList tasks, DawnUi ui, Storage storage) {

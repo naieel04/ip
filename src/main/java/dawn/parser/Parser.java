@@ -7,8 +7,7 @@ import dawn.command.ExitCommand;
 import dawn.command.FindCommand;
 import dawn.command.HelpCommand;
 import dawn.command.ListCommand;
-import dawn.command.MarkCommand;
-import dawn.command.UnmarkCommand;
+import dawn.command.SetCompletionCommand;
 import dawn.command.ViewCommand;
 import dawn.exception.DawnException;
 import dawn.task.Deadline;
@@ -18,7 +17,9 @@ import dawn.task.ToDo;
 
 import java.util.Locale;
 
-/** Parses user input and validates command arguments. */
+/**
+ * Parses user input and validates command arguments.
+ */
 public class Parser {
     private static final String DEADLINE_MARKER = "/by";
     private static final String EVENT_START_MARKER = "/from";
@@ -27,9 +28,9 @@ public class Parser {
     /**
      * Parses a raw user input string into an executable {@link Command}.
      *
-     * @param input the raw user input line
-     * @return the corresponding executable {@link Command}
-     * @throws DawnException if the input is malformed or unrecognised
+     * @param input the raw user input line.
+     * @return the corresponding executable {@link Command}.
+     * @throws DawnException if the input is malformed or unrecognized.
      */
     public static Command parse(String input) throws DawnException {
         String[] parsed = parseCommand(input);
@@ -41,45 +42,44 @@ public class Parser {
         }
 
         switch (commandWord) {
-        case BYE:
-            requireNoArguments(command, arguments);
-            return new ExitCommand();
-        case LIST:
-            requireNoArguments(command, arguments);
-            return new ListCommand();
-        case HELP:
-            requireNoArguments(command, arguments);
-            return new HelpCommand();
-        case MARK:
-            return new MarkCommand(parseTaskNumber(arguments, CommandWord.MARK.usage()));
-        case UNMARK:
-            return new UnmarkCommand(parseTaskNumber(arguments, CommandWord.UNMARK.usage()));
-        case DELETE:
-            return new DeleteCommand(parseTaskNumber(arguments, CommandWord.DELETE.usage()));
-        case TODO:
-            return new AddCommand(new ToDo(parseTodoArgs(arguments)));
-        case DEADLINE:
-            return new AddCommand(parseDeadlineArgs(arguments));
-        case EVENT:
-            return new AddCommand(parseEventArgs(arguments));
-        case VIEW:
-        case SCHEDULE:
-            return parseViewArgs(arguments);
-        case FIND:
-            return parseFindArgs(arguments);
-        default:
-            throw new DawnException(unknownCommandMessage(command));
+            case BYE:
+                requireNoArguments(command, arguments);
+                return new ExitCommand();
+            case LIST:
+                requireNoArguments(command, arguments);
+                return new ListCommand();
+            case HELP:
+                requireNoArguments(command, arguments);
+                return new HelpCommand();
+            case MARK:
+                return new SetCompletionCommand(parseTaskNumber(arguments, CommandWord.MARK.usage()), true);
+            case UNMARK:
+                return new SetCompletionCommand(parseTaskNumber(arguments, CommandWord.UNMARK.usage()), false);
+            case DELETE:
+                return new DeleteCommand(parseTaskNumber(arguments, CommandWord.DELETE.usage()));
+            case TODO:
+                return new AddCommand(new ToDo(parseTodoArgs(arguments)));
+            case DEADLINE:
+                return new AddCommand(parseDeadlineArgs(arguments));
+            case EVENT:
+                return new AddCommand(parseEventArgs(arguments));
+            case VIEW, SCHEDULE:
+                return parseViewArgs(arguments);
+            case FIND:
+                return parseFindArgs(arguments);
+            default:
+                throw new DawnException(unknownCommandMessage(command));
         }
     }
 
     /**
      * Splits a raw command string into the command word and raw arguments.
      *
-     * @param input raw input string
-     * @return two-element array with command word and arguments
-     * @throws DawnException if input is blank
+     * @param input raw input string.
+     * @return two-element array with command word and arguments.
+     * @throws DawnException if input is blank.
      */
-    public static String[] parseCommand(String input) throws DawnException {
+    private static String[] parseCommand(String input) throws DawnException {
         String trimmedInput = input.trim();
         if (trimmedInput.isEmpty()) {
             throw new DawnException(unknownCommandMessage(""));
@@ -93,12 +93,12 @@ public class Parser {
     /**
      * Parses a one-based task number and converts it to a zero-based list index.
      *
-     * @param arguments raw command arguments
-     * @param usage expected command format shown when validation fails
-     * @return the corresponding zero-based task index
-     * @throws DawnException if the argument is missing or is not a positive integer
+     * @param arguments raw command arguments.
+     * @param usage expected command format shown when validation fails.
+     * @return the corresponding zero-based task index.
+     * @throws DawnException if the argument is missing or is not a positive integer.
      */
-    public static int parseTaskNumber(String arguments, String usage) throws DawnException {
+    private static int parseTaskNumber(String arguments, String usage) throws DawnException {
         if (arguments.isEmpty()) {
             throw new DawnException("I need a task number. Use: " + usage);
         }
@@ -115,11 +115,11 @@ public class Parser {
     /**
      * Extrapolates and validates the description for a ToDo task from the command arguments.
      *
-     * @param arguments the raw command arguments
-     * @return the validated task description safely extracted
-     * @throws DawnException if the description is blank
+     * @param arguments the raw command arguments.
+     * @return the validated task description safely extracted.
+     * @throws DawnException if the description is blank.
      */
-    public static String parseTodoArgs(String arguments) throws DawnException {
+    private static String parseTodoArgs(String arguments) throws DawnException {
         if (arguments.isEmpty()) {
             throw new DawnException("I need a description for your todo. Use: " + CommandWord.TODO.usage());
         }
@@ -129,11 +129,11 @@ public class Parser {
     /**
      * Parses the arguments for a Deadline task into a description and due date.
      *
-     * @param arguments the raw command arguments containing description and /by clause
-     * @return a constructed Deadline task
-     * @throws DawnException if markers are missing or fields are blank
+     * @param arguments the raw command arguments containing description and /by clause.
+     * @return a constructed Deadline task.
+     * @throws DawnException if markers are missing or fields are blank.
      */
-    public static Deadline parseDeadlineArgs(String arguments) throws DawnException {
+    private static Deadline parseDeadlineArgs(String arguments) throws DawnException {
         int byIndex = findStandaloneMarker(arguments, DEADLINE_MARKER);
         if (byIndex < 0) {
             throw new DawnException("I need the /by keyword for your deadline. Use: " + CommandWord.DEADLINE.usage());
@@ -154,11 +154,11 @@ public class Parser {
     /**
      * Parses the arguments for an Event task into a description, start date, and end date.
      *
-     * @param arguments the raw command arguments containing description, /from, and /to clauses
-     * @return a constructed Event task
-     * @throws DawnException if markers are missing out of order, or fields are blank
+     * @param arguments the raw command arguments containing description, /from, and /to clauses.
+     * @return a constructed Event task.
+     * @throws DawnException if markers are missing out of order, or fields are blank.
      */
-    public static Event parseEventArgs(String arguments) throws DawnException {
+    private static Event parseEventArgs(String arguments) throws DawnException {
         int fromIndex = findStandaloneMarker(arguments, EVENT_START_MARKER);
         int toIndex = findStandaloneMarker(arguments, EVENT_END_MARKER);
         if (fromIndex < 0) {
@@ -190,11 +190,11 @@ public class Parser {
     /**
      * Parses the arguments for a view command to extract the target date.
      *
-     * @param arguments the raw command arguments
-     * @return an executable ViewCommand holding the target date
-     * @throws DawnException if the date is blank or malformed
+     * @param arguments the raw command arguments.
+     * @return an executable ViewCommand holding the target date.
+     * @throws DawnException if the date is blank or malformed.
      */
-    public static Command parseViewArgs(String arguments) throws DawnException {
+    private static Command parseViewArgs(String arguments) throws DawnException {
         if (arguments.isEmpty()) {
             throw new DawnException("I need a date. Use: " + CommandWord.VIEW.usage());
         }
@@ -205,11 +205,11 @@ public class Parser {
     /**
      * Parses the arguments for a find command to extract the search keyword.
      *
-     * @param arguments the raw command arguments
-     * @return an executable FindCommand holding the extracted keyword
-     * @throws DawnException if the keyword is blank
+     * @param arguments the raw command arguments.
+     * @return an executable FindCommand holding the extracted keyword.
+     * @throws DawnException if the keyword is blank.
      */
-    public static Command parseFindArgs(String arguments) throws DawnException {
+    private static Command parseFindArgs(String arguments) throws DawnException {
         if (arguments.isEmpty()) {
             throw new DawnException("I need a search keyword. Use: " + CommandWord.FIND.usage());
         }
@@ -219,11 +219,11 @@ public class Parser {
     /**
      * Asserts that no trailing arguments were supplied for a command that does not accept any.
      *
-     * @param command the command word invoked
-     * @param arguments the trailing arguments string
-     * @throws DawnException if arguments is not empty
+     * @param command the command word invoked.
+     * @param arguments the trailing arguments string.
+     * @throws DawnException if arguments is not empty.
      */
-    public static void requireNoArguments(String command, String arguments) throws DawnException {
+    private static void requireNoArguments(String command, String arguments) throws DawnException {
         if (!arguments.isEmpty()) {
             throw new DawnException("I don't need arguments for " + command + ". Use: " + command);
         }
@@ -232,9 +232,9 @@ public class Parser {
     /**
      * Searches for a command marker token bounded by whitespace matching standard separator rules.
      *
-     * @param text the text to search within
-     * @param marker the specific marker sequence to find
-     * @return the zero-based index marking the start of the token, or -1 if no standalone match is found
+     * @param text the text to search within.
+     * @param marker the specific marker sequence to find.
+     * @return the zero-based index marking the start of the token, or -1 if no standalone match is found.
      */
     private static int findStandaloneMarker(String text, String marker) {
         int index = text.indexOf(marker);
@@ -254,36 +254,43 @@ public class Parser {
     /**
      * Generates a helpful error message when an unrecognized command is typed, detecting plausible typos.
      *
-     * @param commandWord the malformed command word received
-     * @return a message suggesting a likely command or directing the user to help
+     * @param commandWord the malformed command word received.
+     * @return a message suggesting a likely command or directing the user to help.
      */
-    public static String unknownCommandMessage(String commandWord) {
+    private static String unknownCommandMessage(String commandWord) {
         String normalizedCommand = commandWord.toLowerCase(Locale.ROOT);
         if (normalizedCommand.contains(CommandWord.TODO.keyword())) {
-            return "I don't recognize that command.\nDid you mean: " + CommandWord.TODO.usage() + "?";
+            return suggestCommand(CommandWord.TODO);
         }
         if (normalizedCommand.contains(CommandWord.DEADLINE.keyword())) {
-            return "I don't recognize that command.\nDid you mean: " + CommandWord.DEADLINE.usage() + "?";
+            return suggestCommand(CommandWord.DEADLINE);
         }
         if (normalizedCommand.contains(CommandWord.EVENT.keyword())) {
-            return "I don't recognize that command.\nDid you mean: " + CommandWord.EVENT.usage() + "?";
+            return suggestCommand(CommandWord.EVENT);
         }
         if (normalizedCommand.contains(CommandWord.UNMARK.keyword())) {
-            return "I don't recognize that command.\nDid you mean: " + CommandWord.UNMARK.usage() + "?";
+            return suggestCommand(CommandWord.UNMARK);
         }
         if (normalizedCommand.contains(CommandWord.MARK.keyword())) {
-            return "I don't recognize that command.\nDid you mean: " + CommandWord.MARK.usage() + "?";
+            return suggestCommand(CommandWord.MARK);
         }
         if (normalizedCommand.contains(CommandWord.DELETE.keyword())) {
-            return "I don't recognize that command.\nDid you mean: " + CommandWord.DELETE.usage() + "?";
+            return suggestCommand(CommandWord.DELETE);
         }
         if (normalizedCommand.contains(CommandWord.VIEW.keyword())
                 || normalizedCommand.contains(CommandWord.SCHEDULE.keyword())) {
-            return "I don't recognize that command.\nDid you mean: " + CommandWord.VIEW.usage() + "?";
+            return suggestCommand(CommandWord.VIEW);
         }
         if (normalizedCommand.contains(CommandWord.FIND.keyword())) {
-            return "I don't recognize that command.\nDid you mean: " + CommandWord.FIND.usage() + "?";
+            return suggestCommand(CommandWord.FIND);
         }
         return "I don't recognize that command. Type 'help' to see the available commands.";
+    }
+
+    /**
+     * Formats a suggestion consistently for each recognized command fragment.
+     */
+    private static String suggestCommand(CommandWord commandWord) {
+        return "I don't recognize that command.\nDid you mean: " + commandWord.usage() + "?";
     }
 }

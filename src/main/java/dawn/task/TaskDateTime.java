@@ -6,7 +6,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Objects;
 
-/** Encapsulates a task date, date-time, or freeform text value. */
+/**
+ * Encapsulates a task date, date-time, or freeform text value.
+ */
 public class TaskDateTime {
     private static final DateTimeFormatter DISPLAY_DATE_FORMATTER =
             DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH);
@@ -24,7 +26,7 @@ public class TaskDateTime {
     /**
      * Constructs a TaskDateTime representing just a date.
      *
-     * @param date the date payload
+     * @param date the date payload.
      */
     public TaskDateTime(LocalDate date) {
         this.date = Objects.requireNonNull(date);
@@ -35,7 +37,7 @@ public class TaskDateTime {
     /**
      * Constructs a TaskDateTime representing a date and time.
      *
-     * @param dateTime the date-time payload
+     * @param dateTime the date-time payload.
      */
     public TaskDateTime(LocalDateTime dateTime) {
         this.dateTime = Objects.requireNonNull(dateTime);
@@ -46,7 +48,7 @@ public class TaskDateTime {
     /**
      * Constructs a TaskDateTime from freeform text when no valid calendar date is parsed.
      *
-     * @param rawText the string literal
+     * @param rawText the string literal.
      */
     public TaskDateTime(String rawText) {
         this.rawText = Objects.requireNonNull(rawText).trim();
@@ -57,7 +59,7 @@ public class TaskDateTime {
     /**
      * Checks if this instance contains a time component.
      *
-     * @return {@code true} if time is present
+     * @return {@code true} if time is present.
      */
     public boolean hasTime() {
         return dateTime != null;
@@ -66,7 +68,7 @@ public class TaskDateTime {
     /**
      * Checks if this instance contains a calendar date component.
      *
-     * @return {@code true} if date or date-time is present
+     * @return {@code true} if date or date-time is present.
      */
     public boolean hasDate() {
         return date != null || dateTime != null;
@@ -75,7 +77,7 @@ public class TaskDateTime {
     /**
      * Extracts the local date component from this instance.
      *
-     * @return the local date, or {@code null} if this is raw text
+     * @return the local date, or {@code null} if this is raw text.
      */
     public LocalDate toLocalDate() {
         if (dateTime != null) {
@@ -87,8 +89,8 @@ public class TaskDateTime {
     /**
      * Checks if this instance falls exactly on the given calendar date.
      *
-     * @param targetDate the date to compare against
-     * @return {@code true} if dates match exactly
+     * @param targetDate the date to compare against.
+     * @return {@code true} if dates match exactly.
      */
     public boolean isOnDate(LocalDate targetDate) {
         if (targetDate == null) {
@@ -101,7 +103,7 @@ public class TaskDateTime {
     /**
      * Formats this date or time for UI viewing according to English locale standards.
      *
-     * @return the formatted display string
+     * @return the formatted display string.
      */
     public String toDisplayString() {
         if (dateTime != null) {
@@ -116,7 +118,7 @@ public class TaskDateTime {
     /**
      * Formats this date or time for persistent storage encoding.
      *
-     * @return the formatted string suited for line-based saves
+     * @return the formatted string suited for line-based saves.
      */
     public String toStorageString() {
         if (dateTime != null) {
@@ -131,8 +133,8 @@ public class TaskDateTime {
     /**
      * Evaluates logical equality based on internal fields matching precisely.
      *
-     * @param obj the reference object to benchmark against
-     * @return {@code true} if logically equivalent, {@code false} otherwise
+     * @param obj the object to compare against.
+     * @return {@code true} if logically equivalent, {@code false} otherwise.
      */
     @Override
     public boolean equals(Object obj) {
@@ -148,9 +150,9 @@ public class TaskDateTime {
     }
 
     /**
-     * Computes the hash block.
+     * Computes a hash code consistent with logical equality.
      *
-     * @return standard JDK hash code computed against all member fields
+     * @return standard JDK hash code computed against all member fields.
      */
     @Override
     public int hashCode() {

@@ -1,6 +1,8 @@
 package dawn.parser;
 
-/** Defines the accepted command words and the text used to describe them. */
+/**
+ * Defines the accepted command words and the text used to describe them.
+ */
 public enum CommandWord {
     TODO("todo", "todo [description]", "Add a todo"),
     DEADLINE("deadline", "deadline [description] /by [due date]", "Add a deadline"),
@@ -25,17 +27,23 @@ public enum CommandWord {
         this.helpDescription = helpDescription;
     }
 
-    /** Returns the exact, case-sensitive command word entered by the user. */
+    /**
+     * Returns the exact, case-sensitive command word entered by the user.
+     */
     public String keyword() {
         return keyword;
     }
 
-    /** Returns the syntax shown in usage errors and the command guide. */
+    /**
+     * Returns the syntax shown in usage errors and the command guide.
+     */
     public String usage() {
         return usage;
     }
 
-    /** Finds a command by its exact word, or returns null if it is unknown. */
+    /**
+     * Finds a command by its exact word, or returns null if it is unknown.
+     */
     public static CommandWord fromKeyword(String keyword) {
         for (CommandWord command : values()) {
             if (command.keyword.equals(keyword)) {
@@ -45,7 +53,9 @@ public enum CommandWord {
         return null;
     }
 
-    /** Builds a two-column command table for the introductory help text. */
+    /**
+     * Builds a two-column command table for the introductory help text.
+     */
     public static String commandGuide() {
         String commandHeading = "Command / format";
         String descriptionHeading = "Description";
@@ -69,9 +79,11 @@ public enum CommandWord {
         return guide.toString();
     }
 
-    /** Appends a padded row while keeping both column separators aligned. */
+    /**
+     * Appends a padded row while keeping both column separators aligned.
+     */
     private static void appendTableRow(StringBuilder guide, String command, String description,
-                                       int commandWidth, int descriptionWidth) {
+            int commandWidth, int descriptionWidth) {
         guide.append("| ").append(command)
                 .append(" ".repeat(commandWidth - command.length()))
                 .append(" | ").append(description)

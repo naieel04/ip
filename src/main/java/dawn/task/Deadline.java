@@ -2,15 +2,17 @@ package dawn.task;
 
 import java.time.LocalDate;
 
-/** Subclass Deadline: A task with a due date and description. */
+/**
+ * Subclass Deadline: A task with a due date and description.
+ */
 public class Deadline extends Task {
-    private TaskDateTime dueDate;
+    private final TaskDateTime dueDate;
 
     /**
      * Constructs a new Deadline task with the specified description and due date.
      *
-     * @param description the description of the task
-     * @param dueDate the due date of the task
+     * @param description the description of the task.
+     * @param dueDate the due date of the task.
      */
     public Deadline(String description, TaskDateTime dueDate) {
         super(description);
@@ -20,9 +22,9 @@ public class Deadline extends Task {
     /**
      * Constructs a Deadline task with a specific completion status.
      *
-     * @param description the description of the task
-     * @param dueDate the due date of the task
-     * @param isDone {@code true} if the task is already completed
+     * @param description the description of the task.
+     * @param dueDate the due date of the task.
+     * @param isDone {@code true} if the task is already completed.
      */
     public Deadline(String description, TaskDateTime dueDate, boolean isDone) {
         super(description, isDone);
@@ -32,26 +34,17 @@ public class Deadline extends Task {
     /**
      * Retrieves the due date of this deadline.
      *
-     * @return the due date encapsulation
+     * @return the due date value.
      */
     public TaskDateTime getDueDate() {
         return dueDate;
     }
 
     /**
-     * Updates the due date of this deadline.
-     *
-     * @param dueDate the new due date
-     */
-    public void setDueDate(TaskDateTime dueDate) {
-        this.dueDate = dueDate;
-    }
-
-    /**
      * Checks if this deadline is due on the specified calendar date.
      *
-     * @param date the date to check against
-     * @return {@code true} if the deadline falls on the given date, {@code false} otherwise
+     * @param date the date to check against.
+     * @return {@code true} if the deadline falls on the given date, {@code false} otherwise.
      */
     @Override
     public boolean isOnDate(LocalDate date) {
@@ -59,19 +52,9 @@ public class Deadline extends Task {
     }
 
     /**
-     * Converts the deadline into a formatted string suitable for persistent storage.
-     *
-     * @return the storage-formatted string representing this deadline
-     */
-    @Override
-    public String toFileString() {
-        return "D | " + super.toFileString() + " | " + dueDate.toStorageString();
-    }
-
-    /**
      * Returns the string representation of this deadline for UI display.
      *
-     * @return the formatted deadline string
+     * @return the formatted deadline string.
      */
     @Override
     public String toString() {

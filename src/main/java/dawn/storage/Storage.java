@@ -1,6 +1,7 @@
 package dawn.storage;
 
 import dawn.exception.DawnException;
+import dawn.exception.MalformedRecordException;
 import dawn.exception.StorageException;
 import dawn.parser.DateTimeParser;
 import dawn.task.Deadline;
@@ -18,16 +19,20 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Handles reading from and writing to the local data storage file. */
+/**
+ * Handles reading from and writing to the local data storage file.
+ */
 public class Storage {
     private final Path filePath;
-    /** Warnings from the latest load, displayed by the UI after loading completes. */
+    /**
+     * Warnings from the latest load, displayed by the UI after loading completes.
+     */
     private final List<String> loadWarnings = new ArrayList<>();
 
     /**
      * Constructs a Storage instance tied to a specific file path string.
      *
-     * @param filePath string path to the persistence file (e.g. "data/dawn.txt")
+     * @param filePath string path to the persistence file (e.g. "data/dawn.txt").
      */
     public Storage(String filePath) {
         this.filePath = Paths.get(filePath);
@@ -37,8 +42,8 @@ public class Storage {
      * Saves the current list of tasks to a temporary file, then replaces the
      * persistent file atomically. Creates missing parent directories.
      *
-     * @param taskList the list of tasks to persist
-     * @throws DawnException if serialization or an I/O operation fails
+     * @param taskList the list of tasks to persist.
+     * @throws DawnException if serialization or an I/O operation fails.
      */
     public void save(TaskList taskList) throws DawnException {
         Path temporaryFile = null;
@@ -72,16 +77,16 @@ public class Storage {
 
     /**
      * Loads tasks from the persistent text file.
-     * 
+     *
      * @return a populated TaskList based on the saved data.
      * @throws DawnException if a read failure occurs.
      */
     public TaskList load() throws DawnException {
         loadWarnings.clear();
         TaskList taskList = new TaskList();
-        
+
         if (Files.notExists(filePath)) {
-            return taskList; // Return empty list if no file exists yet
+            return taskList;
         }
 
         try {
@@ -95,11 +100,12 @@ public class Storage {
                 if (line.trim().isEmpty()) {
                     continue;
                 }
-                
+
                 try {
                     Task task = parseLineToTask(line);
-                    taskList.addTask(task); // Suppresses MAX_TASKS exception safely if reading old valid limit
-                } catch (Exception e) {
+                    taskList.addTask(task);
+                } catch (MalformedRecordException | DawnException e) {
+                    // Report malformed records, invalid dates, and capacity limits; let programming errors surface.
                     loadWarnings.add("I skipped a damaged saved task: [" + line + "] - " + e.getMessage());
                 }
             }
@@ -111,12 +117,17 @@ public class Storage {
         return taskList;
     }
 
-    /** Returns a snapshot of warnings without allowing callers to change them. */
+    /**
+     * Returns a snapshot of warnings without allowing callers to change them.
+     */
     public List<String> getLoadWarnings() {
         return List.copyOf(loadWarnings);
     }
 
-    private Task parseLineToTask(String line) throws Exception {
+    /**
+     * Reads either a legacy record or an escaped versioned record.
+     */
+    private Task parseLineToTask(String line) throws MalformedRecordException, DawnException {
         if (line.startsWith("V2 | ")) {
             return parseVersionedLine(line);
         }
@@ -124,7 +135,7 @@ public class Storage {
         // Example format: T | 1 | read book
         String[] parts = line.split("\\s*\\|\\s*");
         if (parts.length < 3) {
-            throw new Exception("Missing essential task components.");
+            throw new MalformedRecordException("Missing essential task components.");
         }
 
         String type = parts[0].trim();
@@ -132,33 +143,37 @@ public class Storage {
         String description = parts[2].trim();
 
         switch (type) {
-        case "T":
-            return new ToDo(description, isDone);
-        case "D":
-            if (parts.length < 4) {
-                throw new Exception("Deadline is missing the due date.");
-            }
-            TaskDateTime dueDate = DateTimeParser.parseFlexible(parts[3].trim());
-            return new Deadline(description, dueDate, isDone);
-        case "E":
-            if (parts.length < 5) {
-                throw new Exception("Event is missing start or end dates.");
-            }
-            TaskDateTime startDate = DateTimeParser.parseFlexible(parts[3].trim());
-            TaskDateTime endDate = DateTimeParser.parseFlexible(parts[4].trim());
-            return new Event(description, startDate, endDate, isDone);
-        default:
-            throw new Exception("Unknown task type identifier: " + type);
+            case "T":
+                return new ToDo(description, isDone);
+            case "D":
+                if (parts.length < 4) {
+                    throw new MalformedRecordException("Deadline is missing the due date.");
+                }
+                TaskDateTime dueDate = DateTimeParser.parseFlexible(parts[3].trim());
+                return new Deadline(description, dueDate, isDone);
+            case "E":
+                if (parts.length < 5) {
+                    throw new MalformedRecordException("Event is missing start or end dates.");
+                }
+                TaskDateTime startDate = DateTimeParser.parseFlexible(parts[3].trim());
+                TaskDateTime endDate = DateTimeParser.parseFlexible(parts[4].trim());
+                return new Event(description, startDate, endDate, isDone);
+            default:
+                throw new MalformedRecordException("Unknown task type identifier: " + type);
         }
     }
 
-    /** Replaces a complete save file atomically; overridable to simulate a failed move in tests. */
+    /**
+     * Replaces a complete save file atomically; overridable to simulate a failed move in tests.
+     */
     protected void replaceSavedFile(Path temporaryFile, Path destination) throws IOException {
         Files.move(temporaryFile, destination, StandardCopyOption.ATOMIC_MOVE,
                 StandardCopyOption.REPLACE_EXISTING);
     }
 
-    /** Writes a versioned record so escaped fields cannot be confused with old data. */
+    /**
+     * Writes a versioned record so escaped fields cannot be confused with old data.
+     */
     private String serializeTask(Task task) throws DawnException {
         String prefix = "V2 | ";
         String status = task.isDone() ? "1" : "0";
@@ -179,7 +194,9 @@ public class Storage {
                 + task.getClass().getSimpleName());
     }
 
-    /** Escapes field separators, backslashes, and line breaks in new records. */
+    /**
+     * Escapes field separators, backslashes, and line breaks in new records.
+     */
     private static String escapeField(String value) {
         return value.replace("\\", "\\\\")
                 .replace("|", "\\|")
@@ -187,66 +204,71 @@ public class Storage {
                 .replace("\n", "\\n");
     }
 
-    /** Reads only versioned records using the matching escape rules. */
-    private Task parseVersionedLine(String line) throws Exception {
+    /**
+     * Reads only versioned records using the matching escape rules.
+     */
+    private Task parseVersionedLine(String line) throws MalformedRecordException, DawnException {
         List<String> fields = splitEscapedFields(line);
         if (fields.size() < 4 || !fields.get(0).equals("V2")) {
-            throw new Exception("Missing essential task components.");
+            throw new MalformedRecordException("Missing essential task components.");
         }
         String type = fields.get(1);
         String status = fields.get(2);
         if (!status.equals("0") && !status.equals("1")) {
-            throw new Exception("Invalid task status.");
+            throw new MalformedRecordException("Invalid task status.");
         }
         boolean isDone = status.equals("1");
         String description = fields.get(3);
         switch (type) {
-        case "T":
-            requireFieldCount(fields, 4);
-            return new ToDo(description, isDone);
-        case "D":
-            requireFieldCount(fields, 5);
-            return new Deadline(description, DateTimeParser.parseFlexible(fields.get(4)), isDone);
-        case "E":
-            requireFieldCount(fields, 6);
-            return new Event(description, DateTimeParser.parseFlexible(fields.get(4)),
-                    DateTimeParser.parseFlexible(fields.get(5)), isDone);
-        default:
-            throw new Exception("Unknown task type identifier: " + type);
+            case "T":
+                requireFieldCount(fields, 4);
+                return new ToDo(description, isDone);
+            case "D":
+                requireFieldCount(fields, 5);
+                return new Deadline(description, DateTimeParser.parseFlexible(fields.get(4)), isDone);
+            case "E":
+                requireFieldCount(fields, 6);
+                return new Event(description, DateTimeParser.parseFlexible(fields.get(4)),
+                        DateTimeParser.parseFlexible(fields.get(5)), isDone);
+            default:
+                throw new MalformedRecordException("Unknown task type identifier: " + type);
         }
     }
 
-    /** Rejects missing or surplus fields instead of silently changing saved task text. */
-    private static void requireFieldCount(List<String> fields, int expected) throws Exception {
+    /**
+     * Rejects missing or surplus fields instead of silently changing saved task text.
+     */
+    private static void requireFieldCount(List<String> fields, int expected) throws MalformedRecordException {
         if (fields.size() != expected) {
-            throw new Exception("Expected " + expected + " fields, found " + fields.size() + ".");
+            throw new MalformedRecordException("Expected " + expected + " fields, found " + fields.size() + ".");
         }
     }
 
-    /** Splits on literal separators while decoding escaped characters within fields. */
-    private static List<String> splitEscapedFields(String line) throws Exception {
+    /**
+     * Splits on literal separators while decoding escaped characters within fields.
+     */
+    private static List<String> splitEscapedFields(String line) throws MalformedRecordException {
         List<String> fields = new ArrayList<>();
         StringBuilder field = new StringBuilder();
         for (int i = 0; i < line.length(); i++) {
             char current = line.charAt(i);
             if (current == '\\') {
                 if (++i == line.length()) {
-                    throw new Exception("Incomplete escape sequence.");
+                    throw new MalformedRecordException("Incomplete escape sequence.");
                 }
                 char escaped = line.charAt(i);
                 switch (escaped) {
-                case '\\':
-                case '|':
-                    field.append(escaped);
-                    break;
-                case 'r':
-                    field.append('\r');
-                    break;
-                case 'n':
-                    field.append('\n');
-                    break;
-                default:
-                    throw new Exception("Unknown escape sequence: \\" + escaped);
+                    case '\\', '|':
+                        field.append(escaped);
+                        break;
+                    case 'r':
+                        field.append('\r');
+                        break;
+                    case 'n':
+                        field.append('\n');
+                        break;
+                    default:
+                        throw new MalformedRecordException("Unknown escape sequence: \\" + escaped);
                 }
             } else if (line.startsWith(" | ", i)) {
                 fields.add(field.toString());

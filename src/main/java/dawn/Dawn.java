@@ -8,24 +8,30 @@ import dawn.storage.Storage;
 import dawn.task.TaskList;
 import dawn.ui.DawnUi;
 
-/** Starts Dawn and coordinates the console application's lifecycle. */
+/**
+ * Starts Dawn and coordinates the console application's lifecycle.
+ */
 public class Dawn {
     private final DawnUi ui;
     private final Storage storage;
     private TaskList tasks;
-    /** Stays true after any storage problem, even if a later save succeeds. */
+    /**
+     * Stays true after any storage problem, even if a later save succeeds.
+     */
     private boolean hadStorageProblem;
 
     /**
      * Initializes Dawn with persistent storage at the given file path.
      *
-     * @param filePath the path to the tasks file
+     * @param filePath the path to the tasks file.
      */
     public Dawn(String filePath) {
         this(new Storage(filePath), new DawnUi());
     }
 
-    /** Accepts a storage service and UI so sessions can be checked with simulated failures. */
+    /**
+     * Accepts a storage service and UI so sessions can be checked with simulated failures.
+     */
     Dawn(Storage storage, DawnUi ui) {
         this.ui = ui;
         this.storage = storage;
@@ -42,12 +48,16 @@ public class Dawn {
         }
     }
 
-    /** Initializes Dawn with the default storage file path. */
+    /**
+     * Initializes Dawn with the default storage file path.
+     */
     public Dawn() {
         this("data/dawn.txt");
     }
 
-    /** Runs the main application event loop until the exit command is received. */
+    /**
+     * Runs the main application event loop until the exit command is received.
+     */
     public void run() {
         ui.showIntro();
         boolean isExit = false;
@@ -80,7 +90,7 @@ public class Dawn {
     /**
      * Entry point for the Dawn application.
      *
-     * @param args command-line arguments (unused)
+     * @param args command-line arguments (unused).
      */
     public static void main(String[] args) {
         new Dawn().run();
