@@ -25,14 +25,15 @@
 
 ## <span style="color:#006064">Introduction</span>
 
-**Dawn** is a desktop Command Line Interface (CLI) task management chatbot tailored to help you keep track of your daily tasks, deadlines, and events efficiently. Optimized for users who prefer using a keyboard, Dawn allows you to manage your schedule seamlessly through standard text commands.
+**Dawn** is a desktop Command Line Interface (CLI) task management chatbot tailored to help  keep track of your daily tasks, deadlines, and events. 
+Named after the Pokémon trainer, _Dawn_ allows you to manage your schedule seamlessly and efficiently through  text commands.
 
 ---
 
 ## <span style="color:#006064">Quick Start</span>
 
 1. Ensure you have **Java 25** or above installed on your computer.
-2. Download the latest [`dawn.jar`](https://github.com/naieel04/ip/releases) release from the repository.
+2. Download the latest [`dawn.jar`](https://github.com/naieel04/ip/releases) release from the repository [here](https://github.com/naieel04/ip/releases).
 3. Open a command prompt or terminal in the folder where the `.jar` file is located.
 4. Start the application by running the following command:
    ```bash
