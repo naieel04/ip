@@ -13,7 +13,8 @@
   * [Unmarking a task: `unmark`](#unmarking-a-task-unmark)
   * [Deleting a task: `delete`](#deleting-a-task-delete)
   * [Searching for tasks by keyword: `find`](#searching-for-tasks-by-keyword-find)
-  * [Viewing tasks by date: `view`](#viewing-tasks-by-date-view)
+  * [Viewing tasks by date: `view` / `schedule`](#viewing-tasks-by-date-view--schedule)
+  * [Viewing help: `help`](#viewing-help-help)
   * [Exiting the application: `bye`](#exiting-the-application-bye)
 * [Command Summary](#command-summary)
 * [FAQ](#faq)
@@ -140,14 +141,22 @@ Retrieves and displays all tasks whose description contains the specified keywor
 
 ---
 
-### Viewing tasks by date: `view`
+### Viewing tasks by date: `view` / `schedule`
 
-Shows all deadline and event tasks that organically occur on a particular calendar date. This requires strict calendar-formatted dates as noted at the top of this section.
+Shows all deadline and event tasks that occur on a particular calendar date. This requires strict calendar-formatted dates as noted at the top of this section. `schedule` can be used as an alias for `view`.
 
-* **Format:** `view [date]`
+* **Format:** `view [date]` or `schedule [date]`
 * **Examples:**
   * `view 2026-10-02`
-  * `view 2/10/2026`
+  * `schedule 2/10/2026`
+
+---
+
+### Viewing help: `help`
+
+Displays the command syntax guide table on demand without having to restart the application.
+
+* **Format:** `help`
 
 ---
 
@@ -172,6 +181,8 @@ Safely exits the chatbot interface.
 | **Delete** | `delete [task number]` | `delete 3` |
 | **Find** | `find [keyword]` | `find meeting` |
 | **View** | `view [date]` | `view 2026-10-12` |
+| **Schedule** | `schedule [date]` | `schedule 2/10/2026` |
+| **Help** | `help` | `help` |
 | **Exit** | `bye` | `bye` |
 
 ---
