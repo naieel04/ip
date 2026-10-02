@@ -291,4 +291,11 @@ Safely exits the chatbot interface.
 **A**: There is no manual save command. Dawn **automatically saves** your tasks to the hard disk in the background after any data creation or modification (e.g., adding, marking, or deleting a task). When you start the application again, your data is seamlessly loaded into the session.
 
 **Q**: Where is my data saved?  
-**A**: Your data is securely saved in a `dawn.txt` file located in the `data/` folder within the same directory as the `.jar` document.
+**A**: Your data is securely saved in a `dawn.txt` file located in the `data/` folder within the same directory as the `.jar` file.
+
+**Q**: Can I manually edit the `data/dawn.txt` file?  
+**A**: Yes, advanced users can edit `data/dawn.txt` directly. However, be cautious:
+* Records use a versioned format (`V2 | [Type] | [Status] | [Description]...`).
+* If any line is damaged, missing required fields, or formatted incorrectly, Dawn will print a warning on startup (`Pip?! I skipped a damaged saved task...`) and safely skip only the corrupted record while preserving all valid tasks.
+* If the file is completely unreadable or missing, Dawn starts with a fresh empty list.
+* It is recommended to make a backup copy of `data/dawn.txt` before making manual edits.
