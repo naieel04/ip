@@ -6,6 +6,7 @@ import dawn.task.TaskDateTime;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.Locale;
@@ -16,24 +17,39 @@ import java.util.regex.Pattern;
  */
 public class DateTimeParser {
     public static final String DATE_TIME_USAGE =
-            "yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)";
+            "yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy"
+                    + " (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)";
 
     private static final Pattern DATE_PATTERN =
             Pattern.compile("^\\d{1,4}[-/]\\d{1,2}([-/]\\d{1,4})?(\\s+.*)?$");
+    private static final Pattern NAMED_MONTH_DATE_PATTERN =
+            Pattern.compile("^\\d{1,2}\\s+[A-Za-z]{3,}\\s+\\d{1,4}(?:\\s+.*)?$");
 
     private static final DateTimeFormatter[] DATE_TIME_FORMATTERS = {
-        DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm", Locale.ENGLISH)
-                .withResolverStyle(ResolverStyle.STRICT),
-        DateTimeFormatter.ofPattern("d/M/uuuu HHmm", Locale.ENGLISH)
-                .withResolverStyle(ResolverStyle.STRICT)
+        strictFormatter("uuuu-MM-dd HHmm"),
+        strictFormatter("uuuu/MM/dd HHmm"),
+        strictFormatter("d/M/uuuu HHmm"),
+        strictFormatter("dd-MM-uuuu HHmm"),
+        strictFormatter("d MMM uuuu HHmm")
     };
 
     private static final DateTimeFormatter[] DATE_FORMATTERS = {
-        DateTimeFormatter.ofPattern("uuuu-MM-dd", Locale.ENGLISH)
-                .withResolverStyle(ResolverStyle.STRICT),
-        DateTimeFormatter.ofPattern("d/M/uuuu", Locale.ENGLISH)
-                .withResolverStyle(ResolverStyle.STRICT)
+        strictFormatter("uuuu-MM-dd"),
+        strictFormatter("uuuu/MM/dd"),
+        strictFormatter("d/M/uuuu"),
+        strictFormatter("dd-MM-uuuu"),
+        strictFormatter("d MMM uuuu")
     };
+
+    /**
+     * Builds a strict English date formatter that accepts either case for month names.
+     */
+    private static DateTimeFormatter strictFormatter(String pattern) {
+        return new DateTimeFormatterBuilder().parseCaseInsensitive()
+                .appendPattern(pattern)
+                .toFormatter(Locale.ENGLISH)
+                .withResolverStyle(ResolverStyle.STRICT);
+    }
 
     /**
      * Parses a date or date-time string strictly into a {@link TaskDateTime}.
@@ -84,7 +100,8 @@ public class DateTimeParser {
         }
         String trimmed = input.trim();
 
-        if (DATE_PATTERN.matcher(trimmed).matches()) {
+        if (DATE_PATTERN.matcher(trimmed).matches()
+                || NAMED_MONTH_DATE_PATTERN.matcher(trimmed).matches()) {
             return parseStrict(trimmed);
         }
 

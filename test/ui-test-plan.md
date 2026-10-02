@@ -1122,43 +1122,43 @@ ${INTRO}
 
 ${LINE}
 
-Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)
 
 ${LINE}
 
 ${LINE}
 
-Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)
 
 ${LINE}
 
 ${LINE}
 
-Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)
 
 ${LINE}
 
 ${LINE}
 
-Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)
 
 ${LINE}
 
 ${LINE}
 
-Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)
 
 ${LINE}
 
 ${LINE}
 
-Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)
 
 ${LINE}
 
 ${LINE}
 
-Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)
 
 ${LINE}
 
@@ -1182,7 +1182,7 @@ bye
 ```
 **Expected output:**
 ```text
-Pip?! I skipped a damaged saved task: [D | 0 | corrupted deadline | 2019-13-02 1800] - I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I skipped a damaged saved task: [D | 0 | corrupted deadline | 2019-13-02 1800] - I couldn't understand that date or time. Use: yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)
 ${INTRO}
 
 ${LINE}
@@ -1272,7 +1272,7 @@ ${LINE}
 
 ${LINE}
 
-Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)
 
 ${LINE}
 
@@ -1320,31 +1320,31 @@ ${LINE}
 
 ${LINE}
 
-Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)
 
 ${LINE}
 
 ${LINE}
 
-Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)
 
 ${LINE}
 
 ${LINE}
 
-Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)
 
 ${LINE}
 
 ${LINE}
 
-Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)
 
 ${LINE}
 
 ${LINE}
 
-Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)
 
 ${LINE}
 
@@ -1387,7 +1387,7 @@ bye
 Pip?! I skipped a damaged saved task: [T | 1] - Missing essential task components.
 Pip?! I skipped a damaged saved task: [D | 0 | submit paper] - Deadline is missing the due date.
 Pip?! I skipped a damaged saved task: [E | 0 | conference | 2026-10-01] - Event is missing start or end dates.
-Pip?! I skipped a damaged saved task: [E | 0 | hackathon | 2019-13-02 | 2019-13-05] - I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I skipped a damaged saved task: [E | 0 | hackathon | 2019-13-02 | 2019-13-05] - I couldn't understand that date or time. Use: yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)
 Pip?! I skipped a damaged saved task: [Z | 0 | alien task] - Unknown task type identifier: Z
 ${INTRO}
 
@@ -2005,6 +2005,215 @@ ${LINE}
 
 I found these tasks in your list:
 1.[T][ ] FILE report
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-32: Accept all calendar formats in deadlines and view
+**Aim:** Verify each supported format parses in a deadline and in a view query, optional times display correctly, and named-month event dates span the queried day.
+**Inputs:**
+```text
+deadline iso /by 2026-10-12
+deadline year slash /by 2026/10/12 1800
+deadline day slash /by 12/10/2026
+deadline day hyphen /by 12-10-2026
+deadline named month /by 12 Oct 2026 0900
+event conference /from 11 Oct 2026 /to 13 Oct 2026
+view 2026-10-12
+view 2026/10/12
+view 12/10/2026
+view 12-10-2026
+view 12 oct 2026
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+Pip! Added this task: iso
+
+${LINE}
+
+${LINE}
+
+Pip! Added this task: year slash
+
+${LINE}
+
+${LINE}
+
+Pip! Added this task: day slash
+
+${LINE}
+
+${LINE}
+
+Pip! Added this task: day hyphen
+
+${LINE}
+
+${LINE}
+
+Pip! Added this task: named month
+
+${LINE}
+
+${LINE}
+
+Pip! Added this task: conference
+
+${LINE}
+
+${LINE}
+
+Here's your plan for 12 Oct 2026:
+1.[D][ ] iso (by: 12 Oct 2026)
+2.[D][ ] year slash (by: 12 Oct 2026 18:00)
+3.[D][ ] day slash (by: 12 Oct 2026)
+4.[D][ ] day hyphen (by: 12 Oct 2026)
+5.[D][ ] named month (by: 12 Oct 2026 09:00)
+6.[E][ ] conference (from: 11 Oct 2026 to: 13 Oct 2026)
+${LINE}
+
+${LINE}
+
+Here's your plan for 12 Oct 2026:
+1.[D][ ] iso (by: 12 Oct 2026)
+2.[D][ ] year slash (by: 12 Oct 2026 18:00)
+3.[D][ ] day slash (by: 12 Oct 2026)
+4.[D][ ] day hyphen (by: 12 Oct 2026)
+5.[D][ ] named month (by: 12 Oct 2026 09:00)
+6.[E][ ] conference (from: 11 Oct 2026 to: 13 Oct 2026)
+${LINE}
+
+${LINE}
+
+Here's your plan for 12 Oct 2026:
+1.[D][ ] iso (by: 12 Oct 2026)
+2.[D][ ] year slash (by: 12 Oct 2026 18:00)
+3.[D][ ] day slash (by: 12 Oct 2026)
+4.[D][ ] day hyphen (by: 12 Oct 2026)
+5.[D][ ] named month (by: 12 Oct 2026 09:00)
+6.[E][ ] conference (from: 11 Oct 2026 to: 13 Oct 2026)
+${LINE}
+
+${LINE}
+
+Here's your plan for 12 Oct 2026:
+1.[D][ ] iso (by: 12 Oct 2026)
+2.[D][ ] year slash (by: 12 Oct 2026 18:00)
+3.[D][ ] day slash (by: 12 Oct 2026)
+4.[D][ ] day hyphen (by: 12 Oct 2026)
+5.[D][ ] named month (by: 12 Oct 2026 09:00)
+6.[E][ ] conference (from: 11 Oct 2026 to: 13 Oct 2026)
+${LINE}
+
+${LINE}
+
+Here's your plan for 12 Oct 2026:
+1.[D][ ] iso (by: 12 Oct 2026)
+2.[D][ ] year slash (by: 12 Oct 2026 18:00)
+3.[D][ ] day slash (by: 12 Oct 2026)
+4.[D][ ] day hyphen (by: 12 Oct 2026)
+5.[D][ ] named month (by: 12 Oct 2026 09:00)
+6.[E][ ] conference (from: 11 Oct 2026 to: 13 Oct 2026)
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-33: Reject invalid calendar dates without losing free-form text
+**Aim:** Confirm malformed month-name and numeric dates fail validation, while a natural-language deadline remains valid.
+**Inputs:**
+```text
+deadline impossible month /by 31 Feb 2026
+deadline misspelled month /by 12 Fob 2026
+deadline impossible slash /by 2026/02/30
+deadline impossible hyphen /by 31-02-2026
+deadline natural /by Friday
+view 31 Feb 2026
+list
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)
+
+${LINE}
+
+${LINE}
+
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)
+
+${LINE}
+
+${LINE}
+
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)
+
+${LINE}
+
+${LINE}
+
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)
+
+${LINE}
+
+${LINE}
+
+Pip! Added this task: natural
+
+${LINE}
+
+${LINE}
+
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd, yyyy/MM/dd, d/M/yyyy, dd-MM-yyyy, or d MMM yyyy (optional HHmm time; e.g., 2026-10-12 or 12 Oct 2026 1800)
+
+${LINE}
+
+${LINE}
+
+Here's your task list:
+1.[D][ ] natural (by: Friday)
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-34: Load saved dates in new formats
+**Aim:** Confirm saved deadlines using named-month and year-first slash dates load and can be found by view.
+**File input:**
+```text
+D | 0 | saved month | 12 Oct 2026
+D | 1 | saved slash | 2026/10/12 1800
+```
+**Inputs:**
+```text
+view 2026-10-12
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+Here's your plan for 12 Oct 2026:
+1.[D][ ] saved month (by: 12 Oct 2026)
+2.[D][X] saved slash (by: 12 Oct 2026 18:00)
 ${LINE}
 
 ${LINE}

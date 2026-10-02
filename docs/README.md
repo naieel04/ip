@@ -76,13 +76,16 @@ When viewing tasks through `list`, `find`, or `view`, each task entry is formatt
 
 ### Supported Date & Time Formats
 
-For commands that require calendar references (`deadline`, `event`, and `view`), the following structured formats are strictly recognized and allow calendar date tracking:
+For commands that use calendar dates (`deadline`, `event`, and `view`), Dawn recognizes these formats. Each may include an optional four-digit `HHmm` time, such as `1800` for 18:00:
 
-- **YYYY-MM-DD** `[HHmm]` (e.g., `2026-10-12` or `2026-10-12 1800`)
-- **D/M/YYYY** `[HHmm]` (e.g., `12/10/2026` or `2/1/2026 0800`)
+- **yyyy-MM-dd:** `2026-10-12`
+- **yyyy/MM/dd:** `2026/10/12`
+- **d/M/yyyy:** `12/10/2026` or `2/1/2026`
+- **dd-MM-yyyy:** `12-10-2026`
+- **d MMM yyyy:** `12 Oct 2026` or `2 Oct 2026` (English month abbreviations)
 
 > [!TIP]
-> **Flexible text fallback:** When creating a basic `deadline` or `event`, if your date string does not match the precise calendar formats above (e.g., typing `"Monday 10am"`, `"tomorrow night"`), Dawn will flexibly save it as standard text. However, you will *not* be able to search for these freeform text dates using the strict `view` command.
+> **Flexible text fallback:** `deadline` and `event` also accept text such as `Monday 10am` or `tomorrow night`. Dawn rejects invalid calendar-like dates such as `31 Feb 2026` instead of saving them as text. Tasks with free-form dates cannot be found using `view`.
 
 ---
 
@@ -212,12 +215,13 @@ Retrieves and displays all tasks whose description contains the specified keywor
 
 ### Viewing tasks by date: `view`
 
-Shows all deadline and event tasks that occur on a particular calendar date. This requires strict calendar-formatted dates as noted at the top of this section.
+Shows all deadline and event tasks that occur on a particular calendar date. Use one of the structured formats above. If you include a time, Dawn still checks the entire day.
 
 - **Format:** `view [date]`
 - **Examples:**
   - `view 2026-10-12`
   - `view 12/10/2026`
+  - `view 12 Oct 2026`
 - **Expected Output:**
   ```text
   Here's your plan for 12 Oct 2026:
