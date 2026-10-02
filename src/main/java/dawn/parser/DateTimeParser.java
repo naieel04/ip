@@ -42,7 +42,7 @@ public class DateTimeParser {
      */
     public static TaskDateTime parseStrict(String input) throws DawnException {
         if (input == null || input.trim().isEmpty()) {
-            throw new DawnException("The date cannot be blank. Use: " + DATE_TIME_USAGE);
+            throw new DawnException("I need a date. Use: " + DATE_TIME_USAGE);
         }
         String trimmed = input.trim();
 
@@ -64,7 +64,7 @@ public class DateTimeParser {
             }
         }
 
-        throw new DawnException("Invalid date or time format. Use: " + DATE_TIME_USAGE);
+        throw new DawnException("I couldn't understand that date or time. Use: " + DATE_TIME_USAGE);
     }
 
     /**
@@ -78,7 +78,7 @@ public class DateTimeParser {
      */
     public static TaskDateTime parseFlexible(String input) throws DawnException {
         if (input == null || input.trim().isEmpty()) {
-            throw new DawnException("The date cannot be blank. Use: " + DATE_TIME_USAGE);
+            throw new DawnException("I need a date. Use: " + DATE_TIME_USAGE);
         }
         String trimmed = input.trim();
 

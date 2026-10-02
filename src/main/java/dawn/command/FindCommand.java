@@ -40,11 +40,11 @@ public class FindCommand extends Command {
     public void execute(TaskList tasks, DawnUi ui, Storage storage) {
         ArrayList<Task> matchingTasks = tasks.findTasks(keyword);
         if (matchingTasks.isEmpty()) {
-            ui.showMessage(String.format("No tasks found matching '%s'.\n\n", keyword));
+            ui.showMessage(String.format("I couldn't find any tasks matching '%s'.\n\n", keyword));
             return;
         }
 
-        StringBuilder sb = new StringBuilder("Here are the matching tasks in your list:\n");
+        StringBuilder sb = new StringBuilder("I found these tasks in your list:\n");
         for (int i = 0; i < matchingTasks.size(); i++) {
             sb.append(String.format("%d.%s\n", i + 1, matchingTasks.get(i)));
         }

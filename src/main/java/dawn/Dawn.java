@@ -2,6 +2,7 @@ package dawn;
 
 import dawn.command.Command;
 import dawn.exception.DawnException;
+import dawn.exception.StorageException;
 import dawn.parser.Parser;
 import dawn.storage.Storage;
 import dawn.task.TaskList;
@@ -12,6 +13,8 @@ public class Dawn {
     private final DawnUi ui;
     private final Storage storage;
     private TaskList tasks;
+    /** Stays true after any storage problem, even if a later save succeeds. */
+    private boolean hadStorageProblem;
 
     /**
      * Initializes Dawn with persistent storage at the given file path.
@@ -19,13 +22,23 @@ public class Dawn {
      * @param filePath the path to the tasks file
      */
     public Dawn(String filePath) {
-        this.ui = new DawnUi();
-        this.storage = new Storage(filePath);
+        this(new Storage(filePath), new DawnUi());
+    }
+
+    /** Accepts a storage service and UI so sessions can be checked with simulated failures. */
+    Dawn(Storage storage, DawnUi ui) {
+        this.ui = ui;
+        this.storage = storage;
         try {
             this.tasks = this.storage.load();
         } catch (DawnException e) {
-            ui.showLoadingError();
+            hadStorageProblem = true;
+            ui.showError(e.getMessage());
             this.tasks = new TaskList();
+        }
+        for (String warning : storage.getLoadWarnings()) {
+            hadStorageProblem = true;
+            ui.showStorageWarning(warning);
         }
     }
 
@@ -49,6 +62,9 @@ public class Dawn {
                 command.execute(tasks, ui, storage);
                 isExit = command.isExit();
             } catch (DawnException e) {
+                if (e instanceof StorageException) {
+                    hadStorageProblem = true;
+                }
                 ui.showError(e.getMessage());
             } finally {
                 if (!isExit) {
@@ -57,7 +73,7 @@ public class Dawn {
             }
         }
         if (isExit) {
-            ui.showBye();
+            ui.showBye(hadStorageProblem);
         }
     }
 

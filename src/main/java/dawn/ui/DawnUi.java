@@ -58,10 +58,14 @@ public class DawnUi {
     public static final String COMMAND_GUIDE = CommandWord.commandGuide();
 
     public static final String INTRO_MESSAGE = MAX_LINE + "\n" + IMG_NAME_BANNER
-            + "Hello! I'm Dawn.\nWhat can I do for you?\n\n"
+            + "Piplup here! Dawn is ready when you are.\n\n"
             + COMMAND_GUIDE + "\n"
             + MAX_LINE;
-    public static final String BYE_MESSAGE = "Bye. Hope to see you again soon!\n" + MAX_LINE;
+    public static final String BYE_MESSAGE =
+            "Pip! No need to worry, everything is saved. See you next time!\n" + MAX_LINE;
+    public static final String STORAGE_PROBLEM_BYE_MESSAGE =
+            "Pip... I ran into a storage problem this session. Please check your tasks before you go. "
+                    + "See you next time!\n" + MAX_LINE;
 
     private final Scanner scanner;
 
@@ -84,9 +88,9 @@ public class DawnUi {
         System.out.println(INTRO_MESSAGE);
     }
 
-    /** Displays the goodbye message upon exiting. */
-    public void showBye() {
-        System.out.println(BYE_MESSAGE);
+    /** Chooses a goodbye that reflects any storage problem during this session. */
+    public void showBye(boolean hadStorageProblem) {
+        System.out.println(hadStorageProblem ? STORAGE_PROBLEM_BYE_MESSAGE : BYE_MESSAGE);
     }
 
     /** Displays a divider line between commands. */
@@ -109,14 +113,12 @@ public class DawnUi {
      * @param error the specific error text
      */
     public void showError(String error) {
-        System.out.println(error + "\n");
+        System.out.println("Pip?! " + error + "\n");
     }
 
-    /**
-     * Displays a terminal failure message when file persistence is irrecoverable.
-     */
-    public void showLoadingError() {
-        System.out.println("No saved tasks found or file is corrupted. Starting fresh!");
+    /** Displays a recoverable loading warning without discarding the valid tasks. */
+    public void showStorageWarning(String warning) {
+        System.out.println("Pip?! " + warning);
     }
 
     /**

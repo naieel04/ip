@@ -31,7 +31,7 @@ public class DeleteCommand extends Command {
     @Override
     public void execute(TaskList tasks, DawnUi ui, Storage storage) throws DawnException {
         if (taskIndex < 0 || taskIndex >= tasks.size()) {
-            throw new DawnException("Task number not found. Use: " + CommandWord.DELETE.usage());
+            throw new DawnException("I couldn't find that task number. Use: " + CommandWord.DELETE.usage());
         }
         Task removedTask = tasks.removeTask(taskIndex);
         try {
@@ -40,7 +40,8 @@ public class DeleteCommand extends Command {
             tasks.insertTask(taskIndex, removedTask);
             throw e;
         }
-        ui.showMessage("Noted. I've removed this task:\n\t" + removedTask
-                + "\nNow you have " + tasks.size() + " tasks in the list\n\n");
+        String taskCount = tasks.size() + (tasks.size() == 1 ? " task" : " tasks");
+        ui.showMessage("Removed this task. You have " + taskCount + " left:\n\t"
+                + removedTask + "\n\n");
     }
 }

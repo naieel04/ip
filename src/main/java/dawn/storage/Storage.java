@@ -1,6 +1,7 @@
 package dawn.storage;
 
 import dawn.exception.DawnException;
+import dawn.exception.StorageException;
 import dawn.parser.DateTimeParser;
 import dawn.task.Deadline;
 import dawn.task.Event;
@@ -20,6 +21,8 @@ import java.util.List;
 /** Handles reading from and writing to the local data storage file. */
 public class Storage {
     private final Path filePath;
+    /** Warnings from the latest load, displayed by the UI after loading completes. */
+    private final List<String> loadWarnings = new ArrayList<>();
 
     /**
      * Constructs a Storage instance tied to a specific file path string.
@@ -54,7 +57,8 @@ public class Storage {
             Files.write(temporaryFile, lines, java.nio.charset.StandardCharsets.UTF_8);
             replaceSavedFile(temporaryFile, destination);
         } catch (IOException e) {
-            throw new DawnException("Failed to save tasks to file: " + e.getMessage());
+            throw new StorageException("I couldn't save that change. Your list is unchanged. Details: "
+                    + e.getMessage());
         } finally {
             if (temporaryFile != null) {
                 try {
@@ -73,6 +77,7 @@ public class Storage {
      * @throws DawnException if a read failure occurs.
      */
     public TaskList load() throws DawnException {
+        loadWarnings.clear();
         TaskList taskList = new TaskList();
         
         if (Files.notExists(filePath)) {
@@ -95,14 +100,20 @@ public class Storage {
                     Task task = parseLineToTask(line);
                     taskList.addTask(task); // Suppresses MAX_TASKS exception safely if reading old valid limit
                 } catch (Exception e) {
-                    System.out.println("Warning: Corrupted task line skipped: [" + line + "] - " + e.getMessage());
+                    loadWarnings.add("I skipped a damaged saved task: [" + line + "] - " + e.getMessage());
                 }
             }
         } catch (IOException e) {
-            throw new DawnException("Failed to load tasks from file: " + e.getMessage());
+            throw new StorageException("I couldn't load your saved tasks. I'll start with an empty list. Details: "
+                    + e.getMessage());
         }
 
         return taskList;
+    }
+
+    /** Returns a snapshot of warnings without allowing callers to change them. */
+    public List<String> getLoadWarnings() {
+        return List.copyOf(loadWarnings);
     }
 
     private Task parseLineToTask(String line) throws Exception {
@@ -164,7 +175,8 @@ public class Storage {
         if (task instanceof ToDo) {
             return prefix + "T | " + status + " | " + description;
         }
-        throw new DawnException("Unsupported task type: " + task.getClass().getSimpleName());
+        throw new StorageException("I couldn't save that change. Your list is unchanged. Unsupported task type: "
+                + task.getClass().getSimpleName());
     }
 
     /** Escapes field separators, backslashes, and line breaks in new records. */

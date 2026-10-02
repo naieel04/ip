@@ -15,7 +15,11 @@ public class ListCommand extends Command {
      */
     @Override
     public void execute(TaskList tasks, DawnUi ui, Storage storage) {
-        StringBuilder sb = new StringBuilder("Here are the tasks in your list:\n");
+        if (tasks.size() == 0) {
+            ui.showMessage("Your list is empty. I was starting to get bored.\n");
+            return;
+        }
+        StringBuilder sb = new StringBuilder("Here's your task list:\n");
         for (int i = 0; i < tasks.size(); i++) {
             sb.append(String.format("%d.%s\n", i + 1, tasks.getTask(i)));
         }

@@ -5,8 +5,10 @@ Run these tests from the repository root after compiling with Java 25:
 ```powershell
 $javaSources = @(Get-ChildItem -Path src\main\java -Recurse -Filter *.java | Select-Object -ExpandProperty FullName)
 javac -d out\production\ip $javaSources
-powershell -ExecutionPolicy Bypass -File .gemini\skills\test-ui\scripts\run-ui-tests.ps1 -ProgramCommand 'java "-Dstdout.encoding=UTF-8" -cp out/production/ip dawn.Dawn'
+powershell -ExecutionPolicy Bypass -File .codex\skills\test-ui\scripts\run-ui-tests.ps1 -ProgramCommand 'java "-Dstdout.encoding=UTF-8" -cp out/production/ip dawn.Dawn'
 ```
+
+The messages use Piplup's voice. Task entries and the command table stay factual. `${STORAGE_BYE}` replaces `${BYE}` after any storage problem, including skipped damaged records; ordinary validation errors do not change the goodbye.
 
 Each case is a new console session. The listed inputs are entered in order, and the expected output is the complete session transcript. The runner expands the following output tokens before it compares output exactly, apart from platform line endings, final newlines, and trailing padding on a line.
 
@@ -62,8 +64,7 @@ ____________________________________________________________
                -#+.+###+.                       .+####+#+..     
                  .-                                 +##..#+     
 
-Hello! I'm Dawn.
-What can I do for you?
+Piplup here! Dawn is ready when you are.
 
 Here are the commands you can use:
 +---------------------------------------------+-----------------------+
@@ -86,7 +87,13 @@ ____________________________________________________________
 
 ### BYE
 ```text
-Bye. Hope to see you again soon!
+Pip! No need to worry, everything is saved. See you next time!
+____________________________________________________________
+```
+
+### STORAGE_BYE
+```text
+Pip... I ran into a storage problem this session. Please check your tasks before you go. See you next time!
 ____________________________________________________________
 ```
 
@@ -128,25 +135,25 @@ ${INTRO}
 
 ${LINE}
 
-added: read book
+Pip! Added this task: read book
 
 ${LINE}
 
 ${LINE}
 
-added: submit report
+Pip! Added this task: submit report
 
 ${LINE}
 
 ${LINE}
 
-added: team meeting
+Pip! Added this task: team meeting
 
 ${LINE}
 
 ${LINE}
 
-Here are the tasks in your list:
+Here's your task list:
 1.[T][ ] read book
 2.[D][ ] submit report (by: 15 Oct 2019)
 3.[E][ ] team meeting (from: 2pm to: 3pm)
@@ -173,27 +180,27 @@ ${INTRO}
 
 ${LINE}
 
-added: revise notes
+Pip! Added this task: revise notes
 
 ${LINE}
 
 ${LINE}
 
-Nice! I've marked this task as done:
+Nice! Marked this task as done:
 	[T][X] revise notes
 
 ${LINE}
 
 ${LINE}
 
-OK, I've marked this task as not done yet:
+Back on the list. Marked this task as not done yet:
 	[T][ ] revise notes
 
 ${LINE}
 
 ${LINE}
 
-Here are the tasks in your list:
+Here's your task list:
 1.[T][ ] revise notes
 ${LINE}
 
@@ -216,13 +223,13 @@ ${INTRO}
 
 ${LINE}
 
-A todo needs a description. Use: todo [description]
+Pip?! I need a description for your todo. Use: todo [description]
 
 ${LINE}
 
 ${LINE}
 
-Task number not found. Use: mark [task number]
+Pip?! I couldn't find that task number. Use: mark [task number]
 
 ${LINE}
 
@@ -254,77 +261,77 @@ ${INTRO}
 
 ${LINE}
 
-Command not recognised.
+Pip?! I don't recognize that command.
 Did you mean: todo [description]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised.
+Pip?! I don't recognize that command.
 Did you mean: todo [description]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised.
+Pip?! I don't recognize that command.
 Did you mean: deadline [description] /by [due date]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised.
+Pip?! I don't recognize that command.
 Did you mean: event [description] /from [start] /to [end]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised.
+Pip?! I don't recognize that command.
 Did you mean: mark [task number]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised.
+Pip?! I don't recognize that command.
 Did you mean: unmark [task number]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised.
+Pip?! I don't recognize that command.
 Did you mean: delete [task number]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised.
+Pip?! I don't recognize that command.
 Did you mean: view [date]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised.
+Pip?! I don't recognize that command.
 Did you mean: view [date]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised.
+Pip?! I don't recognize that command.
 Did you mean: find [keyword]?
 
 ${LINE}
 
 ${LINE}
 
-Command not recognised.
+Pip?! I don't recognize that command.
 Supported commands:
   - todo, deadline, event
   - list, mark, unmark, delete
@@ -338,7 +345,7 @@ ${BYE}
 ```
 
 ### TC-06: Explain malformed deadline commands
-**Aim:** Explain malformed deadline commands, including missing /by, missing description, missing due date, and freeform date strings.
+**Aim:** Explain missing /by, description, and due date, while accepting freeform date strings.
 **Inputs:**
 ```text
 deadline watch lecture /by
@@ -355,37 +362,37 @@ ${INTRO}
 
 ${LINE}
 
-The due date cannot be blank. Use: deadline [description] /by [due date]
+Pip?! I need a due date. Use: deadline [description] /by [due date]
 
 ${LINE}
 
 ${LINE}
 
-A deadline needs the /by keyword. Use: deadline [description] /by [due date]
+Pip?! I need the /by keyword for your deadline. Use: deadline [description] /by [due date]
 
 ${LINE}
 
 ${LINE}
 
-The deadline description cannot be blank. Use: deadline [description] /by [due date]
+Pip?! I need a description for your deadline. Use: deadline [description] /by [due date]
 
 ${LINE}
 
 ${LINE}
 
-added: watch lecture
+Pip! Added this task: watch lecture
 
 ${LINE}
 
 ${LINE}
 
-added: watch lecture
+Pip! Added this task: watch lecture
 
 ${LINE}
 
 ${LINE}
 
-Here are the tasks in your list:
+Here's your task list:
 1.[D][ ] watch lecture (by: Friday)
 2.[D][ ] watch lecture (by: 15 Oct 2019)
 ${LINE}
@@ -424,103 +431,103 @@ ${INTRO}
 
 ${LINE}
 
-added: read book
+Pip! Added this task: read book
 
 ${LINE}
 
 ${LINE}
 
-A task number is required. Use: mark [task number]
+Pip?! I need a task number. Use: mark [task number]
 
 ${LINE}
 
 ${LINE}
 
-A task number is required. Use: unmark [task number]
+Pip?! I need a task number. Use: unmark [task number]
 
 ${LINE}
 
 ${LINE}
 
-A task number is required. Use: delete [task number]
+Pip?! I need a task number. Use: delete [task number]
 
 ${LINE}
 
 ${LINE}
 
-The task number must be a positive integer. Use: mark [task number]
+Pip?! I need a positive whole number for the task number. Use: mark [task number]
 
 ${LINE}
 
 ${LINE}
 
-The task number must be a positive integer. Use: unmark [task number]
+Pip?! I need a positive whole number for the task number. Use: unmark [task number]
 
 ${LINE}
 
 ${LINE}
 
-The task number must be a positive integer. Use: delete [task number]
+Pip?! I need a positive whole number for the task number. Use: delete [task number]
 
 ${LINE}
 
 ${LINE}
 
-The task number must be a positive integer. Use: delete [task number]
+Pip?! I need a positive whole number for the task number. Use: delete [task number]
 
 ${LINE}
 
 ${LINE}
 
-The task number must be a positive integer. Use: delete [task number]
+Pip?! I need a positive whole number for the task number. Use: delete [task number]
 
 ${LINE}
 
 ${LINE}
 
-The task number must be a positive integer. Use: mark [task number]
+Pip?! I need a positive whole number for the task number. Use: mark [task number]
 
 ${LINE}
 
 ${LINE}
 
-The task number must be a positive integer. Use: unmark [task number]
+Pip?! I need a positive whole number for the task number. Use: unmark [task number]
 
 ${LINE}
 
 ${LINE}
 
-The task number must be a positive integer. Use: delete [task number]
+Pip?! I need a positive whole number for the task number. Use: delete [task number]
 
 ${LINE}
 
 ${LINE}
 
-Task number not found. Use: mark [task number]
+Pip?! I couldn't find that task number. Use: mark [task number]
 
 ${LINE}
 
 ${LINE}
 
-Task number not found. Use: delete [task number]
+Pip?! I couldn't find that task number. Use: delete [task number]
 
 ${LINE}
 
 ${LINE}
 
-The list command does not accept arguments. Use: list
+Pip?! I don't need arguments for list. Use: list
 
 ${LINE}
 
 ${LINE}
 
-The bye command does not accept arguments. Use: bye
+Pip?! I don't need arguments for bye. Use: bye
 
 ${LINE}
 
 ${LINE}
 
-Here are the tasks in your list:
+Here's your task list:
 1.[T][ ] read book
 ${LINE}
 
@@ -549,49 +556,49 @@ ${INTRO}
 
 ${LINE}
 
-The event description cannot be blank. Use: event [description] /from [start] /to [end]
+Pip?! I need a description for your event. Use: event [description] /from [start] /to [end]
 
 ${LINE}
 
 ${LINE}
 
-The event start cannot be blank. Use: event [description] /from [start] /to [end]
+Pip?! I need a start for your event. Use: event [description] /from [start] /to [end]
 
 ${LINE}
 
 ${LINE}
 
-The event end cannot be blank. Use: event [description] /from [start] /to [end]
+Pip?! I need an end for your event. Use: event [description] /from [start] /to [end]
 
 ${LINE}
 
 ${LINE}
 
-An event needs the /from keyword. Use: event [description] /from [start] /to [end]
+Pip?! I need the /from keyword for your event. Use: event [description] /from [start] /to [end]
 
 ${LINE}
 
 ${LINE}
 
-An event needs the /to keyword. Use: event [description] /from [start] /to [end]
+Pip?! I need the /to keyword for your event. Use: event [description] /from [start] /to [end]
 
 ${LINE}
 
 ${LINE}
 
-The /to keyword must come after /from. Use: event [description] /from [start] /to [end]
+Pip?! I need /from before /to. Use: event [description] /from [start] /to [end]
 
 ${LINE}
 
 ${LINE}
 
-added: meeting
+Pip! Added this task: meeting
 
 ${LINE}
 
 ${LINE}
 
-Here are the tasks in your list:
+Here's your task list:
 1.[E][ ] meeting (from: 10am to: 11am)
 ${LINE}
 
@@ -618,22 +625,22 @@ bye
 ```
 **Expected output:**
 ```text
-Warning: Corrupted task line skipped: [corrupted line without delimiters] - Missing essential task components.
-Warning: Corrupted task line skipped: [D | 0 | submit report] - Deadline is missing the due date.
-Warning: Corrupted task line skipped: [E | 1 | project sync | 2pm] - Event is missing start or end dates.
-Warning: Corrupted task line skipped: [X | 0 | unknown type] - Unknown task type identifier: X
+Pip?! I skipped a damaged saved task: [corrupted line without delimiters] - Missing essential task components.
+Pip?! I skipped a damaged saved task: [D | 0 | submit report] - Deadline is missing the due date.
+Pip?! I skipped a damaged saved task: [E | 1 | project sync | 2pm] - Event is missing start or end dates.
+Pip?! I skipped a damaged saved task: [X | 0 | unknown type] - Unknown task type identifier: X
 ${INTRO}
 
 ${LINE}
 
-Here are the tasks in your list:
+Here's your task list:
 1.[T][X] revise notes
 2.[E][ ] hackathon (from: Friday 6pm to: Sunday 6pm)
 ${LINE}
 
 ${LINE}
 
-${BYE}
+${STORAGE_BYE}
 ```
 
 ### TC-10: Delete a task loaded from storage
@@ -655,15 +662,14 @@ ${INTRO}
 
 ${LINE}
 
-Noted. I've removed this task:
+Removed this task. You have 1 task left:
 	[T][ ] read book
-Now you have 1 tasks in the list
 
 ${LINE}
 
 ${LINE}
 
-Here are the tasks in your list:
+Here's your task list:
 1.[D][X] submit report (by: 02 Dec 2019 18:00)
 ${LINE}
 
@@ -673,7 +679,7 @@ ${BYE}
 ```
 
 ### TC-11: Empty list display, blank input handling, and whitespace padding
-**Aim:** Confirm that list on an empty list shows the header cleanly, blank lines display supported commands, and whitespace around commands is trimmed.
+**Aim:** Confirm that an empty list shows Piplup's empty-list message, blank lines display supported commands, and whitespace around commands is trimmed.
 **Inputs:**
 ```text
 list
@@ -689,12 +695,12 @@ ${INTRO}
 
 ${LINE}
 
-Here are the tasks in your list:
+Your list is empty. I was starting to get bored.
 ${LINE}
 
 ${LINE}
 
-Command not recognised.
+Pip?! I don't recognize that command.
 Supported commands:
   - todo, deadline, event
   - list, mark, unmark, delete
@@ -704,7 +710,7 @@ ${LINE}
 
 ${LINE}
 
-Command not recognised.
+Pip?! I don't recognize that command.
 Supported commands:
   - todo, deadline, event
   - list, mark, unmark, delete
@@ -714,13 +720,13 @@ ${LINE}
 
 ${LINE}
 
-added: buy groceries
+Pip! Added this task: buy groceries
 
 ${LINE}
 
 ${LINE}
 
-Here are the tasks in your list:
+Here's your task list:
 1.[T][ ] buy groceries
 ${LINE}
 
@@ -745,26 +751,25 @@ ${INTRO}
 
 ${LINE}
 
-added: temporary task
+Pip! Added this task: temporary task
 
 ${LINE}
 
 ${LINE}
 
-Noted. I've removed this task:
+Removed this task. You have 0 tasks left:
 	[T][ ] temporary task
-Now you have 0 tasks in the list
 
 ${LINE}
 
 ${LINE}
 
-Here are the tasks in your list:
+Your list is empty. I was starting to get bored.
 ${LINE}
 
 ${LINE}
 
-Task number not found. Use: delete [task number]
+Pip?! I couldn't find that task number. Use: delete [task number]
 
 ${LINE}
 
@@ -791,37 +796,37 @@ ${INTRO}
 
 ${LINE}
 
-A deadline needs the /by keyword. Use: deadline [description] /by [due date]
+Pip?! I need the /by keyword for your deadline. Use: deadline [description] /by [due date]
 
 ${LINE}
 
 ${LINE}
 
-A deadline needs the /by keyword. Use: deadline [description] /by [due date]
+Pip?! I need the /by keyword for your deadline. Use: deadline [description] /by [due date]
 
 ${LINE}
 
 ${LINE}
 
-An event needs the /from keyword. Use: event [description] /from [start] /to [end]
+Pip?! I need the /from keyword for your event. Use: event [description] /from [start] /to [end]
 
 ${LINE}
 
 ${LINE}
 
-An event needs the /to keyword. Use: event [description] /from [start] /to [end]
+Pip?! I need the /to keyword for your event. Use: event [description] /from [start] /to [end]
 
 ${LINE}
 
 ${LINE}
 
-added: read book by/author
+Pip! Added this task: read book by/author
 
 ${LINE}
 
 ${LINE}
 
-Here are the tasks in your list:
+Here's your task list:
 1.[D][ ] read book by/author (by: 15 Oct 2019)
 ${LINE}
 
@@ -848,41 +853,41 @@ ${INTRO}
 
 ${LINE}
 
-added: practice coding
+Pip! Added this task: practice coding
 
 ${LINE}
 
 ${LINE}
 
-Nice! I've marked this task as done:
+Nice! Marked this task as done:
 	[T][X] practice coding
 
 ${LINE}
 
 ${LINE}
 
-Nice! I've marked this task as done:
+Nice! Marked this task as done:
 	[T][X] practice coding
 
 ${LINE}
 
 ${LINE}
 
-OK, I've marked this task as not done yet:
+Back on the list. Marked this task as not done yet:
 	[T][ ] practice coding
 
 ${LINE}
 
 ${LINE}
 
-OK, I've marked this task as not done yet:
+Back on the list. Marked this task as not done yet:
 	[T][ ] practice coding
 
 ${LINE}
 
 ${LINE}
 
-Here are the tasks in your list:
+Here's your task list:
 1.[T][ ] practice coding
 ${LINE}
 
@@ -1009,21 +1014,20 @@ ${INTRO}
 
 ${LINE}
 
-Dawn can store at most 100 tasks.
+Pip?! I can keep at most 100 tasks in your list.
 
 ${LINE}
 
 ${LINE}
 
-Noted. I've removed this task:
+Removed this task. You have 99 tasks left:
 	[T][ ] task 100
-Now you have 99 tasks in the list
 
 ${LINE}
 
 ${LINE}
 
-added: replacement task
+Pip! Added this task: replacement task
 
 ${LINE}
 
@@ -1049,31 +1053,31 @@ ${INTRO}
 
 ${LINE}
 
-added: finish homework
+Pip! Added this task: finish homework
 
 ${LINE}
 
 ${LINE}
 
-added: noon meeting
+Pip! Added this task: noon meeting
 
 ${LINE}
 
 ${LINE}
 
-added: leap day sprint
+Pip! Added this task: leap day sprint
 
 ${LINE}
 
 ${LINE}
 
-added: standard date
+Pip! Added this task: standard date
 
 ${LINE}
 
 ${LINE}
 
-Here are the tasks in your list:
+Here's your task list:
 1.[D][ ] finish homework (by: 02 Dec 2019 00:00)
 2.[D][ ] noon meeting (by: 02 Dec 2019 12:00)
 3.[D][ ] leap day sprint (by: 29 Feb 2020 09:00)
@@ -1086,7 +1090,7 @@ ${BYE}
 ```
 
 ### TC-17: Rejection of impossible calendar dates and out-of-range time values
-**Aim:** Confirm that non-leap years, impossible days, invalid months, hours, minutes, and unsupported text formats are strictly rejected.
+**Aim:** Confirm that invalid leap days, impossible days, invalid months, hours, and minutes in numeric date-time input are rejected.
 **Inputs:**
 ```text
 deadline bad leap /by 29/02/2019 0900
@@ -1104,43 +1108,43 @@ ${INTRO}
 
 ${LINE}
 
-Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
 
 ${LINE}
 
 ${LINE}
 
-Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
 
 ${LINE}
 
 ${LINE}
 
-Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
 
 ${LINE}
 
 ${LINE}
 
-Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
 
 ${LINE}
 
 ${LINE}
 
-Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
 
 ${LINE}
 
 ${LINE}
 
-Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
 
 ${LINE}
 
 ${LINE}
 
-Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
 
 ${LINE}
 
@@ -1149,8 +1153,8 @@ ${LINE}
 ${BYE}
 ```
 
-### TC-18: Storage persistence round-trip and corrupted date handling for deadlines
-**Aim:** Confirm that deadlines with valid dates are loaded and serialized losslessly, while stored deadlines with malformed dates are skipped with warnings.
+### TC-18: Load deadline dates and skip corrupted dates
+**Aim:** Confirm that stored deadlines with valid dates are loaded and displayed correctly, while malformed dates are skipped with warnings and lead to the storage-problem goodbye.
 **File input:**
 ```text
 D | 0 | project submission | 2019-12-02 1800
@@ -1164,19 +1168,19 @@ bye
 ```
 **Expected output:**
 ```text
-Warning: Corrupted task line skipped: [D | 0 | corrupted deadline | 2019-13-02 1800] - Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I skipped a damaged saved task: [D | 0 | corrupted deadline | 2019-13-02 1800] - I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
 ${INTRO}
 
 ${LINE}
 
-Here are the tasks in your list:
+Here's your task list:
 1.[D][ ] project submission (by: 02 Dec 2019 18:00)
 2.[D][X] day only deadline (by: 15 Oct 2019)
 ${LINE}
 
 ${LINE}
 
-${BYE}
+${STORAGE_BYE}
 ```
 
 ### TC-19: View command for date filtering
@@ -1200,31 +1204,31 @@ ${INTRO}
 
 ${LINE}
 
-added: assignment
+Pip! Added this task: assignment
 
 ${LINE}
 
 ${LINE}
 
-added: project
+Pip! Added this task: project
 
 ${LINE}
 
 ${LINE}
 
-added: other day
+Pip! Added this task: other day
 
 ${LINE}
 
 ${LINE}
 
-added: conference
+Pip! Added this task: conference
 
 ${LINE}
 
 ${LINE}
 
-Here are the tasks occurring on 02 Dec 2019:
+Here's your plan for 02 Dec 2019:
 1.[D][ ] assignment (by: 02 Dec 2019 18:00)
 2.[D][ ] project (by: 02 Dec 2019 23:59)
 3.[E][ ] conference (from: 01 Dec 2019 to: 03 Dec 2019)
@@ -1232,9 +1236,9 @@ ${LINE}
 
 ${LINE}
 
-Note: 'view' queries tasks for the entire day (02 Dec 2019).
+I'll check the entire day (02 Dec 2019).
 
-Here are the tasks occurring on 02 Dec 2019:
+Here's your plan for 02 Dec 2019:
 1.[D][ ] assignment (by: 02 Dec 2019 18:00)
 2.[D][ ] project (by: 02 Dec 2019 23:59)
 3.[E][ ] conference (from: 01 Dec 2019 to: 03 Dec 2019)
@@ -1242,19 +1246,19 @@ ${LINE}
 
 ${LINE}
 
-No tasks occurring on 04 Dec 2019.
+I couldn't find any tasks on 04 Dec 2019.
 
 ${LINE}
 
 ${LINE}
 
-A date is required. Use: view [date]
+Pip?! I need a date. Use: view [date]
 
 ${LINE}
 
 ${LINE}
 
-Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
 
 ${LINE}
 
@@ -1284,55 +1288,55 @@ ${INTRO}
 
 ${LINE}
 
-added: retreat
+Pip! Added this task: retreat
 
 ${LINE}
 
 ${LINE}
 
-added: final exam
+Pip! Added this task: final exam
 
 ${LINE}
 
 ${LINE}
 
-added: orientation
+Pip! Added this task: orientation
 
 ${LINE}
 
 ${LINE}
 
-Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
 
 ${LINE}
 
 ${LINE}
 
-Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
 
 ${LINE}
 
 ${LINE}
 
-Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
 
 ${LINE}
 
 ${LINE}
 
-Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
 
 ${LINE}
 
 ${LINE}
 
-Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
 
 ${LINE}
 
 ${LINE}
 
-Here are the tasks in your list:
+Here's your task list:
 1.[E][ ] retreat (from: 01 Oct 2026 to: 05 Oct 2026)
 2.[E][ ] final exam (from: 02 Dec 2019 09:00 to: 02 Dec 2019 11:00)
 3.[E][ ] orientation (from: Monday to: Wednesday)
@@ -1344,7 +1348,7 @@ ${BYE}
 ```
 
 ### TC-21: Multi-case corrupted storage recovery and valid task preservation
-**Aim:** Verify that storage loading skips various corrupted task lines with descriptive warnings, successfully loads valid tasks across types, and supports further mutations.
+**Aim:** Verify that storage loading skips various corrupted task lines with descriptive warnings, successfully loads valid tasks across types, supports further mutations, and still uses the storage-problem goodbye after successful saves.
 **File input:**
 ```text
 T | 1
@@ -1366,16 +1370,16 @@ bye
 ```
 **Expected output:**
 ```text
-Warning: Corrupted task line skipped: [T | 1] - Missing essential task components.
-Warning: Corrupted task line skipped: [D | 0 | submit paper] - Deadline is missing the due date.
-Warning: Corrupted task line skipped: [E | 0 | conference | 2026-10-01] - Event is missing start or end dates.
-Warning: Corrupted task line skipped: [E | 0 | hackathon | 2019-13-02 | 2019-13-05] - Invalid date or time format. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
-Warning: Corrupted task line skipped: [Z | 0 | alien task] - Unknown task type identifier: Z
+Pip?! I skipped a damaged saved task: [T | 1] - Missing essential task components.
+Pip?! I skipped a damaged saved task: [D | 0 | submit paper] - Deadline is missing the due date.
+Pip?! I skipped a damaged saved task: [E | 0 | conference | 2026-10-01] - Event is missing start or end dates.
+Pip?! I skipped a damaged saved task: [E | 0 | hackathon | 2019-13-02 | 2019-13-05] - I couldn't understand that date or time. Use: yyyy-MM-dd [HHmm] or d/M/yyyy [HHmm] (e.g., 2019-12-02 1800 or 2/12/2019 1800)
+Pip?! I skipped a damaged saved task: [Z | 0 | alien task] - Unknown task type identifier: Z
 ${INTRO}
 
 ${LINE}
 
-Here are the tasks in your list:
+Here's your task list:
 1.[T][ ] read book
 2.[D][X] submit assignment (by: 02 Oct 2026 14:00)
 3.[E][ ] workshop (from: 01 Oct 2026 to: 03 Oct 2026)
@@ -1383,29 +1387,28 @@ ${LINE}
 
 ${LINE}
 
-Nice! I've marked this task as done:
+Nice! Marked this task as done:
 	[T][X] read book
 
 ${LINE}
 
 ${LINE}
 
-Noted. I've removed this task:
+Removed this task. You have 2 tasks left:
 	[E][ ] workshop (from: 01 Oct 2026 to: 03 Oct 2026)
-Now you have 2 tasks in the list
 
 ${LINE}
 
 ${LINE}
 
-Here are the tasks in your list:
+Here's your task list:
 1.[T][X] read book
 2.[D][X] submit assignment (by: 02 Oct 2026 14:00)
 ${LINE}
 
 ${LINE}
 
-${BYE}
+${STORAGE_BYE}
 ```
 
 ### TC-22: Task list deletion boundaries across positions and sequential re-indexing
@@ -1434,39 +1437,38 @@ ${INTRO}
 
 ${LINE}
 
-added: first task
+Pip! Added this task: first task
 
 ${LINE}
 
 ${LINE}
 
-added: second task
+Pip! Added this task: second task
 
 ${LINE}
 
 ${LINE}
 
-added: third task
+Pip! Added this task: third task
 
 ${LINE}
 
 ${LINE}
 
-added: fourth task
+Pip! Added this task: fourth task
 
 ${LINE}
 
 ${LINE}
 
-Noted. I've removed this task:
+Removed this task. You have 3 tasks left:
 	[T][ ] second task
-Now you have 3 tasks in the list
 
 ${LINE}
 
 ${LINE}
 
-Here are the tasks in your list:
+Here's your task list:
 1.[T][ ] first task
 2.[T][ ] third task
 3.[T][ ] fourth task
@@ -1474,54 +1476,52 @@ ${LINE}
 
 ${LINE}
 
-Noted. I've removed this task:
+Removed this task. You have 2 tasks left:
 	[T][ ] first task
-Now you have 2 tasks in the list
 
 ${LINE}
 
 ${LINE}
 
-Here are the tasks in your list:
+Here's your task list:
 1.[T][ ] third task
 2.[T][ ] fourth task
 ${LINE}
 
 ${LINE}
 
-Noted. I've removed this task:
+Removed this task. You have 1 task left:
 	[T][ ] fourth task
-Now you have 1 tasks in the list
 
 ${LINE}
 
 ${LINE}
 
-Here are the tasks in your list:
+Here's your task list:
 1.[T][ ] third task
 ${LINE}
 
 ${LINE}
 
-The task number must be a positive integer. Use: delete [task number]
+Pip?! I need a positive whole number for the task number. Use: delete [task number]
 
 ${LINE}
 
 ${LINE}
 
-The task number must be a positive integer. Use: delete [task number]
+Pip?! I need a positive whole number for the task number. Use: delete [task number]
 
 ${LINE}
 
 ${LINE}
 
-Task number not found. Use: delete [task number]
+Pip?! I couldn't find that task number. Use: delete [task number]
 
 ${LINE}
 
 ${LINE}
 
-The task number must be a positive integer. Use: delete [task number]
+Pip?! I need a positive whole number for the task number. Use: delete [task number]
 
 ${LINE}
 
@@ -1552,64 +1552,64 @@ ${INTRO}
 
 ${LINE}
 
-No tasks occurring on 02 Oct 2026.
+I couldn't find any tasks on 02 Oct 2026.
 
 ${LINE}
 
 ${LINE}
 
-added: untimed task
+Pip! Added this task: untimed task
 
 ${LINE}
 
 ${LINE}
 
-added: urgent
+Pip! Added this task: urgent
 
 ${LINE}
 
 ${LINE}
 
-added: conference
+Pip! Added this task: conference
 
 ${LINE}
 
 ${LINE}
 
-added: freeform
+Pip! Added this task: freeform
 
 ${LINE}
 
 ${LINE}
 
-Here are the tasks occurring on 01 Oct 2026:
+Here's your plan for 01 Oct 2026:
 1.[E][ ] conference (from: 01 Oct 2026 to: 03 Oct 2026)
 ${LINE}
 
 ${LINE}
 
-Here are the tasks occurring on 02 Oct 2026:
+Here's your plan for 02 Oct 2026:
 1.[D][ ] urgent (by: 02 Oct 2026 18:00)
 2.[E][ ] conference (from: 01 Oct 2026 to: 03 Oct 2026)
 ${LINE}
 
 ${LINE}
 
-Here are the tasks occurring on 03 Oct 2026:
+Here's your plan for 03 Oct 2026:
 1.[E][ ] conference (from: 01 Oct 2026 to: 03 Oct 2026)
 ${LINE}
 
 ${LINE}
 
-No tasks occurring on 04 Oct 2026.
+I couldn't find any tasks on 04 Oct 2026.
 
 ${LINE}
 
 ${LINE}
 
-Note: 'view' queries tasks for the entire day (02 Oct 2026).
+I'll check the entire day (02 Oct 2026).
 
-Here are the tasks occurring on 02 Oct 2026:
+Here's your plan for 02 Oct 2026:
 1.[D][ ] urgent (by: 02 Oct 2026 18:00)
 2.[E][ ] conference (from: 01 Oct 2026 to: 03 Oct 2026)
 ${LINE}
@@ -1643,37 +1643,37 @@ ${INTRO}
 
 ${LINE}
 
-No tasks found matching 'book'.
+I couldn't find any tasks matching 'book'.
 
 ${LINE}
 
 ${LINE}
 
-added: read book
+Pip! Added this task: read book
 
 ${LINE}
 
 ${LINE}
 
-added: return book
+Pip! Added this task: return book
 
 ${LINE}
 
 ${LINE}
 
-added: book club meeting
+Pip! Added this task: book club meeting
 
 ${LINE}
 
 ${LINE}
 
-added: buy groceries
+Pip! Added this task: buy groceries
 
 ${LINE}
 
 ${LINE}
 
-Here are the matching tasks in your list:
+I found these tasks in your list:
 1.[T][ ] read book
 2.[D][ ] return book (by: 02 Dec 2019 18:00)
 3.[E][ ] book club meeting (from: 01 Dec 2019 to: 03 Dec 2019)
@@ -1681,7 +1681,7 @@ ${LINE}
 
 ${LINE}
 
-Here are the matching tasks in your list:
+I found these tasks in your list:
 1.[T][ ] read book
 2.[D][ ] return book (by: 02 Dec 2019 18:00)
 3.[E][ ] book club meeting (from: 01 Dec 2019 to: 03 Dec 2019)
@@ -1689,25 +1689,25 @@ ${LINE}
 
 ${LINE}
 
-Here are the matching tasks in your list:
+I found these tasks in your list:
 1.[E][ ] book club meeting (from: 01 Dec 2019 to: 03 Dec 2019)
 ${LINE}
 
 ${LINE}
 
-No tasks found matching 'non-existent'.
+I couldn't find any tasks matching 'non-existent'.
 
 ${LINE}
 
 ${LINE}
 
-A search keyword is required. Use: find [keyword]
+Pip?! I need a search keyword. Use: find [keyword]
 
 ${LINE}
 
 ${LINE}
 
-A search keyword is required. Use: find [keyword]
+Pip?! I need a search keyword. Use: find [keyword]
 
 ${LINE}
 
@@ -1735,7 +1735,7 @@ ${INTRO}
 
 ${LINE}
 
-Here are the tasks in your list:
+Here's your task list:
 1.[T][ ] read | review
 2.[D][X] submit A\B | final (by: 02 Dec 2019 18:00)
 3.[E][ ] plan | demo (from: 01 Dec 2019 to: 03 Dec 2019)
@@ -1744,4 +1744,177 @@ ${LINE}
 ${LINE}
 
 ${BYE}
+```
+
+### TC-26: Recover from invalid input and preserve literal task text
+**Aim:** Confirm that validation errors allow recovery, task text containing Piplup wording and storage separators stays literal, no-match searches are normal responses, and this session uses the normal goodbye.
+**Inputs:**
+```text
+todo
+todo Pip?! review A\B | notes
+mark 2
+mark 1
+list
+find missing
+find pip?!
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+Pip?! I need a description for your todo. Use: todo [description]
+
+${LINE}
+
+${LINE}
+
+Pip! Added this task: Pip?! review A\B | notes
+
+${LINE}
+
+${LINE}
+
+Pip?! I couldn't find that task number. Use: mark [task number]
+
+${LINE}
+
+${LINE}
+
+Nice! Marked this task as done:
+	[T][X] Pip?! review A\B | notes
+
+${LINE}
+
+${LINE}
+
+Here's your task list:
+1.[T][X] Pip?! review A\B | notes
+${LINE}
+
+${LINE}
+
+I couldn't find any tasks matching 'missing'.
+
+${LINE}
+
+${LINE}
+
+I found these tasks in your list:
+1.[T][X] Pip?! review A\B | notes
+${LINE}
+
+${LINE}
+
+${BYE}
+```
+
+### TC-27: Recover when every saved record is damaged
+**Aim:** Confirm that all damaged rows are reported, the resulting empty list remains usable, and a subsequent successful save still leads to the storage-problem goodbye.
+**File input:**
+```text
+damaged
+D | 0 | missing date
+```
+**Inputs:**
+```text
+list
+find book
+todo new task
+list
+bye
+```
+**Expected output:**
+```text
+Pip?! I skipped a damaged saved task: [damaged] - Missing essential task components.
+Pip?! I skipped a damaged saved task: [D | 0 | missing date] - Deadline is missing the due date.
+${INTRO}
+
+${LINE}
+
+Your list is empty. I was starting to get bored.
+${LINE}
+
+${LINE}
+
+I couldn't find any tasks matching 'book'.
+
+${LINE}
+
+${LINE}
+
+Pip! Added this task: new task
+
+${LINE}
+
+${LINE}
+
+Here's your task list:
+1.[T][ ] new task
+${LINE}
+
+${LINE}
+
+${STORAGE_BYE}
+```
+
+### TC-28: Skip malformed versioned records while preserving valid neighbors
+**Aim:** Confirm that invalid status, unknown and incomplete escapes, surplus fields, and missing fields each produce a warning, while valid records before and after the damaged rows remain intact.
+**File input:**
+```text
+V2 | T | 0 | first task
+V2 | T | 2 | invalid status
+V2 | T | 0 | bad\q
+V2 | T | 0 | unfinished\
+V2 | T | 0 | extra | field
+V2 | D | 0 | missing date
+V2 | T | 1 | last \| task
+```
+**Inputs:**
+```text
+list
+bye
+```
+**Expected output:**
+```text
+Pip?! I skipped a damaged saved task: [V2 | T | 2 | invalid status] - Invalid task status.
+Pip?! I skipped a damaged saved task: [V2 | T | 0 | bad\q] - Unknown escape sequence: \q
+Pip?! I skipped a damaged saved task: [V2 | T | 0 | unfinished\] - Incomplete escape sequence.
+Pip?! I skipped a damaged saved task: [V2 | T | 0 | extra | field] - Expected 4 fields, found 5.
+Pip?! I skipped a damaged saved task: [V2 | D | 0 | missing date] - Expected 5 fields, found 4.
+${INTRO}
+
+${LINE}
+
+Here's your task list:
+1.[T][ ] first task
+2.[T][X] last | task
+${LINE}
+
+${LINE}
+
+${STORAGE_BYE}
+```
+
+## Focused storage failure verification
+
+The companion Java checks exercise failures that cannot be represented by a
+plain saved-file fixture in the console runner:
+
+- Reject the first file replacement, verify the attempted task is rolled back,
+  then save another task successfully and still show the storage-problem goodbye.
+- Attempt to load a directory as the saved file, report the load error, and use
+  the storage-problem goodbye without claiming that everything is saved.
+- Verify failed replacement leaves the original file intact, failed saves roll
+  back add/mark/unmark/delete, and escaped fields survive a save/load round trip.
+
+Run this after the full console plan with Java 25:
+
+```powershell
+$javaSources = @(Get-ChildItem src/main/java -Recurse -Filter *.java | Select-Object -ExpandProperty FullName)
+javac -d out/test $javaSources test/dawn/PiplupStorageTest.java test/StorageRegressionTest.java
+java -cp out/test dawn.PiplupStorageTest
+java -cp out/test StorageRegressionTest
 ```

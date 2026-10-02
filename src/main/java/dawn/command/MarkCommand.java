@@ -31,7 +31,7 @@ public class MarkCommand extends Command {
     @Override
     public void execute(TaskList tasks, DawnUi ui, Storage storage) throws DawnException {
         if (taskIndex < 0 || taskIndex >= tasks.size()) {
-            throw new DawnException("Task number not found. Use: " + CommandWord.MARK.usage());
+            throw new DawnException("I couldn't find that task number. Use: " + CommandWord.MARK.usage());
         }
         Task task = tasks.getTask(taskIndex);
         boolean wasDone = task.isDone();
@@ -42,6 +42,6 @@ public class MarkCommand extends Command {
             task.setDone(wasDone);
             throw e;
         }
-        ui.showMessage("Nice! I've marked this task as done:\n\t" + task + "\n\n");
+        ui.showMessage("Nice! Marked this task as done:\n\t" + task + "\n\n");
     }
 }

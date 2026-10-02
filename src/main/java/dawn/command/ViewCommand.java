@@ -58,13 +58,13 @@ public class ViewCommand extends Command {
 
         StringBuilder sb = new StringBuilder();
         if (targetDateTime.hasTime()) {
-            sb.append("Note: 'view' queries tasks for the entire day (")
+            sb.append("I'll check the entire day (")
               .append(formattedDate)
               .append(").\n\n");
         }
 
         StringBuilder taskListSb = new StringBuilder();
-        taskListSb.append("Here are the tasks occurring on ")
+        taskListSb.append("Here's your plan for ")
                   .append(formattedDate)
                   .append(":\n");
 
@@ -78,7 +78,7 @@ public class ViewCommand extends Command {
         }
 
         if (count == 0) {
-            sb.append("No tasks occurring on ").append(formattedDate).append(".\n\n");
+            sb.append("I couldn't find any tasks on ").append(formattedDate).append(".\n\n");
         } else {
             sb.append(taskListSb);
         }

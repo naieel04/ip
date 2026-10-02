@@ -36,6 +36,6 @@ public class AddCommand extends Command {
             tasks.removeTask(tasks.size() - 1);
             throw e;
         }
-        ui.showMessage("added: " + task.getDescription() + "\n\n");
+        ui.showMessage("Pip! Added this task: " + task.getDescription() + "\n\n");
     }
 }

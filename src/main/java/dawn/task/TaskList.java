@@ -41,7 +41,7 @@ public class TaskList {
      */
     public void addTask(Task task) throws DawnException {
         if (tasks.size() >= MAX_TASKS) {
-            throw new DawnException("Dawn can store at most " + MAX_TASKS + " tasks.");
+            throw new DawnException("I can keep at most " + MAX_TASKS + " tasks in your list.");
         }
         tasks.add(task);
     }
@@ -55,7 +55,7 @@ public class TaskList {
      */
     public void insertTask(int index, Task task) throws DawnException {
         if (tasks.size() >= MAX_TASKS) {
-            throw new DawnException("Dawn can store at most " + MAX_TASKS + " tasks.");
+            throw new DawnException("I can keep at most " + MAX_TASKS + " tasks in your list.");
         }
         tasks.add(index, task);
     }

@@ -31,7 +31,7 @@ public class UnmarkCommand extends Command {
     @Override
     public void execute(TaskList tasks, DawnUi ui, Storage storage) throws DawnException {
         if (taskIndex < 0 || taskIndex >= tasks.size()) {
-            throw new DawnException("Task number not found. Use: " + CommandWord.UNMARK.usage());
+            throw new DawnException("I couldn't find that task number. Use: " + CommandWord.UNMARK.usage());
         }
         Task task = tasks.getTask(taskIndex);
         boolean wasDone = task.isDone();
@@ -42,6 +42,6 @@ public class UnmarkCommand extends Command {
             task.setDone(wasDone);
             throw e;
         }
-        ui.showMessage("OK, I've marked this task as not done yet:\n\t" + task + "\n\n");
+        ui.showMessage("Back on the list. Marked this task as not done yet:\n\t" + task + "\n\n");
     }
 }
