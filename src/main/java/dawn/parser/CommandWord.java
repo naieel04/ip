@@ -2,28 +2,27 @@ package dawn.parser;
 
 /** Defines the accepted command words and the text used to describe them. */
 public enum CommandWord {
-    TODO("todo", "todo [description]", "Add a todo", 1),
-    DEADLINE("deadline", "deadline [description] /by [due date]", "Add a deadline", 1),
-    EVENT("event", "event [description] /from [start] /to [end]", "Add an event", 1),
-    LIST("list", "list", "List all tasks", 2),
-    MARK("mark", "mark [task number]", "Mark a task done", 2),
-    UNMARK("unmark", "unmark [task number]", "Mark a task not done", 2),
-    DELETE("delete", "delete [task number]", "Delete a task", 2),
-    VIEW("view", "view [date]", "View tasks on a date", 3),
-    SCHEDULE("schedule", "schedule [date]", "Alias for view", 3),
-    FIND("find", "find [keyword]", "Find tasks by keyword", 3),
-    BYE("bye", "bye", "Exit Dawn", 3);
+    TODO("todo", "todo [description]", "Add a todo"),
+    DEADLINE("deadline", "deadline [description] /by [due date]", "Add a deadline"),
+    EVENT("event", "event [description] /from [start] /to [end]", "Add an event"),
+    LIST("list", "list", "List all tasks"),
+    MARK("mark", "mark [task number]", "Mark a task done"),
+    UNMARK("unmark", "unmark [task number]", "Mark a task not done"),
+    DELETE("delete", "delete [task number]", "Delete a task"),
+    VIEW("view", "view [date]", "View tasks on a date"),
+    SCHEDULE("schedule", "schedule [date]", "Alias for view"),
+    FIND("find", "find [keyword]", "Find tasks by keyword"),
+    HELP("help", "help", "Show commands"),
+    BYE("bye", "bye", "Exit Dawn");
 
     private final String keyword;
     private final String usage;
     private final String helpDescription;
-    private final int helpGroup;
 
-    CommandWord(String keyword, String usage, String helpDescription, int helpGroup) {
+    CommandWord(String keyword, String usage, String helpDescription) {
         this.keyword = keyword;
         this.usage = usage;
         this.helpDescription = helpDescription;
-        this.helpGroup = helpGroup;
     }
 
     /** Returns the exact, case-sensitive command word entered by the user. */
@@ -78,24 +77,5 @@ public enum CommandWord {
                 .append(" | ").append(description)
                 .append(" ".repeat(descriptionWidth - description.length()))
                 .append(" |\n");
-    }
-
-    /** Builds the grouped list shown when a command is not recognised. */
-    public static String supportedCommands() {
-        StringBuilder commands = new StringBuilder();
-        int previousGroup = -1;
-        for (CommandWord command : values()) {
-            if (command.helpGroup != previousGroup) {
-                if (!commands.isEmpty()) {
-                    commands.append('\n');
-                }
-                commands.append("  - ");
-                previousGroup = command.helpGroup;
-            } else {
-                commands.append(", ");
-            }
-            commands.append(command.keyword);
-        }
-        return commands.toString();
     }
 }

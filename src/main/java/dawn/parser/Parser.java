@@ -5,6 +5,7 @@ import dawn.command.Command;
 import dawn.command.DeleteCommand;
 import dawn.command.ExitCommand;
 import dawn.command.FindCommand;
+import dawn.command.HelpCommand;
 import dawn.command.ListCommand;
 import dawn.command.MarkCommand;
 import dawn.command.UnmarkCommand;
@@ -46,6 +47,9 @@ public class Parser {
         case LIST:
             requireNoArguments(command, arguments);
             return new ListCommand();
+        case HELP:
+            requireNoArguments(command, arguments);
+            return new HelpCommand();
         case MARK:
             return new MarkCommand(parseTaskNumber(arguments, CommandWord.MARK.usage()));
         case UNMARK:
@@ -251,7 +255,7 @@ public class Parser {
      * Generates a helpful error message when an unrecognized command is typed, detecting plausible typos.
      *
      * @param commandWord the malformed command word received
-     * @return a structured string diagnosing the typo or listing valid commands
+     * @return a message suggesting a likely command or directing the user to help
      */
     public static String unknownCommandMessage(String commandWord) {
         String normalizedCommand = commandWord.toLowerCase(Locale.ROOT);
@@ -280,6 +284,6 @@ public class Parser {
         if (normalizedCommand.contains(CommandWord.FIND.keyword())) {
             return "I don't recognize that command.\nDid you mean: " + CommandWord.FIND.usage() + "?";
         }
-        return "I don't recognize that command.\nSupported commands:\n" + CommandWord.supportedCommands();
+        return "I don't recognize that command. Type 'help' to see the available commands.";
     }
 }

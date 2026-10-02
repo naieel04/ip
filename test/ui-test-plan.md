@@ -64,7 +64,7 @@ ____________________________________________________________
                -#+.+###+.                       .+####+#+..     
                  .-                                 +##..#+     
 
-Piplup here! Dawn is ready when you are.
+Piplup here! Ready when you are!
 
 Here are the commands you can use:
 +---------------------------------------------+-----------------------+
@@ -80,9 +80,31 @@ Here are the commands you can use:
 | view [date]                                 | View tasks on a date  |
 | schedule [date]                             | Alias for view        |
 | find [keyword]                              | Find tasks by keyword |
+| help                                        | Show commands         |
 | bye                                         | Exit Dawn             |
 +---------------------------------------------+-----------------------+
 ____________________________________________________________
+```
+
+### GUIDE
+```text
+Here are the commands you can use:
++---------------------------------------------+-----------------------+
+| Command / format                            | Description           |
++---------------------------------------------+-----------------------+
+| todo [description]                          | Add a todo            |
+| deadline [description] /by [due date]       | Add a deadline        |
+| event [description] /from [start] /to [end] | Add an event          |
+| list                                        | List all tasks        |
+| mark [task number]                          | Mark a task done      |
+| unmark [task number]                        | Mark a task not done  |
+| delete [task number]                        | Delete a task         |
+| view [date]                                 | View tasks on a date  |
+| schedule [date]                             | Alias for view        |
+| find [keyword]                              | Find tasks by keyword |
+| help                                        | Show commands         |
+| bye                                         | Exit Dawn             |
++---------------------------------------------+-----------------------+
 ```
 
 ### BYE
@@ -239,7 +261,7 @@ ${BYE}
 ```
 
 ### TC-05: Require exact command words and suggest intended commands
-**Aim:** Confirm that unrecognized command words suggest matching command syntax or display the supported command list.
+**Aim:** Confirm that recognizable command fragments suggest the matching syntax and unrelated commands point to `help`.
 **Inputs:**
 ```text
 todoadd read a book
@@ -253,6 +275,7 @@ viewtasks 2019-10-15
 schedules 2019-10-15
 findtasks book
 add todo read a book
+food
 bye
 ```
 **Expected output:**
@@ -331,11 +354,13 @@ ${LINE}
 
 ${LINE}
 
-Pip?! I don't recognize that command.
-Supported commands:
-  - todo, deadline, event
-  - list, mark, unmark, delete
-  - view, schedule, find, bye
+Pip?! I don't recognize that command. Type 'help' to see the available commands.
+
+${LINE}
+
+${LINE}
+
+Pip?! I don't recognize that command. Type 'help' to see the available commands.
 
 ${LINE}
 
@@ -679,7 +704,7 @@ ${BYE}
 ```
 
 ### TC-11: Empty list display, blank input handling, and whitespace padding
-**Aim:** Confirm that an empty list shows Piplup's empty-list message, blank lines display supported commands, and whitespace around commands is trimmed.
+**Aim:** Confirm that an empty list shows Piplup's empty-list message, blank lines suggest `help`, and whitespace around commands is trimmed.
 **Inputs:**
 ```text
 list
@@ -700,21 +725,13 @@ ${LINE}
 
 ${LINE}
 
-Pip?! I don't recognize that command.
-Supported commands:
-  - todo, deadline, event
-  - list, mark, unmark, delete
-  - view, schedule, find, bye
+Pip?! I don't recognize that command. Type 'help' to see the available commands.
 
 ${LINE}
 
 ${LINE}
 
-Pip?! I don't recognize that command.
-Supported commands:
-  - todo, deadline, event
-  - list, mark, unmark, delete
-  - view, schedule, find, bye
+Pip?! I don't recognize that command. Type 'help' to see the available commands.
 
 ${LINE}
 
@@ -1896,6 +1913,54 @@ ${LINE}
 ${LINE}
 
 ${STORAGE_BYE}
+```
+
+### TC-29: Show the command guide on demand
+**Aim:** Confirm that `help` repeats the complete startup command table without the banner, preserves the current task list, and rejects extra arguments.
+**Inputs:**
+```text
+help
+todo review notes
+help extra
+help
+list
+bye
+```
+**Expected output:**
+```text
+${INTRO}
+
+${LINE}
+
+${GUIDE}
+${LINE}
+
+${LINE}
+
+Pip! Added this task: review notes
+
+${LINE}
+
+${LINE}
+
+Pip?! I don't need arguments for help. Use: help
+
+${LINE}
+
+${LINE}
+
+${GUIDE}
+${LINE}
+
+${LINE}
+
+Here's your task list:
+1.[T][ ] review notes
+${LINE}
+
+${LINE}
+
+${BYE}
 ```
 
 ## Focused storage failure verification

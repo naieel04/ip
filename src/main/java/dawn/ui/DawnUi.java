@@ -58,7 +58,7 @@ public class DawnUi {
     public static final String COMMAND_GUIDE = CommandWord.commandGuide();
 
     public static final String INTRO_MESSAGE = MAX_LINE + "\n" + IMG_NAME_BANNER
-            + "Piplup here! Dawn is ready when you are.\n\n"
+            + "Piplup here! Ready when you are!\n\n"
             + COMMAND_GUIDE + "\n"
             + MAX_LINE;
     public static final String BYE_MESSAGE =
@@ -86,6 +86,11 @@ public class DawnUi {
     /** Displays the application welcome message and banner. */
     public void showIntro() {
         System.out.println(INTRO_MESSAGE);
+    }
+
+    /** Displays the command table without repeating the startup banner. */
+    public void showCommandGuide() {
+        System.out.println(COMMAND_GUIDE);
     }
 
     /** Chooses a goodbye that reflects any storage problem during this session. */
