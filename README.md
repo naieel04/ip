@@ -1,6 +1,6 @@
 # Dawn project template
 
-This is a project template for a greenfield Java project. It's named after the Pokémon trainer _Dawn_. Given below are instructions on how to use it.
+This is a project template for a greenfield Java project, it is named after the Pokémon trainer _Dawn_. Given below are instructions on how to use it.
 
 ## Setting up in Intellij
 
