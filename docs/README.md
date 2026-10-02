@@ -5,6 +5,7 @@
 * [Quick Start](#quick-start)
 * [Features](#features)
   * [Command Format & Syntax Rules](#command-format--syntax-rules)
+  * [Task Display Notation & Status Icons](#task-display-notation--status-icons)
   * [Supported Date & Time Formats](#supported-date--time-formats)
   * [Adding a todo task: `todo`](#adding-a-todo-task-todo)
   * [Adding a deadline task: `deadline`](#adding-a-deadline-task-deadline)
@@ -54,6 +55,22 @@ Before using Dawn, take note of the following general command rules:
 * **Task numbers are 1-based positive integers:** For `mark`, `unmark`, and `delete`, task numbers refer to the index displayed in the `list` command and must be positive integers (e.g., `1`, `2`, `3`).
 * **Marker order in events:** For `event` commands, the `/from` clause must precede the `/to` clause.
 * **Keyword searches are case-insensitive:** The `find` command will match tasks regardless of uppercase or lowercase (e.g., `find book` matches `Book` and `BOOK`).
+
+---
+
+### Task Display Notation & Status Icons
+
+When viewing tasks through `list`, `find`, or `view`, each task entry is formatted with concise status and type tags:
+
+| Symbol / Tag | Meaning | Example |
+| :---: | :--- | :--- |
+| `[T]` | **ToDo task:** A simple task without dates or times. | `[T][ ] read a book` |
+| `[D]` | **Deadline task:** A task due by a specific date or time. | `[D][ ] submit assignment (by: 20 Nov 2026 23:59)` |
+| `[E]` | **Event task:** An event spanning a start and end time. | `[E][ ] orientation (from: 12 Oct 2026 14:00 to: 12 Oct 2026 16:00)` |
+| `[ ]` | **Pending status:** The task has not been completed yet. | `[T][ ] read a book` |
+| `[X]` | **Completed status:** The task has been marked as done. | `[T][X] read a book` |
+
+*Note: Dates and times with recognized calendar formats are automatically displayed in clean English format (`dd MMM yyyy` or `dd MMM yyyy HH:mm`, e.g., `12 Oct 2026 14:00`).*
 
 ---
 
