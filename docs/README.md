@@ -62,13 +62,13 @@ Before using Dawn, take note of the following general command rules:
 
 When viewing tasks through `list`, `find`, or `view`, each task entry is formatted with concise status and type tags:
 
-| Symbol / Tag | Meaning | Example |
-| :---: | :--- | :--- |
-| `[T]` | **ToDo task:** A simple task without dates or times. | `[T][ ] read a book` |
-| `[D]` | **Deadline task:** A task due by a specific date or time. | `[D][ ] submit assignment (by: 20 Nov 2026 23:59)` |
-| `[E]` | **Event task:** An event spanning a start and end time. | `[E][ ] orientation (from: 12 Oct 2026 14:00 to: 12 Oct 2026 16:00)` |
-| `[ ]` | **Pending status:** The task has not been completed yet. | `[T][ ] read a book` |
-| `[X]` | **Completed status:** The task has been marked as done. | `[T][X] read a book` |
+| Symbol / Tag | Meaning                                                   | Example                                                              |
+|:------------:|:----------------------------------------------------------|:---------------------------------------------------------------------|
+|    `[T]`     | **ToDo task:** A simple task without dates or times.      | `[T][ ] read a book`                                                 |
+|    `[D]`     | **Deadline task:** A task due by a specific date or time. | `[D][ ] submit assignment (by: 20 Nov 2026 23:59)`                   |
+|    `[E]`     | **Event task:** An event spanning a start and end time.   | `[E][ ] orientation (from: 12 Oct 2026 14:00 to: 12 Oct 2026 16:00)` |
+|    `[ ]`     | **Pending status:** The task has not been completed yet.  | `[T][ ] read a book`                                                 |
+|    `[X]`     | **Completed status:** The task has been marked as done.   | `[T][X] read a book`                                                 |
 
 *Note: Dates and times with recognized calendar formats are automatically displayed in clean English format (`dd MMM yyyy` or `dd MMM yyyy HH:mm`, e.g., `12 Oct 2026 14:00`).*
 
