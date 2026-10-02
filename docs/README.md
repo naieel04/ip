@@ -4,6 +4,7 @@
 * [Introduction](#introduction)
 * [Quick Start](#quick-start)
 * [Features](#features)
+  * [Command Format & Syntax Rules](#command-format--syntax-rules)
   * [Supported Date & Time Formats](#supported-date--time-formats)
   * [Adding a todo task: `todo`](#adding-a-todo-task-todo)
   * [Adding a deadline task: `deadline`](#adding-a-deadline-task-deadline)
@@ -42,7 +43,19 @@
 
 ## <span style="color:#006064">Features</span>
 
-*Words in `[brackets]` represent parameters to be supplied by the user.*
+### Command Format & Syntax Rules
+
+Before using Dawn, take note of the following general command rules:
+
+* **Words in `[brackets]` are parameters:** Parameters enclosed in square brackets are required arguments to be provided by the user.  
+  *Example:* In `todo [description]`, `[description]` is a parameter (`todo read a book`).
+* **Command keywords are lowercase:** Commands like `todo`, `list`, and `help` must be entered in lowercase.
+* **Parameterless commands reject extra arguments:** Commands that take no arguments (`list`, `help`, `bye`) will show an error if additional characters or arguments are typed (e.g., `list 123` or `bye now` will be rejected).
+* **Task numbers are 1-based positive integers:** For `mark`, `unmark`, and `delete`, task numbers refer to the index displayed in the `list` command and must be positive integers (e.g., `1`, `2`, `3`).
+* **Marker order in events:** For `event` commands, the `/from` clause must precede the `/to` clause.
+* **Keyword searches are case-insensitive:** The `find` command will match tasks regardless of uppercase or lowercase (e.g., `find book` matches `Book` and `BOOK`).
+
+---
 
 ### Supported Date & Time Formats
 
