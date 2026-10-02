@@ -78,7 +78,6 @@ Here are the commands you can use:
 | unmark [task number]                        | Mark a task not done  |
 | delete [task number]                        | Delete a task         |
 | view [date]                                 | View tasks on a date  |
-| schedule [date]                             | Alias for view        |
 | find [keyword]                              | Find tasks by keyword |
 | help                                        | Show commands         |
 | bye                                         | Exit Dawn             |
@@ -100,7 +99,6 @@ Here are the commands you can use:
 | unmark [task number]                        | Mark a task not done  |
 | delete [task number]                        | Delete a task         |
 | view [date]                                 | View tasks on a date  |
-| schedule [date]                             | Alias for view        |
 | find [keyword]                              | Find tasks by keyword |
 | help                                        | Show commands         |
 | bye                                         | Exit Dawn             |
@@ -272,7 +270,7 @@ marking 1
 unmarking 1
 deleteitem 1
 viewtasks 2019-10-15
-schedules 2019-10-15
+schedule 2019-10-15
 findtasks book
 add todo read a book
 food
@@ -340,8 +338,7 @@ ${LINE}
 
 ${LINE}
 
-Pip?! I don't recognize that command.
-Did you mean: view [date]?
+Pip?! I don't recognize that command. Type 'help' to see the available commands.
 
 ${LINE}
 
@@ -1547,8 +1544,8 @@ ${LINE}
 ${BYE}
 ```
 
-### TC-23: Multi-day event queries with view and schedule alias on populated and empty lists
-**Aim:** Verify that date queries correctly detect events on start, middle, and end days, handle empty lists, support the schedule command alias, and display the informational note when time is passed.
+### TC-23: Multi-day event queries with view on populated and empty lists
+**Aim:** Verify that date queries correctly detect events on start, middle, and end days, handle empty lists, and display the informational note when time is passed.
 **Inputs:**
 ```text
 view 2026-10-02
@@ -1557,7 +1554,7 @@ deadline urgent /by 2026-10-02 1800
 event conference /from 2026-10-01 /to 2026-10-03
 deadline freeform /by tonight
 view 2026-10-01
-schedule 2026-10-02
+view 2026-10-02
 view 2026-10-03
 view 2026-10-04
 view 2026-10-02 0900

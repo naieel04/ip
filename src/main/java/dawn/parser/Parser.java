@@ -63,7 +63,7 @@ public class Parser {
                 return new AddCommand(parseDeadlineArgs(arguments));
             case EVENT:
                 return new AddCommand(parseEventArgs(arguments));
-            case VIEW, SCHEDULE:
+            case VIEW:
                 return parseViewArgs(arguments);
             case FIND:
                 return parseFindArgs(arguments);
@@ -277,8 +277,7 @@ public class Parser {
         if (normalizedCommand.contains(CommandWord.DELETE.keyword())) {
             return suggestCommand(CommandWord.DELETE);
         }
-        if (normalizedCommand.contains(CommandWord.VIEW.keyword())
-                || normalizedCommand.contains(CommandWord.SCHEDULE.keyword())) {
+        if (normalizedCommand.contains(CommandWord.VIEW.keyword())) {
             return suggestCommand(CommandWord.VIEW);
         }
         if (normalizedCommand.contains(CommandWord.FIND.keyword())) {

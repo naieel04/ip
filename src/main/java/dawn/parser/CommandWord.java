@@ -12,7 +12,6 @@ public enum CommandWord {
     UNMARK("unmark", "unmark [task number]", "Mark a task not done"),
     DELETE("delete", "delete [task number]", "Delete a task"),
     VIEW("view", "view [date]", "View tasks on a date"),
-    SCHEDULE("schedule", "schedule [date]", "Alias for view"),
     FIND("find", "find [keyword]", "Find tasks by keyword"),
     HELP("help", "help", "Show commands"),
     BYE("bye", "bye", "Exit Dawn");
