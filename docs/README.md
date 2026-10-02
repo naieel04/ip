@@ -94,6 +94,10 @@ Adds a standard task without any specific date attached to it.
 * **Examples:**
   * `todo read a book`
   * `todo wash the dishes`
+* **Expected Output:**
+  ```text
+  Pip! Added this task: read a book
+  ```
 
 ---
 
@@ -105,6 +109,10 @@ Adds a task that needs to be done by a specific deadline.
 * **Examples:**
   * `deadline submit assignment /by 2026-11-20 2359`
   * `deadline return library book /by tomorrow night`
+* **Expected Output:**
+  ```text
+  Pip! Added this task: submit assignment (by: 20 Nov 2026 23:59)
+  ```
 
 ---
 
@@ -116,6 +124,10 @@ Adds an event task that spans a duration defined by a start time and an end time
 * **Examples:**
   * `event project meeting /from 12/10/2026 1400 /to 12/10/2026 1600`
   * `event career fair /from Monday 10am /to Wednesday 5pm`
+* **Expected Output:**
+  ```text
+  Pip! Added this task: project meeting (from: 12 Oct 2026 14:00 to: 12 Oct 2026 16:00)
+  ```
 
 ---
 
@@ -124,6 +136,13 @@ Adds an event task that spans a duration defined by a start time and an end time
 Displays all the tasks currently saved in your task list, alongside their completion statuses.
 
 * **Format:** `list`
+* **Expected Output:**
+  ```text
+  Here's your task list:
+  1.[T][ ] read a book
+  2.[D][ ] submit assignment (by: 20 Nov 2026 23:59)
+  3.[E][ ] project meeting (from: 12 Oct 2026 14:00 to: 12 Oct 2026 16:00)
+  ```
 
 ---
 
@@ -134,6 +153,11 @@ Marks the task at the specified numerical index in the list as completed.
 * **Format:** `mark [task number]`
 * **Examples:**
   * `mark 1` *(Marks the 1st task as done).*
+* **Expected Output:**
+  ```text
+  Nice! Marked this task as done:
+  	[T][X] read a book
+  ```
 
 ---
 
@@ -144,6 +168,11 @@ Marks a previously completed task at the specified index as uncompleted.
 * **Format:** `unmark [task number]`
 * **Examples:**
   * `unmark 1` *(Unmarks the 1st task).*
+* **Expected Output:**
+  ```text
+  Back on the list. Marked this task as not done yet:
+  	[T][ ] read a book
+  ```
 
 ---
 
@@ -157,6 +186,11 @@ Permanently deletes the task at the specified index from your tracker.
 * **Format:** `delete [task number]`
 * **Examples:**
   * `delete 3` *(Deletes the 3rd task in the list).*
+* **Expected Output:**
+  ```text
+  Removed this task. You have 2 tasks left:
+  	[E][ ] project meeting (from: 12 Oct 2026 14:00 to: 12 Oct 2026 16:00)
+  ```
 
 ---
 
@@ -168,6 +202,11 @@ Retrieves and displays all tasks whose description contains the specified keywor
 * **Examples:**
   * `find meeting`
   * `find BOOK`
+* **Expected Output:**
+  ```text
+  I found these tasks in your list:
+  1.[E][ ] project meeting (from: 12 Oct 2026 14:00 to: 12 Oct 2026 16:00)
+  ```
 
 ---
 
@@ -177,8 +216,13 @@ Shows all deadline and event tasks that occur on a particular calendar date. Thi
 
 * **Format:** `view [date]` or `schedule [date]`
 * **Examples:**
-  * `view 2026-10-02`
-  * `schedule 2/10/2026`
+  * `view 2026-10-12`
+  * `schedule 12/10/2026`
+* **Expected Output:**
+  ```text
+  Here's your plan for 12 Oct 2026:
+  1.[E][ ] project meeting (from: 12 Oct 2026 14:00 to: 12 Oct 2026 16:00)
+  ```
 
 ---
 
@@ -187,6 +231,26 @@ Shows all deadline and event tasks that occur on a particular calendar date. Thi
 Displays the command syntax guide table on demand without having to restart the application.
 
 * **Format:** `help`
+* **Expected Output:**
+  ```text
+  Here are the commands you can use:
+  +---------------------------------------------+-----------------------+
+  | Command / format                            | Description           |
+  +---------------------------------------------+-----------------------+
+  | todo [description]                          | Add a todo            |
+  | deadline [description] /by [due date]       | Add a deadline        |
+  | event [description] /from [start] /to [end] | Add an event          |
+  | list                                        | List all tasks        |
+  | mark [task number]                          | Mark a task done      |
+  | unmark [task number]                        | Mark a task not done  |
+  | delete [task number]                        | Delete a task         |
+  | view [date]                                 | View tasks on a date  |
+  | schedule [date]                             | Alias for view        |
+  | find [keyword]                              | Find tasks by keyword |
+  | help                                        | Show commands         |
+  | bye                                         | Exit Dawn             |
+  +---------------------------------------------+-----------------------+
+  ```
 
 ---
 
@@ -195,6 +259,10 @@ Displays the command syntax guide table on demand without having to restart the 
 Safely exits the chatbot interface.
 
 * **Format:** `bye`
+* **Expected Output:**
+  ```text
+  Pip! No need to worry, everything is saved. See you next time!
+  ```
 
 ---
 
